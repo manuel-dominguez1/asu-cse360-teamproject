@@ -120,14 +120,40 @@ public class ControllerAdminHome {
 	 * 
 	 * Title: setOnetimePassword () Method. </p>
 	 * 
-	 * <p> Description: Protected method that is currently a stub informing the user that
-	 * this function has not yet been implemented. </p>
+	 * <p> Description: Protected method that generates a new one-time password
+	 * for a selected user and displays the password to the administrator. </p>
 	 */
-	protected static void setOnetimePassword () {
-		System.out.println("\n*** WARNING ***: One-Time Password Not Yet Implemented");
-		ViewAdminHome.alertNotImplemented.setTitle("*** WARNING ***");
-		ViewAdminHome.alertNotImplemented.setHeaderText("One-Time Password Issue");
-		ViewAdminHome.alertNotImplemented.setContentText("One-Time Password Not Yet Implemented");
+	protected static void setOneTimePassword () {
+		String selectedUser = (String) ViewAdminHome.combobox_SelectUser.getValue();
+		
+		// Make sure a user has been selected
+		if (selectedUser == null || selectedUser.isEmpty() || selectedUser.equals("<Select a User>")) {
+			ViewAdminHome.alertNotImplemented.setTitle("One-Time Password");
+			ViewAdminHome.alertNotImplemented.setHeaderText("No User Selected");
+			ViewAdminHome.alertNotImplemented.setContentText("Please select a user in order to set a one-time password.");
+			ViewAdminHome.alertNotImplemented.showAndWait();
+			return;
+			
+		}
+		
+		// Generate and set the one-time password
+		String oneTimePassword = theDatabase.setOneTimePassword(selectedUser);
+		
+		// Check whether the operation was successful
+		if (oneTimePassword.isEmpty()) {
+			ViewAdminHome.alertNotImplemented.setTitle("One-Time Password");
+			ViewAdminHome.alertNotImplemented.setHeaderText("Password Reset Failed");
+			ViewAdminHome.alertNotImplemented.setContentText("Unable to set a one-time password for user: " + selectedUser);
+			ViewAdminHome.alertNotImplemented.showAndWait();
+			return;
+		}
+		
+		// Display the new password to the administrator
+		ViewAdminHome.alertNotImplemented.setTitle("One-Time Password");
+		ViewAdminHome.alertNotImplemented.setHeaderText("One-Time Password Created");
+		ViewAdminHome.alertNotImplemented.setContentText(
+				"User:" + selectedUser +
+				"\n\nOne-time password:" + oneTimePassword);
 		ViewAdminHome.alertNotImplemented.showAndWait();
 	}
 	
