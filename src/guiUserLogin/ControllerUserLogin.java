@@ -3,6 +3,8 @@ package guiUserLogin;
 import database.Database;
 import entityClasses.User;
 import javafx.stage.Stage;
+import javafx.scene.control.TextInputDialog;
+import java.util.Optional;
 
 /*******
  * <p> Title: ControllerUserLogin Class. </p>
@@ -78,6 +80,46 @@ public class ControllerUserLogin {
     		return;
     	}
 		// System.out.println("*** Username is valid");
+
+		// Check whether the entered password is the user's one-time password.
+		     if (theDatabase.isOneTimePassword(username, password)) {
+		     		
+		     	//Display pop-up window prompting user to enter new password
+		     	TextInputDialog passwordDialog = new TextInputDialog();
+		     	passwordDialog.setTitle("Create New Password");
+				passwordDialog.setHeaderText("One-Time Password Detected");
+	     		passwordDialog.setContentText("Enter your new permanent password:");
+	     		Optional<String> resultOne = passwordDialog.showAndWait();
+		     		
+				passwordDialog.getEditor().clear();
+		     		
+		     	passwordDialog.setContentText("Re-enter your new permanent password:");
+		     	Optional<String> resultTwo = passwordDialog.showAndWait();
+		     		
+		     	if (resultOne.isPresent() && resultTwo.isPresent()) {
+		     		String newPassword = resultOne.get();
+		     		String confirmPassword = resultTwo.get();
+		     			
+		     		// Check if the password fields are filled
+		     		if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+		     			ViewUserLogin.alertUsernamePasswordError.setContentText(
+		     					"Password cannot be empty. Enter password and try again.");
+		     			ViewUserLogin.alertUsernamePasswordError.showAndWait();
+		     		}
+		     			
+		     		// Check if the password fields match
+		     		if (!newPassword.equals(confirmPassword)) {
+		     			ViewUserLogin.alertUsernamePasswordError.setContentText(
+		     					"Passwords do not match. Re-enter passwords and try again.");
+		     			ViewUserLogin.alertUsernamePasswordError.showAndWait();
+		     		} else {
+		     			theDatabase.updatePassword(username, newPassword);
+		     			theDatabase.clearOneTimePassword(username);
+		     		}
+		     	}
+		     		
+		     return;
+		}
 		
 		// Check to see that the login password matches the account password
     	String actualPassword = theDatabase.getCurrentPassword();
