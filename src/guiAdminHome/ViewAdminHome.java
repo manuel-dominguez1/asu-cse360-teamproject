@@ -64,6 +64,16 @@ public class ViewAdminHome {
 	private static double width = applicationMain.FoundationsMain.WINDOW_WIDTH;
 	private static double height = applicationMain.FoundationsMain.WINDOW_HEIGHT;
 
+	// Reference for the in-memory database so this package has access
+	private static Database theDatabase = applicationMain.FoundationsMain.database;
+	
+	protected static Stage deleteWindow;		// The delete user Stage
+	protected static Stage theStage;			// The Stage that JavaFX has established for us
+	private static Pane theRootPane;			// The Pane that holds all the GUI widgets 
+	protected static User theUser;				// The current logged in User
+
+	private static Scene theAdminHomeScene;		// The shared Scene each invocation populates
+	private static final int theRole = 1;		// Admin: 1; Role1: 2; Role2: 3
 	
 	// These are the widget attributes for the GUI. There are 5 areas for this GUI.
 	
@@ -105,6 +115,8 @@ public class ViewAdminHome {
 	// alert pops up to inform the admin of this fact.
 	protected static Button button_ManageInvitations = new Button("Manage Invitations");
 	protected static Button button_SetOnetimePassword = new Button("Set a One-Time Password");
+	protected static ComboBox <String> combobox_SelectUser = new ComboBox <String>();
+	protected static List<String> users = theDatabase.getUserList();
 	protected static Button button_DeleteUser = new Button("Delete a User");
 	protected static Button button_ListUsers = new Button("List All Users");
 	protected static Button button_AddRemoveRoles = new Button("Add/Remove Roles");
@@ -132,17 +144,6 @@ public class ViewAdminHome {
 	// These attributes are used to configure the page and populate it with this user's information
 	private static ViewAdminHome theView;		// Used to determine if instantiation of the class
 												// is needed
-
-	// Reference for the in-memory database so this package has access
-	private static Database theDatabase = applicationMain.FoundationsMain.database;
-	
-	protected static Stage deleteWindow;		// The delete user Stage
-	protected static Stage theStage;			// The Stage that JavaFX has established for us
-	private static Pane theRootPane;			// The Pane that holds all the GUI widgets 
-	protected static User theUser;				// The current logged in User
-
-	private static Scene theAdminHomeScene;		// The shared Scene each invocation populates
-	private static final int theRole = 1;		// Admin: 1; Role1: 2; Role2: 3
 
 	/*-*******************************************************************************************
 
@@ -187,6 +188,9 @@ public class ViewAdminHome {
 
 		// Set the role for potential users to the default (No role selected)
 		combobox_SelectRole.getSelectionModel().select(0);
+
+		// Set the user for potential users to the default (No user selected)
+		combobox_SelectUser.getSelectionModel().select(0);
 				
 		// Set the title for the window, display the page, and wait for the Admin to do something
 		theStage.setTitle("CSE 360 Foundation Code: Admin Home Page");
@@ -265,6 +269,10 @@ public class ViewAdminHome {
 		button_SetOnetimePassword.setOnAction((_) -> 
 			{ControllerAdminHome.setOnetimePassword(); });
 
+		setupComboBoxUI(combobox_SelectUser, "Dialog", 16, 250, 300, 320);
+		combobox_SelectUser.setItems(FXCollections.observableArrayList(users));
+		combobox_SelectUser.getSelectionModel().select(0);
+
 		setupButtonUI(button_DeleteUser, "Dialog", 16, 250, Pos.CENTER, 20, 370);
 		//button_DeleteUser.setOnAction((_) -> {ControllerAdminHome.deleteUser(); });
 		// handle the Delete User Button click
@@ -294,7 +302,7 @@ public class ViewAdminHome {
     		label_InvitationEmailAddress, text_InvitationEmailAddress,
     		combobox_SelectRole, button_SendInvitation, line_Separator3,
     		button_ManageInvitations,
-    		button_SetOnetimePassword,
+    		button_SetOnetimePassword, combobox_SelectUser,
     		button_DeleteUser,
     		button_ListUsers,
     		button_AddRemoveRoles,
