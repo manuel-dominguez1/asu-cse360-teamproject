@@ -267,7 +267,7 @@ public class ViewAdminHome {
 	
 		setupButtonUI(button_SetOnetimePassword, "Dialog", 16, 250, Pos.CENTER, 20, 320);
 		button_SetOnetimePassword.setOnAction((_) -> 
-			{ControllerAdminHome.setOnetimePassword(); });
+			{ControllerAdminHome.setOneTimePassword(); });
 
 		setupComboBoxUI(combobox_SelectUser, "Dialog", 16, 250, 300, 320);
 		combobox_SelectUser.setItems(FXCollections.observableArrayList(users));
