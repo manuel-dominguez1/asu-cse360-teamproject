@@ -1,6 +1,7 @@
 package guiUserLogin;
 
 import database.Database;
+import passwordRecognizer.passwordRecognizer;
 import entityClasses.User;
 import javafx.stage.Stage;
 import javafx.scene.control.TextInputDialog;
@@ -96,29 +97,51 @@ public class ControllerUserLogin {
 		     	passwordDialog.setContentText("Re-enter your new permanent password:");
 		     	Optional<String> resultTwo = passwordDialog.showAndWait();
 		     		
-		     	if (resultOne.isPresent() && resultTwo.isPresent()) {
-		     		String newPassword = resultOne.get();
-		     		String confirmPassword = resultTwo.get();
+		     	String newPassword = resultOne.get();
+		     	String confirmPassword = resultTwo.get();
 		     			
-		     		// Check if the password fields are filled
-		     		if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-		     			ViewUserLogin.alertUsernamePasswordError.setContentText(
-		     					"Password cannot be empty. Enter password and try again.");
-		     			ViewUserLogin.alertUsernamePasswordError.showAndWait();
-		     		}
+		     	// Check if the password fields are filled
+		     	if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+		     		ViewUserLogin.alertUsernamePasswordError.setContentText(
+		     				"Password cannot be empty. Enter password and try again.");
+		     		ViewUserLogin.alertUsernamePasswordError.showAndWait();
+
+					return;
+		     	}
+
+				// Check the Password with passwordNameRecognizer
+				String passwordError = passwordRecognizer.checkForValidPassword(newPassword);
+			
+				// if there is an error, set the alert text to the error
+				if (!passwordError.isEmpty()) {
+					ViewUserLogin.alertUsernamePasswordError.setContentText(passwordError);
+					ViewUserLogin.alertUsernamePasswordError.setHeaderText("Invalid Password");
+					ViewUserLogin.alertUsernamePasswordError.showAndWait();
+						
+					// reset UserName & password fields, then exit
+					ViewUserLogin.text_oneTimePasswordOne.clear();
+					ViewUserLogin.text_oneTimePasswordTwo.clear();
+
+				return;
+			}
 		     			
-		     		// Check if the password fields match
-		     		if (!newPassword.equals(confirmPassword)) {
-		     			ViewUserLogin.alertUsernamePasswordError.setContentText(
-		     					"Passwords do not match. Re-enter passwords and try again.");
-		     			ViewUserLogin.alertUsernamePasswordError.showAndWait();
-		     		} else {
-		     			theDatabase.updatePassword(username, newPassword);
-		     			theDatabase.clearOneTimePassword(username);
-		     		}
+		     	// Check if the password fields match
+		     	if (!newPassword.equals(confirmPassword)) {
+		     		ViewUserLogin.alertUsernamePasswordError.setContentText(
+		     				"Passwords do not match. Re-enter passwords and try again.");
+		     		ViewUserLogin.alertUsernamePasswordError.showAndWait();
+
+					// reset UserName & password fields, then exit
+					ViewUserLogin.text_oneTimePasswordOne.clear();
+					ViewUserLogin.text_oneTimePasswordTwo.clear();
+
+					return;
+				} else {
+		     		theDatabase.updatePassword(username, newPassword);
+		     		theDatabase.clearOneTimePassword(username);
 		     	}
 		     		
-		     return;
+		     	return;
 		}
 		
 		// Check to see that the login password matches the account password
