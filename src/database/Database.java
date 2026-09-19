@@ -1,10 +1,6 @@
 package database;
 
 import java.sql.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -247,7 +243,26 @@ public class Database {
 //		System.out.println(userList);
 		return userList;
 	}
-
+	/*******
+	 *  <p> Method: List getFullUserList() </p>
+	 *  
+	 *  
+	 */
+		public List<User> getFullUserList () {
+			List<User> userList = new ArrayList<User>();
+			String query = "SELECT * FROM userDB";
+			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+				ResultSet rs = pstmt.executeQuery();
+				while (rs.next()) {
+					userList.add(new User(rs.getString("userName"),"" ,rs.getString("firstName"), rs.getString("middleName"),
+							rs.getString("lastName"), rs.getString("preferredFirstName"),rs.getString("emailAddress"),
+							rs.getBoolean("adminRole"),rs.getBoolean("newRole1"),rs.getBoolean("newRole2")));
+				}
+			} catch (SQLException e) {
+		        return userList;
+		    }
+			return userList;
+		}
 /*******
  * <p> Method: boolean loginAdmin(User user) </p>
  * 
