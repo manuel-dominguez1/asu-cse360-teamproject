@@ -1045,7 +1045,7 @@ public class Database {
 		if (role.compareTo("Admin") == 0) {
 			String query = "UPDATE userDB SET adminRole = ? WHERE username = ?";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-				pstmt.setString(1, roleValue);
+				pstmt.setBoolean(1, roleValue);
 				pstmt.setString(2, username);
 				pstmt.executeUpdate();
 				if (value.compareTo("true") == 0)
