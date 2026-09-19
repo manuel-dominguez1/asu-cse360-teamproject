@@ -54,17 +54,18 @@ public class passwordRecognizer {
 	public static String checkForValidPassword(String input) {
 		// Check to ensure that there is input to process
 		if(input.length() <= 0) {
-			return "\n*** ERROR *** Password cannot be empty";
+			passwordRecognizerErrorMessage = "\n*** ERROR *** Password cannot be empty";
+			return passwordRecognizerErrorMessage;
 		}
 		
 		//Check to ensure that the input meets length requirements;
 		if (input.length() < 8) {
 			passwordRecognizerErrorMessage = "\n*** ERROR *** Password too short, must exceed 7 characters";
-			return "\n*** ERROR *** Password too short, must exceed 7 characters";
+			return passwordRecognizerErrorMessage;
 		}
 		if (input.length() > 33) {
 			passwordRecognizerErrorMessage = "\n*** ERROR *** Password too long, must not exceed 33 characters";
-			return "\n*** ERROR *** Password too long, must not exceed 33 characters";
+			return passwordRecognizerErrorMessage;
 		}
 		
 		
@@ -74,7 +75,7 @@ public class passwordRecognizer {
 		boolean hasDigit = false;
 		boolean hasSpecialChar = false;
 		
-		State currentState = State.START;
+		
 		
 		// Process the input character by character
 		for (int i = 0; i < input.length(); i++) {
@@ -82,52 +83,40 @@ public class passwordRecognizer {
 			
 			if (Character.isUpperCase(ch)) {
 				hasUpper = true;
-			} else if (Character.isLowerCase(ch)) {
+			}
+			
+			if (Character.isLowerCase(ch)) {
 				hasLower = true;
-			} else if (Character.isDigit(ch)) {
+			}
+			
+			if (Character.isDigit(ch)) {
 				hasDigit = true;
-			} else if (SPECIAL_CHARS.contains(ch)) {
+			}
+			
+			if (SPECIAL_CHARS.contains(ch)) {
 				hasSpecialChar = true;
 			}
+		}
 			
-			//State Transition Logic
-			switch (currentState) {
-				case START:
-					if (hasUpper) {
-						currentState = State.UPPERCASE_FOUND;
-					} else {
-						passwordRecognizerErrorMessage = "\n*** ERROR *** Password must contain an uppercase letter";
-						return "\n*** ERROR *** Password must contain an uppercase letter";
-					}
+		//State Transition Logic
+		if (!hasUpper) {
+			passwordRecognizerErrorMessage = "\n*** ERROR *** Password must contain an uppercase letter";
+			return passwordRecognizerErrorMessage;
+		}
+			
+		if (!hasLower) {
+			passwordRecognizerErrorMessage = "\n*** ERROR *** Password must contain a lowercase letter";
+			return passwordRecognizerErrorMessage;
+		}
 				
-				case UPPERCASE_FOUND:
-					if (hasLower) {
-						currentState = State.LOWERCASE_FOUND;
-					} else {
-						passwordRecognizerErrorMessage = "\n*** ERROR *** Password must contain a lowercase letter";
-						return "\n*** ERROR *** Password must contain a lowercase letter";
-					}
-				
-				case LOWERCASE_FOUND:
-					if (hasDigit) {
-						currentState = State.DIGIT_FOUND;
-					} else {
-						passwordRecognizerErrorMessage = "\n*** ERROR *** Password must contain a numeric digit";
-						return "\n*** ERROR *** Password must contain a numeric digit";
-					}
+		if (!hasDigit) {
+			passwordRecognizerErrorMessage = "\n*** ERROR *** Password must contain a numeric digit";
+			return passwordRecognizerErrorMessage;
+		}
 									
-				case DIGIT_FOUND:
-					if (hasSpecialChar) {
-						currentState = State.VALID;
-					}
-					
-				case VALID:
-					break;
-			}
-			
-			if (currentState == State.VALID) {
-				return "";
-			}
+		if (!hasSpecialChar) {
+			passwordRecognizerErrorMessage = "\n*** ERROR *** Password must contain a special character (!,@,$,&,?,.)";
+			return passwordRecognizerErrorMessage;
 		}
 		
 		return "";
