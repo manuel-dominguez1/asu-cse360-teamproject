@@ -2,6 +2,7 @@ package guiFirstAdmin;
 
 import java.sql.SQLException;
 import userNameRecognizer.UserNameRecognizer;
+import passwordRecognizer.passwordRecognizer;
 import database.Database;
 import entityClasses.User;
 import javafx.stage.Stage;
@@ -115,6 +116,22 @@ public class ControllerFirstAdmin {
 			ViewFirstAdmin.alertUserNameError.setHeaderText("Invalid UserName");
 			ViewFirstAdmin.alertUserNameError.showAndWait();
 			
+			// reset UserName & password fields, then exit
+			ViewFirstAdmin.text_AdminUsername.clear();
+			ViewFirstAdmin.text_AdminPassword1.clear();
+			ViewFirstAdmin.text_AdminPassword2.clear();
+			return;
+		}
+
+		// Check the Password with passwordNameRecognizer
+		String passwordError = passwordRecognizer.checkForValidPassword(adminPassword1);
+		
+		// if there is an error, set the alert text to the error
+		if (!passwordError.isEmpty()) {
+			ViewFirstAdmin.alertPasswordError.setContentText(passwordError);
+			ViewFirstAdmin.alertPasswordError.setHeaderText("Invalid Password");
+			ViewFirstAdmin.alertPasswordError.showAndWait();
+					
 			// reset UserName & password fields, then exit
 			ViewFirstAdmin.text_AdminUsername.clear();
 			ViewFirstAdmin.text_AdminPassword1.clear();
