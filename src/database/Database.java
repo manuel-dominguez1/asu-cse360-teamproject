@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import entityClasses.User;
+import passwordRecognizer.passwordRecognizer;
 
 /*******
  * <p> Title: Database Class. </p>
@@ -709,15 +710,20 @@ public class Database {
 	 */
 	// update the password
 	public void updatePassword(String username, String password) {
-	    String query = "UPDATE userDB SET password = ? WHERE username = ?";
-	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-	        pstmt.setString(1, password);
-	        pstmt.setString(2, username);
-	        pstmt.executeUpdate();
-	        currentPassword = password;
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+	    // Check the Password with passwordNameRecognizer
+		String passwordError = passwordRecognizer.checkForValidPassword(password);
+		
+		if (passwordError.isEmpty()) {
+			String query = "UPDATE userDB SET password = ? WHERE username = ?";
+			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+				pstmt.setString(1, password);
+				pstmt.setString(2, username);
+				pstmt.executeUpdate();
+				currentPassword = password;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/*******
