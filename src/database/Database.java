@@ -48,6 +48,7 @@ public class Database {
 	// This is only useful for single user applications
 	private String currentUsername;
 	private String currentPassword;
+	private String oneTimePassword;
 	private String currentFirstName;
 	private String currentMiddleName;
 	private String currentLastName;
@@ -1001,14 +1002,15 @@ public class Database {
 			rs.next();
 	    	currentUsername = rs.getString(2);
 	    	currentPassword = rs.getString(3);
-	    	currentFirstName = rs.getString(4);
-	    	currentMiddleName = rs.getString(5);
-	    	currentLastName = rs.getString(6);
-	    	currentPreferredFirstName = rs.getString(7);
-	    	currentEmailAddress = rs.getString(8);
-	    	currentAdminRole = rs.getBoolean(9);
-	    	currentNewRole1 = rs.getBoolean(10);
-	    	currentNewRole2 = rs.getBoolean(11);
+			oneTimePassword = rs.getString(4);
+	    	currentFirstName = rs.getString(5);
+	    	currentMiddleName = rs.getString(6);
+	    	currentLastName = rs.getString(7);
+	    	currentPreferredFirstName = rs.getString(8);
+	    	currentEmailAddress = rs.getString(9);
+	    	currentAdminRole = rs.getBoolean(10);
+	    	currentNewRole1 = rs.getBoolean(11);
+	    	currentNewRole2 = rs.getBoolean(12);
 			return true;
 	    } catch (SQLException e) {
 			return false;
@@ -1060,7 +1062,7 @@ public class Database {
 		if (role.compareTo("Role1") == 0) {
 			String query = "UPDATE userDB SET newRole1 = ? WHERE username = ?";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-				pstmt.setString(1, value);
+				pstmt.setBoolean(1, roleValue);
 				pstmt.setString(2, username);
 				pstmt.executeUpdate();
 				if (value.compareTo("true") == 0)
@@ -1075,7 +1077,7 @@ public class Database {
 		if (role.compareTo("Role2") == 0) {
 			String query = "UPDATE userDB SET newRole2 = ? WHERE username = ?";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-				pstmt.setString(1, value);
+				pstmt.setBoolean(1, roleValue);
 				pstmt.setString(2, username);
 				pstmt.executeUpdate();
 				if (value.compareTo("true") == 0)
