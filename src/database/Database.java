@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import entityClasses.User;
 import passwordRecognizer.passwordRecognizer;
+import emailAddressRecognizer.EmailAddressRecognizer;
 
 /*******
  * <p> Title: Database Class. </p>
@@ -977,15 +978,20 @@ public class Database {
 	 */
 	// update the email address
 	public void updateEmailAddress(String username, String emailAddress) {
-	    String query = "UPDATE userDB SET emailAddress = ? WHERE username = ?";
-	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-	        pstmt.setString(1, emailAddress);
-	        pstmt.setString(2, username);
-	        pstmt.executeUpdate();
-	        currentEmailAddress = emailAddress;
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		//Check the email validity against the EmailAddressRecognizer FSM
+		String emailError = EmailAddressRecognizer.checkEmailAddress(emailAddress);
+
+		if (emailError.isEmpty()) {
+	    	String query = "UPDATE userDB SET emailAddress = ? WHERE username = ?";
+	    	try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+	        	pstmt.setString(1, emailAddress);
+	       	 	pstmt.setString(2, username);
+	       	 	pstmt.executeUpdate();
+	        	currentEmailAddress = emailAddress;
+	    	} catch (SQLException e) {
+	        	e.printStackTrace();
+	    	}
+		}
 	}
 	
 	
