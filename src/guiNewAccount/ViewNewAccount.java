@@ -164,7 +164,7 @@ public class ViewNewAccount {
 		theRootPane = new Pane();
 		theNewAccountScene = new Scene(theRootPane, width, height);
 
-		// Label the Panle with the name of the startup screen, centered at the top of the pane
+		// Label the Panel with the name of the startup screen, centered at the top of the pane
 		setupLabelUI(label_ApplicationTitle, "Arial", 28, width, Pos.CENTER, 0, 5);
 		
     	// Label to display the welcome message for the new user
