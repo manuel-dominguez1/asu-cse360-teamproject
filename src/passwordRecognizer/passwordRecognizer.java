@@ -30,10 +30,18 @@ public class passwordRecognizer {
 	 */
 	
 	// Define which special characters are valid
-	private static final Set<Character> SPECIAL_CHARS = Set.of('!', '@', '$', '&', '?', '.');
+	private static final Set<Character> SPECIAL_CHARS = Set.of('~', '`', '!', '@', '#',  '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '{', '}', '[', ']', '|', ':', ';', ',', '.', '/', '?');
 	
 	public static String passwordRecognizerErrorMessage = "";		//The error message text
 
+	// Need to un-nest boolean parameters for automation testing
+	public static boolean hasUpper = false;
+	public static boolean hasLower = false;
+	public static boolean hasDigit = false;
+	public static boolean hasSpecialChar = false;
+	public static boolean tooShort = false;
+	public static boolean tooLong = false;
+	
 	/**********
 	 * This method is a mechanical transformation of a Finite State Machine diagram into a Java
 	 * method.
@@ -51,11 +59,13 @@ public class passwordRecognizer {
 		
 		//Check to ensure that the input meets length requirements;
 		if (input.length() < 8) {
-			passwordRecognizerErrorMessage = "\n*** ERROR *** Password too short, must exceed 7 characters";
+			passwordRecognizerErrorMessage = "\n*** ERROR *** Password too short, must exceed 8 characters";
+			tooShort = true;
 			return passwordRecognizerErrorMessage;
 		}
 		if (input.length() > 33) {
 			passwordRecognizerErrorMessage = "\n*** ERROR *** Password too long, must not exceed 33 characters";
+			tooLong = true;
 			return passwordRecognizerErrorMessage;
 		}
 		

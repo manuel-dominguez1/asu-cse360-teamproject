@@ -1,1 +1,38 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/* JavaFX CSS - shared styling for all GUI pages in this application */
+
+/* Applies to the root node of any Scene this stylesheet is attached to */
+.root {
+    -fx-background-color: #ffffff;
+}
+
+/* Facebook-blue buttons */
+.fb-button {
+    -fx-background-color: #1877F2;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+}
+
+.fb-button:hover {
+    -fx-background-color: #166FE5;
+}
+
+.fb-button:pressed {
+    -fx-background-color: #125FC2;
+}
+
+/* Neutral grey buttons,*/
+.grey-button {
+    -fx-background-color: #808080;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+}
+
+.grey-button:hover {
+    -fx-background-color: #6e6e6e;
+}
+
+.grey-button:pressed {
+    -fx-background-color: #5c5c5c;
+}
