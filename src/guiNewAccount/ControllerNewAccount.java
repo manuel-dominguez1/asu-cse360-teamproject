@@ -97,6 +97,22 @@ public class ControllerNewAccount {
 		// Make sure the two passwords are the same.	
 		if (ViewNewAccount.text_Password1.getText().
 				compareTo(ViewNewAccount.text_Password2.getText()) == 0) {
+
+			// Check the Password with passwordNameRecognizer
+			String passwordError = passwordRecognizer.checkForValidPassword(password);
+			
+			// if there is an error, set the alert text to the error
+			if (!passwordError.isEmpty()) {
+				ViewNewAccount.alertUsernamePasswordError.setContentText(passwordError);
+				ViewNewAccount.alertUsernamePasswordError.setHeaderText("Invalid Password");
+				ViewNewAccount.alertUsernamePasswordError.showAndWait();
+						
+				// reset UserName & password fields, then exit
+				ViewNewAccount.text_Username.clear();
+				ViewNewAccount.text_Password1.clear();
+				ViewNewAccount.text_Password2.clear();
+				return;
+			}
 			
 			// The passwords match so we will set up the role and the User object base on the 
 			// information provided in the invitation
