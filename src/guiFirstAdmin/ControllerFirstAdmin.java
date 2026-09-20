@@ -112,9 +112,9 @@ public class ControllerFirstAdmin {
 		
 		// if there is an error, set the alert text to the error
 		if (!userNameError.isEmpty()) {
-			ViewFirstAdmin.alertUserNameError.setContentText(userNameError);
-			ViewFirstAdmin.alertUserNameError.setHeaderText("Invalid UserName");
-			ViewFirstAdmin.alertUserNameError.showAndWait();
+			ViewFirstAdmin.alertUsernameError.setContentText(userNameError);
+			ViewFirstAdmin.alertUsernameError.setHeaderText("Invalid UserName");
+			ViewFirstAdmin.alertUsernameError.showAndWait();
 			
 			// reset UserName & password fields, then exit
 			ViewFirstAdmin.text_AdminUsername.clear();
