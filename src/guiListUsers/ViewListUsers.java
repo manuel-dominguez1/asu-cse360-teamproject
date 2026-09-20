@@ -129,6 +129,8 @@ public class ViewListUsers {
 		// singleton instance of this class
 		if (theView == null)
 			theView = new ViewListUsers();
+		List<User> userList = theDatabase.getFullUserList();
+	    tableView.setItems(FXCollections.observableArrayList(userList));
 		ControllerListUsers.repaintTheWindow();
 		
 
@@ -169,7 +171,7 @@ public class ViewListUsers {
 		// GUI Area 2
 		
 		
-		List<User> userList = theDatabase.getFullUserList();
+		
 		usernameColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
 		fnameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 		mnameColumn.setCellValueFactory(new PropertyValueFactory<>("middleName"));
@@ -180,7 +182,7 @@ public class ViewListUsers {
 		role1Column.setCellValueFactory(new PropertyValueFactory<>("newRole1"));
 		role2Column.setCellValueFactory(new PropertyValueFactory<>("newRole2"));
 	    tableView.getColumns().addAll(usernameColumn,fnameColumn,mnameColumn,lnameColumn,pnameColumn,emailColumn,adminColumn,role1Column,role2Column);
-		tableView.setItems(FXCollections.observableArrayList(userList));
+	    
 		
 		tableView.setPrefWidth(width - 40);
 		tableView.setPrefHeight(440);
