@@ -11,7 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.Region;
 
 
 /*******
@@ -51,26 +50,23 @@ public class ViewFirstAdmin {
 	// but to abort the action and stop the application.
 	private static Label label_ApplicationTitle = new Label("Foundation Application Startup Page");
 	private static Label label_TitleLine1 = 
-			new Label(" You are the first user.  You must be an administrator.");
+			new Label(" Welcome Admin ");
 	
 	private static Label label_TitleLine2 = 
-			new Label("Enter the Admin's Username, the Password twice, and then click on " + 
-					"Setup Admin Account.");
+			new Label("Please Create a New Account");
 	
+	// These labels go above the input boxes
 	protected static Label label_PasswordsDoNotMatch = new Label();
+	private static Label label_UsernameHeader = new Label("Username");
 	protected static TextField text_AdminUsername = new TextField();
+	private static Label label_Password1Header = new Label("Password");
 	protected static PasswordField text_AdminPassword1 = new PasswordField();
+	private static Label label_Password2Header = new Label("Confirm Password");
 	protected static PasswordField text_AdminPassword2 = new PasswordField();
-	private static Button button_AdminSetup = new Button("Setup Admin Account");
+	private static Button button_AdminSetup = new Button("Submit");
 
 	// This alert is used should the user enter two passwords that do not match
 	protected static Alert alertUsernamePasswordError = new Alert(AlertType.INFORMATION);
-	
-	// This alert is used should the user enter an invalid UserName
-	protected static Alert alertUserNameError = new Alert(AlertType.INFORMATION);
-
-	// This alert is used should the user enter an invalid password
-	protected static Alert alertPasswordError = new Alert(AlertType.INFORMATION);
 
 	// This button allow the user to abort creating the first admin account and terminate
 	private static Button button_Quit = new Button("Quit");
@@ -150,6 +146,8 @@ public class ViewFirstAdmin {
 		// Create the Pane for the list of widgets and the Scene for the window
 		theRootPane = new Pane();
 		theFirstAdminScene = new Scene(theRootPane, width, height);
+		theFirstAdminScene.getStylesheets().add(
+				getClass().getResource("/applicationMain/application.css").toExternalForm());
 
 		// Label theScene with the name of the system startup screen
 		setupLabelUI(label_ApplicationTitle, "Arial", 32, width, Pos.CENTER, 0, 10);
@@ -158,49 +156,59 @@ public class ViewFirstAdmin {
 		setupLabelUI(label_TitleLine1, "Arial", 24, width, Pos.CENTER, 0, 70);
 
 		// Label to display the welcome message for the first user
-		setupLabelUI(label_TitleLine2, "Arial", 18, width, Pos.CENTER, 0, 130);
+		setupLabelUI(label_TitleLine2, "Arial", 18, width, Pos.CENTER, 0, 110);
+
+		// Header label for the Admin username field
+		setupLabelUI(label_UsernameHeader, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 140);
+		label_UsernameHeader.setStyle("-fx-font-weight: bold;");
 
 		// Establish the text input operand field for the Admin username
-		setupTextUI(text_AdminUsername, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 160, 
+		setupTextUI(text_AdminUsername, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 160, 
 				true);
 		text_AdminUsername.setPromptText("Enter Admin Username");
 		text_AdminUsername.textProperty().addListener((_, _, _) 
 				-> {ControllerFirstAdmin.setAdminUsername(); });
 
+		// Header label for the first password field
+		setupLabelUI(label_Password1Header, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 210);
+		label_Password1Header.setStyle("-fx-font-weight: bold;");
+
 		// Establish the text input operand field for the password
-		setupTextUI(text_AdminPassword1, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 210, 
+		setupTextUI(text_AdminPassword1, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 230, 
 				true);
 		text_AdminPassword1.setPromptText("Enter Admin Password");
 		text_AdminPassword1.textProperty().addListener((_, _, _)
 				-> {ControllerFirstAdmin.setAdminPassword1(); });
 
+		// Header label for the second password field
+		setupLabelUI(label_Password2Header, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 280);
+		label_Password2Header.setStyle("-fx-font-weight: bold;");
+
 		// Establish the text input operand field for the password
-		setupTextUI(text_AdminPassword2, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 260, 
+		setupTextUI(text_AdminPassword2, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 300, 
 				true);
 		text_AdminPassword2.setPromptText("Enter Admin Password Again");
 		text_AdminPassword2.textProperty().addListener((_, _, _) 
 				-> {ControllerFirstAdmin.setAdminPassword2(); });
 
 		// Set up the Log In button
-		setupButtonUI(button_AdminSetup, "Dialog", 18, 200, Pos.CENTER, 475, 210);
+		setupButtonUI(button_AdminSetup, "Dialog", 18, 200, Pos.CENTER, 300, 360);
 		button_AdminSetup.setOnAction((_) -> {
 			ControllerFirstAdmin.doSetupAdmin(theStage,1); 
 			});
 
 		// Label to display the Passwords do not match error message
-		setupLabelUI(label_PasswordsDoNotMatch, "Arial", 18, width, Pos.CENTER, 0, 300);
+		setupLabelUI(label_PasswordsDoNotMatch, "Arial", 18, width, Pos.CENTER, 0, 410);
 
-		setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 520);
+		setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 275, 520);
 		button_Quit.setOnAction((_) -> {ControllerFirstAdmin.performQuit(); });
 
 		// Place all of the just-initialized GUI elements into the pane
 		theRootPane.getChildren().addAll(label_ApplicationTitle, label_TitleLine1,
-				label_TitleLine2, text_AdminUsername, text_AdminPassword1, 
+				label_TitleLine2, label_UsernameHeader, text_AdminUsername,
+				label_Password1Header, text_AdminPassword1, label_Password2Header,
 				text_AdminPassword2, button_AdminSetup, label_PasswordsDoNotMatch,
 				button_Quit);
-		
-		// resize alert to the size of the content string
-		alertUserNameError.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 	}
 	
 	
@@ -248,6 +256,7 @@ public class ViewFirstAdmin {
 		b.setAlignment(p);
 		b.setLayoutX(x);
 		b.setLayoutY(y);		
+		b.getStyleClass().add("fb-button");
 	}
 
 	

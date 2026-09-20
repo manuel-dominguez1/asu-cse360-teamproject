@@ -9,7 +9,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -40,24 +39,24 @@ public class ViewUserLogin {
 	private static double width = applicationMain.FoundationsMain.WINDOW_WIDTH;
 	private static double height = applicationMain.FoundationsMain.WINDOW_HEIGHT;
 
-	private static Label label_ApplicationTitle = new Label("Foundation Application Startup Page");
+	private static Label label_ApplicationTitle = new Label("Foundation Login");
 
 	// This set is for all subsequent starts of the system
-	private static Label label_OperationalStartTitle = new Label("Log In or Invited User Account Setup ");
-	private static Label label_LogInInsrtuctions = new Label("Enter your user name and password and "+	
-			"then click on the LogIn button");
+	private static Label label_OperationalStartTitle = new Label("Log In or Create a New Account");
 	protected static Alert alertUsernamePasswordError = new Alert(AlertType.INFORMATION);
 
+
 	//	private User user;
+	private static Label label_UsernameHeader = new Label("Username");
 	protected static TextField text_Username = new TextField();
+	private static Label label_PasswordHeader = new Label("Password");
 	protected static PasswordField text_Password = new PasswordField();
 	private static Button button_Login = new Button("Log In");	
 
-	private static Label label_AccountSetupInsrtuctions = new Label("No account? "+	
-			"Enter your invitation code and click on the Account Setup button");
-	private static TextField text_Invitation = new TextField();
-	private static Button button_SetupAccount = new Button("Setup Account");
-	
+	// Takes the user to the New Account page, where the invitation code is entered and
+	// validated before the account can be created.
+	private static Button button_NewAccount = new Button("New Account");
+
 	private static Button button_Quit = new Button("Quit");
 
 	private static Stage theStage;	
@@ -86,7 +85,6 @@ public class ViewUserLogin {
 		// state of the system.		
 		text_Username.setText("");		// Reset the username and password from the last use
 		text_Password.setText("");
-		text_Invitation.setText("");	// Same for the invitation code
 
 		// Set the title for the window, display the page, and wait for the Admin to do something
 		theStage.setTitle("CSE 360 Foundation Code: User Login Page");		
@@ -121,6 +119,8 @@ public class ViewUserLogin {
 		// Create the Pane for the list of widgets and the Scene for the window
 		theRootPane = new Pane();
 		theUserLoginScene = new Scene(theRootPane, width, height);
+		theUserLoginScene.getStylesheets().add(
+				getClass().getResource("/applicationMain/application.css").toExternalForm());
 		
 		// Populate the window with the title and other common widgets and set their static state
 		setupLabelUI(label_ApplicationTitle, "Arial", 32, width, Pos.CENTER, 0, 10);
@@ -130,41 +130,42 @@ public class ViewUserLogin {
 
 		// Existing user log in portion of the page
 
-		setupLabelUI(label_LogInInsrtuctions, "Arial", 18, width, Pos.BASELINE_LEFT, 20, 120);
+
+		// Header label for the username field
+		setupLabelUI(label_UsernameHeader, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 140);
+		label_UsernameHeader.setStyle("-fx-font-weight: bold;");
 
 		// Establish the text input operand field for the username
-		setupTextUI(text_Username, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 160, true);
+		setupTextUI(text_Username, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 160, true);
 		text_Username.setPromptText("Enter Username");
 
+		// Header label for the password field
+		setupLabelUI(label_PasswordHeader, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 210);
+		label_PasswordHeader.setStyle("-fx-font-weight: bold;");
+
 		// Establish the text input operand field for the password
-		setupTextUI(text_Password, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 210, true);
+		setupTextUI(text_Password, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 230, true);
 		text_Password.setPromptText("Enter Password");
 
 		// Set up the Log In button
-		setupButtonUI(button_Login, "Dialog", 18, 200, Pos.CENTER, 475, 180);
+		setupButtonUI(button_Login, "Dialog", 18, 200, Pos.CENTER, 300, 270);
 		button_Login.setOnAction((_) -> {ControllerUserLogin.doLogin(theStage); });
 
 		alertUsernamePasswordError.setTitle("Invalid username/password!");
 		alertUsernamePasswordError.setHeaderText(null);
 
 
-		// The invitation to setup an account portion of the page
-
-		setupLabelUI(label_AccountSetupInsrtuctions, "Arial", 18, width, Pos.BASELINE_LEFT, 20, 300);
-
-		// Establish the text input operand field for the password
-		setupTextUI(text_Invitation, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 340, true);
-		text_Invitation.setPromptText("Enter Invitation Code");
-
-		// Set up the setup button
-		setupButtonUI(button_SetupAccount, "Dialog", 18, 200, Pos.CENTER, 475, 340);
-		button_SetupAccount.setOnAction((_) -> {
-			System.out.println("**** Calling doSetupAccount");
-			ControllerUserLogin.doSetupAccount(theStage, text_Invitation.getText());
+		// Button to start creating a new account. The invitation code is now entered and
+		// validated on the New Account page itself, so this page just navigates there.
+		setupButtonUI(button_NewAccount, "Dialog", 18, 200, Pos.CENTER, 300, 320);
+		button_NewAccount.getStyleClass().remove("fb-button");
+		button_NewAccount.getStyleClass().add("grey-button");
+		button_NewAccount.setOnAction((_) -> {
+			ControllerUserLogin.doNewAccount(theStage);
 		});
 
 		// Set up the Quit button  
-		setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 520);
+		setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 275, 520);
 		button_Quit.setOnAction((_) -> {ControllerUserLogin.performQuit(); });
 
 		//		theRootPane.getChildren().clear();
@@ -172,10 +173,9 @@ public class ViewUserLogin {
 		theRootPane.getChildren().addAll(
 				label_ApplicationTitle, 
 				label_OperationalStartTitle,
-				label_LogInInsrtuctions, label_AccountSetupInsrtuctions, text_Username,
-				button_Login, text_Password, text_Invitation, button_SetupAccount,
-				button_Quit);
-		
+				label_UsernameHeader, text_Username,
+				label_PasswordHeader, text_Password, button_Login,
+				button_NewAccount, button_Quit);
 	}
 
 
@@ -215,6 +215,7 @@ public class ViewUserLogin {
 		b.setAlignment(p);
 		b.setLayoutX(x);
 		b.setLayoutY(y);		
+		b.getStyleClass().add("fb-button");
 	}
 
 	/**********

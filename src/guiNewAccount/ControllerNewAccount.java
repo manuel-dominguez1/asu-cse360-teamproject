@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import database.Database;
 import entityClasses.User;
-import guiFirstAdmin.ViewFirstAdmin;
 import userNameRecognizer.UserNameRecognizer;
 
 /*******
@@ -64,26 +63,31 @@ public class ControllerNewAccount {
 	 */	
 	protected static void doCreateUser() {
 		
+		// Fetch and validate the invitation code first, since the role and email address for
+		// this new account are looked up from it. (Previously this happened on the Login page
+		// before this page was even shown; now it happens here instead.)
+		String invitationCode = ViewNewAccount.text_Invitation.getText();
+		String role = theDatabase.getRoleGivenAnInvitationCode(invitationCode);
+		if (role.length() == 0) {
+			ViewNewAccount.alertInvitationCodeIsInvalid.showAndWait();
+			return;
+		}
+		ViewNewAccount.theInvitationCode = invitationCode;
+		ViewNewAccount.theRole = role;
+		ViewNewAccount.emailAddress = theDatabase.getEmailAddressUsingCode(invitationCode);
+		
 		// Fetch the username and password. (We use the first of the two here, but we will validate
 		// that the two password fields are the same before we do anything with it.)
 		String username = ViewNewAccount.text_Username.getText();
 		String password = ViewNewAccount.text_Password1.getText();
 		
-		// Check the UserName with UserNameRecognizer FSM
-				String userNameError = UserNameRecognizer.checkForValidUserName(username);
-				
-				// if there is an error, set the alert text to the error
-				if (!userNameError.isEmpty()) {
-					ViewNewAccount.alertUserNameError.setContentText(userNameError);
-					ViewNewAccount.alertUserNameError.setHeaderText("Invalid UserName");
-					ViewNewAccount.alertUserNameError.showAndWait();
-					
-					// reset UserName & password fields, then exit
-					ViewNewAccount.text_Username.clear();
-					ViewNewAccount.text_Password1.clear();
-					ViewNewAccount.text_Password2.clear();
-					return;
-				}
+		//check the username against the UserName Recognizers rules before proceeding
+		String usernameError = UserNameRecognizer.checkForValidUserName(username);
+		if(!usernameError.isEmpty()) {
+			ViewNewAccount.alertUsernameError.setContentText(usernameError);
+			ViewNewAccount.alertUsernameError.showAndWait();
+			return;
+		}
 		
 		// Display key information to the log
 		System.out.println("** Account for Username: " + username + "; theInvitationCode: "+
@@ -97,22 +101,6 @@ public class ControllerNewAccount {
 		// Make sure the two passwords are the same.	
 		if (ViewNewAccount.text_Password1.getText().
 				compareTo(ViewNewAccount.text_Password2.getText()) == 0) {
-
-			// Check the Password with passwordNameRecognizer
-			String passwordError = passwordRecognizer.checkForValidPassword(password);
-			
-			// if there is an error, set the alert text to the error
-			if (!passwordError.isEmpty()) {
-				ViewNewAccount.alertUsernamePasswordError.setContentText(passwordError);
-				ViewNewAccount.alertUsernamePasswordError.setHeaderText("Invalid Password");
-				ViewNewAccount.alertUsernamePasswordError.showAndWait();
-						
-				// reset UserName & password fields, then exit
-				ViewNewAccount.text_Username.clear();
-				ViewNewAccount.text_Password1.clear();
-				ViewNewAccount.text_Password2.clear();
-				return;
-			}
 			
 			// The passwords match so we will set up the role and the User object base on the 
 			// information provided in the invitation

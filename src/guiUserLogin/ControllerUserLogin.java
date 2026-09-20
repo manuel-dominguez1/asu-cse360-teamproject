@@ -199,16 +199,16 @@ public class ControllerUserLogin {
 		}
 	}
 	
-		
 	/**********
-	 * <p> Method: setup() </p>
+	 * <p> Method: doNewAccount(Stage theStage) </p>
 	 * 
-	 * <p> Description: This method is called to reset the page and then populate it with new
-	 * content for the new user.</p>
+	 * <p> Description: This method is called when the user clicks the New Account button.
+	 * It simply navigates to the New Account page; the invitation code is now entered and
+	 * validated on that page itself rather than here.</p>
 	 * 
 	 */
-	protected static void doSetupAccount(Stage theStage, String invitationCode) {
-		guiNewAccount.ViewNewAccount.displayNewAccount(theStage, invitationCode);
+	protected static void doNewAccount(Stage theStage) {
+		guiNewAccount.ViewNewAccount.displayNewAccount(theStage);
 	}
 
 	

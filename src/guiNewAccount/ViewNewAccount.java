@@ -13,7 +13,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import database.Database;
 import entityClasses.User;
-import javafx.scene.layout.Region;
 
 /*******
  * <p> Title: ViewNewAccount Class. </p>
@@ -50,10 +49,14 @@ public class ViewNewAccount {
 			new Label("Foundation Application Account Setup Page");
     protected static Label label_NewUserCreation = new Label(" User Account Creation.");
     protected static Label label_NewUserLine = new Label("Please enter a username and a password.");
+    private static Label label_UsernameHeader = new Label("Username");
     protected static TextField text_Username = new TextField();
+    private static Label label_Password1Header = new Label("Password");
     protected static PasswordField text_Password1 = new PasswordField();
+    private static Label label_Password2Header = new Label("Confirm Password");
     protected static PasswordField text_Password2 = new PasswordField();
     protected static Button button_UserSetup = new Button("User Setup");
+    private static Label label_InvitationHeader = new Label("Invitation Code");
     protected static TextField text_Invitation = new TextField();
 
 	// This alert is used should the invitation code be invalid
@@ -62,8 +65,8 @@ public class ViewNewAccount {
 	// This alert is used should the user enter two passwords that do not match
 	protected static Alert alertUsernamePasswordError = new Alert(AlertType.INFORMATION);
 	
-	// This alert is used should the user enter an invalid UserName
-	protected static Alert alertUserNameError = new Alert(AlertType.INFORMATION);
+	// This alert explains exactly why an entered username failed the UserName Recognizer
+	protected static Alert alertUsernameError = new Alert(AlertType.INFORMATION);
 
     protected static Button button_Quit = new Button("Quit");
 
@@ -108,39 +111,34 @@ public class ViewNewAccount {
 	 * 
 	 * @param ps specifies the JavaFX Stage to be used for this GUI and it's methods
 	 * 
-	 * @param ic specifies the user's invitation code for this GUI and it's methods
-	 * 
 	 */
-	public static void displayNewAccount(Stage ps, String ic) {
+	public static void displayNewAccount(Stage ps) {
 		// This is the only way some component of the system can cause a New User Account page to
 		// appear.  The first time, the class is created and initialized.  Every subsequent call it
 		// is reused with only the elements that differ being initialized.
+		//
+		// Unlike before, the invitation code is not passed in from the Login page. The user
+		// types it directly into this page, and it is looked up/validated by the controller
+		// when the "User Setup" button is clicked.
 		
-		// Establish the references to the GUI and the current user
+		// Establish the reference to the GUI
 		theStage = ps;				// Save the reference to the Stage for the rest of this package
-		theInvitationCode = ic;		// Establish the invitation code so it can be easily accessed
 		
 		if (theView == null) theView = new ViewNewAccount();
 		
 		text_Username.setText("");	// Clear the input fields so previously entered values do not
 		text_Password1.setText("");	// appear for a new user
 		text_Password2.setText("");
-		
-		// Fetch the role for this user
-		theRole = theDatabase.getRoleGivenAnInvitationCode(theInvitationCode);
-		
-		if (theRole.length() == 0) {// If there is an issue with the invitation code, display a
-			alertInvitationCodeIsInvalid.showAndWait();	// dialog box saying that are when it it
-			return;					// acknowledged, return so the proper code can be entered
-		}
-		
-		// Get the email address associated with the invitation code
-		emailAddress = theDatabase.getEmailAddressUsingCode(theInvitationCode);
+		text_Invitation.setText("");
 		
     	// Place all of the established GUI elements into the pane
     	theRootPane.getChildren().clear();
-    	theRootPane.getChildren().addAll(label_NewUserCreation, label_NewUserLine, text_Username,
-    			text_Password1, text_Password2, button_UserSetup, button_Quit);    	
+    	theRootPane.getChildren().addAll(label_InvitationHeader, text_Invitation,
+    			label_NewUserCreation, label_NewUserLine,
+    			label_UsernameHeader, text_Username,
+    			label_Password1Header, text_Password1,
+    			label_Password2Header, text_Password2,
+    			button_UserSetup, button_Quit);    	
 
 		// Set the title for the window, display the page, and wait for the Admin to do something
 		theStage.setTitle("CSE 360 Foundation Code: New User Account Setup");	
@@ -163,8 +161,10 @@ public class ViewNewAccount {
 		// Create the Pane for the list of widgets and the Scene for the window
 		theRootPane = new Pane();
 		theNewAccountScene = new Scene(theRootPane, width, height);
+		theNewAccountScene.getStylesheets().add(
+				getClass().getResource("/applicationMain/application.css").toExternalForm());
 
-		// Label the Panel with the name of the startup screen, centered at the top of the pane
+		// Label the Panle with the name of the startup screen, centered at the top of the pane
 		setupLabelUI(label_ApplicationTitle, "Arial", 28, width, Pos.CENTER, 0, 5);
 		
     	// Label to display the welcome message for the new user
@@ -173,16 +173,36 @@ public class ViewNewAccount {
     	// Label to display the  message for the first user
     	setupLabelUI(label_NewUserLine, "Arial", 24, width, Pos.CENTER, 0, 70);
 		
+		// Header label for the invitation code field
+		setupLabelUI(label_InvitationHeader, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 100);
+		label_InvitationHeader.setStyle("-fx-font-weight: bold;");
+
+		// Establish the text input operand field for the invitation code
+		setupTextUI(text_Invitation, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 120, true);
+		text_Invitation.setPromptText("Enter Invitation Code");
+
+		// Header label for the username field
+		setupLabelUI(label_UsernameHeader, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 170);
+		label_UsernameHeader.setStyle("-fx-font-weight: bold;");
+
 		// Establish the text input operand asking for a username
-		setupTextUI(text_Username, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 160, true);
+		setupTextUI(text_Username, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 190, true);
 		text_Username.setPromptText("Enter the Username");
 		
+		// Header label for the password field
+		setupLabelUI(label_Password1Header, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 240);
+		label_Password1Header.setStyle("-fx-font-weight: bold;");
+
 		// Establish the text input operand field for the password
-		setupTextUI(text_Password1, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 210, true);
+		setupTextUI(text_Password1, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 260, true);
 		text_Password1.setPromptText("Enter the Password");
 		
+		// Header label for the confirm-password field
+		setupLabelUI(label_Password2Header, "Arial", 14, 300, Pos.BASELINE_LEFT, 250, 310);
+		label_Password2Header.setStyle("-fx-font-weight: bold;");
+
 		// Establish the text input operand field to confirm the password
-		setupTextUI(text_Password2, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 260, true);
+		setupTextUI(text_Password2, "Arial", 18, 300, Pos.BASELINE_LEFT, 250, 330, true);
 		text_Password2.setPromptText("Enter the Password Again");
 		
 		// If the invitation code is wrong, this alert dialog will tell the user
@@ -194,17 +214,19 @@ public class ViewNewAccount {
 		alertUsernamePasswordError.setTitle("Passwords Do Not Match");
 		alertUsernamePasswordError.setHeaderText("The two passwords must be identical.");
 		alertUsernamePasswordError.setContentText("Correct the passwords and try again.");
+		
+		//If the username is not valid, this alert explains why. The text is
+		//filled in by the controller when an error occurs, since the reason varies
+		alertUsernameError.setTitle("Invalid Username");
+		alertUsernameError.setHeaderText("The username you entered is not valid");
 
         // Set up the account creation and login
-        setupButtonUI(button_UserSetup, "Dialog", 18, 200, Pos.CENTER, 475, 210);
+        setupButtonUI(button_UserSetup, "Dialog", 18, 200, Pos.CENTER, 300, 380);
         button_UserSetup.setOnAction((_) -> {ControllerNewAccount.doCreateUser(); });
 		
         // Enable the user to quit the application
-        setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 540);
+        setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 275, 540);
         button_Quit.setOnAction((_) -> {ControllerNewAccount.performQuit(); });
-        
-        // resize alert to the size of the content string
-        alertUserNameError.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 	}
 	
 	
@@ -244,6 +266,7 @@ public class ViewNewAccount {
 		b.setAlignment(p);
 		b.setLayoutX(x);
 		b.setLayoutY(y);		
+		b.getStyleClass().add("fb-button");
 	}
 
 	/**********
