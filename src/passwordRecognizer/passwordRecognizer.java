@@ -29,15 +29,6 @@ public class passwordRecognizer {
 	 * 
 	 */
 	
-	// State transition labels
-	private enum State {
-		START,
-		UPPERCASE_FOUND,
-		LOWERCASE_FOUND,
-		DIGIT_FOUND,
-		VALID
-	}
-	
 	// Define which special characters are valid
 	private static final Set<Character> SPECIAL_CHARS = Set.of('!', '@', '$', '&', '?', '.');
 	
