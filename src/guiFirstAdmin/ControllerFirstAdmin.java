@@ -109,7 +109,7 @@ public class ControllerFirstAdmin {
 	protected static void doSetupAdmin(Stage ps, int r) {
 		
 		// Check the UserName with UserNameRecognizer FSM
-		String userNameError = UserNameRecognizer.checkForValidUserName(adminUserName);
+		String userNameError = ModelFirstAdmin.usernameIsValid(adminUserName);
 		
 		// if there is an error, set the alert text to the error
 		if (!userNameError.isEmpty()) {
@@ -125,7 +125,7 @@ public class ControllerFirstAdmin {
 		}
 
 		// Check the Password with passwordNameRecognizer
-		String passwordError = passwordRecognizer.checkForValidPassword(adminPassword1);
+		String passwordError = ModelFirstAdmin.passwordIsValid(adminPassword1);
 		
 		// if there is an error, set the alert text to the error
 		if (!passwordError.isEmpty()) {

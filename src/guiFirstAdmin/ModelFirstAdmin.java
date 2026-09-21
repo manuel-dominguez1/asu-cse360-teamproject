@@ -1,5 +1,8 @@
 package guiFirstAdmin;
 
+import guiTools.UserNameRecognizer;
+import guiTools.passwordRecognizer;
+
 /*******
  * <p> Title: ModelFirstAdmin Class. </p>
  * 
@@ -16,5 +19,13 @@ package guiFirstAdmin;
  */
 
 public class ModelFirstAdmin {
+
+	public static String usernameIsValid(String username) {
+		return UserNameRecognizer.checkForValidUserName(username);
+	}
+	
+	public static String passwordIsValid(String password) {
+		return passwordRecognizer.checkForValidPassword(password);
+	}
 
 }
