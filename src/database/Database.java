@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.UUID;
 
 import entityClasses.User;
+import guiTools.EmailAddressRecognizer;
 import guiTools.passwordRecognizer;
-import emailAddressRecognizer.EmailAddressRecognizer;
 
 /*******
  * <p> Title: Database Class. </p>

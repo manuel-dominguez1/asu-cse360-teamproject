@@ -1,4 +1,4 @@
-package emailAddressRecognizer;
+package guiTools;
 
 
 public class EmailAddressRecognizer {
