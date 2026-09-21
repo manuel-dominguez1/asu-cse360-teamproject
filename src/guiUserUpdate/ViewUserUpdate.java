@@ -33,6 +33,7 @@ import entityClasses.User;
  * @author Lynn Robert Carter
  * 
  * @version 1.01		2025-08-19 Initial version plus new internal documentation
+ * @version 1.02		2026-09-21 Updated GUI to match a facebook theme
  *  
  */
 
@@ -56,9 +57,8 @@ public class ViewUserUpdate {
 	// is not able to logout, return, or quit from this page
 	
 	// These widgets display the purpose of the page and guide the user.
-	private static Label label_ApplicationTitle = new Label("Update a User's Account Details");
-    private static Label label_Purpose = 
-    		new Label(" Use this page to define or update your account information."); 
+	private static Label label_ApplicationTitle = new Label("Update Account Details");
+   
     
     // These are static output labels and do not change during execution
 	private static Label label_Username = new Label("Username:");
@@ -214,6 +214,8 @@ public class ViewUserUpdate {
 		// Create the Pane for the list of widgets and the Scene for the window
 		theRootPane = new Pane();
 		theUserUpdateScene = new Scene(theRootPane, width, height);
+		theUserUpdateScene.getStylesheets().add(
+				getClass().getResource("/applicationMain/application.css").toExternalForm());
 
 		// Initialize the pop-up dialogs to an empty text filed.
 		dialogUpdatePassword = new TextInputDialog("");
@@ -244,20 +246,20 @@ public class ViewUserUpdate {
 
 		// Label theScene with the name of the startup screen, centered at the top of the pane
 		setupLabelUI(label_ApplicationTitle, "Arial", 28, width, Pos.CENTER, 0, 5);
-
-        // Label to display the welcome message for the first theUser
-        setupLabelUI(label_Purpose, "Arial", 20, width, Pos.CENTER, 0, 50);
+		label_ApplicationTitle.setStyle("-fx-font-weight: bold;");
         
         // Display the titles, values, and update buttons for the various admin account attributes.
         // If the attributes is null or empty, display "<none>".
         
         // USername
         setupLabelUI(label_Username, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 100);
+        label_Username.setStyle("-fx-font-weight: bold;");
         setupLabelUI(label_CurrentUsername, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 100);
         setupButtonUI(button_UpdateUsername, "Dialog", 18, 275, Pos.CENTER, 500, 93);
        
         // password
         setupLabelUI(label_Password, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 150);
+        label_Password.setStyle("-fx-font-weight: bold;");
         setupLabelUI(label_CurrentPassword, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 150);
         setupButtonUI(button_UpdatePassword, "Dialog", 18, 275, Pos.CENTER, 500, 143);
         button_UpdatePassword.setOnAction((_) -> {result = dialogUpdatePassword.showAndWait();
@@ -266,12 +268,13 @@ public class ViewUserUpdate {
     		String newPassword = theDatabase.getCurrentPassword();
     		theUser.setPassword(newPassword);
     		theDatabase.clearOneTimePassword(theUser.getUserName());
-    		if (newPassword == null || newPassword.length() < 1)label_CurrentPassword.setText("<none>");
+    		if (newPassword == null || newPassword.length() < 1)label_CurrentPassword.setText("Not Set");
     		else label_CurrentPassword.setText(newPassword);
      		});
 		
         // First Name
         setupLabelUI(label_FirstName, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 200);
+        label_FirstName.setStyle("-fx-font-weight: bold;");
         setupLabelUI(label_CurrentFirstName, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 200);
         setupButtonUI(button_UpdateFirstName, "Dialog", 18, 275, Pos.CENTER, 500, 193);
         button_UpdateFirstName.setOnAction((_) -> {result = dialogUpdateFirstName.showAndWait();
@@ -279,12 +282,13 @@ public class ViewUserUpdate {
         	theDatabase.getUserAccountDetails(theUser.getUserName());
          	String newName = theDatabase.getCurrentFirstName();
            	theUser.setFirstName(newName);
-        	if (newName == null || newName.length() < 1)label_CurrentFirstName.setText("<none>");
+        	if (newName == null || newName.length() < 1)label_CurrentFirstName.setText("Not Set");
         	else label_CurrentFirstName.setText(newName);
          	});
                
         // Middle Name
         setupLabelUI(label_MiddleName, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 250);
+        label_MiddleName.setStyle("-fx-font-weight: bold;");
         setupLabelUI(label_CurrentMiddleName, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 250);
         setupButtonUI(button_UpdateMiddleName, "Dialog", 18, 275, Pos.CENTER, 500, 243);
         button_UpdateMiddleName.setOnAction((_) -> {result = dialogUpdateMiddleName.showAndWait();
@@ -292,12 +296,13 @@ public class ViewUserUpdate {
     		theDatabase.getUserAccountDetails(theUser.getUserName());
     		String newName = theDatabase.getCurrentMiddleName();
            	theUser.setMiddleName(newName);
-        	if (newName == null || newName.length() < 1)label_CurrentMiddleName.setText("<none>");
+        	if (newName == null || newName.length() < 1)label_CurrentMiddleName.setText("Not Set");
         	else label_CurrentMiddleName.setText(newName);
     		});
         
         // Last Name
         setupLabelUI(label_LastName, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 300);
+        label_LastName.setStyle("-fx-font-weight: bold;");
         setupLabelUI(label_CurrentLastName, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 300);
         setupButtonUI(button_UpdateLastName, "Dialog", 18, 275, Pos.CENTER, 500, 293);
         button_UpdateLastName.setOnAction((_) -> {result = dialogUpdateLastName.showAndWait();
@@ -305,13 +310,14 @@ public class ViewUserUpdate {
     		theDatabase.getUserAccountDetails(theUser.getUserName());
     		String newName = theDatabase.getCurrentLastName();
            	theUser.setLastName(newName);
-      	if (newName == null || newName.length() < 1)label_CurrentLastName.setText("<none>");
+      	if (newName == null || newName.length() < 1)label_CurrentLastName.setText("Not Set");
         	else label_CurrentLastName.setText(newName);
     		});
         
         // Preferred First Name
         setupLabelUI(label_PreferredFirstName, "Arial", 18, 190, Pos.BASELINE_RIGHT, 
         		5, 350);
+        label_PreferredFirstName.setStyle("-fx-font-weight: bold;");
         setupLabelUI(label_CurrentPreferredFirstName, "Arial", 18, 260, Pos.BASELINE_LEFT, 
         		200, 350);
         setupButtonUI(button_UpdatePreferredFirstName, "Dialog", 18, 275, Pos.CENTER, 500, 343);
@@ -322,12 +328,13 @@ public class ViewUserUpdate {
     		theDatabase.getUserAccountDetails(theUser.getUserName());
     		String newName = theDatabase.getCurrentPreferredFirstName();
            	theUser.setPreferredFirstName(newName);
-         	if (newName == null || newName.length() < 1)label_CurrentPreferredFirstName.setText("<none>");
+         	if (newName == null || newName.length() < 1)label_CurrentPreferredFirstName.setText("Not Set");
         	else label_CurrentPreferredFirstName.setText(newName);
      		});
         
         // Email Address
         setupLabelUI(label_EmailAddress, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 400);
+        label_EmailAddress.setStyle("-fx-font-weight: bold;");
         setupLabelUI(label_CurrentEmailAddress, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 400);
         setupButtonUI(button_UpdateEmailAddress, "Dialog", 18, 275, Pos.CENTER, 500, 393);
         button_UpdateEmailAddress.setOnAction((_) -> {result = dialogUpdateEmailAddress.showAndWait();
@@ -335,7 +342,7 @@ public class ViewUserUpdate {
     		theDatabase.getUserAccountDetails(theUser.getUserName());
     		String newEmail = theDatabase.getCurrentEmailAddress();
            	theUser.setEmailAddress(newEmail);
-        	if (newEmail == null || newEmail.length() < 1)label_CurrentEmailAddress.setText("<none>");
+        	if (newEmail == null || newEmail.length() < 1)label_CurrentEmailAddress.setText("Not Set");
         	else label_CurrentEmailAddress.setText(newEmail);
  			});
         
@@ -347,7 +354,7 @@ public class ViewUserUpdate {
     	
         // Populate the Pane's list of children widgets
         theRootPane.getChildren().addAll(
-        		label_ApplicationTitle, label_Purpose, label_Username,
+        		label_ApplicationTitle, label_Username,
         		label_CurrentUsername, 
         		label_Password, label_CurrentPassword, 
         		button_UpdatePassword, 
@@ -403,6 +410,7 @@ public class ViewUserUpdate {
 		b.setMinWidth(w);
 		b.setAlignment(p);
 		b.setLayoutX(x);
-		b.setLayoutY(y);		
+		b.setLayoutY(y);
+		b.getStyleClass().add("fb-button");
 	}
 }

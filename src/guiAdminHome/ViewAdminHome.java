@@ -48,6 +48,7 @@ import guiUserUpdate.ViewUserUpdate;
  * @author Lynn Robert Carter
  * 
  * @version 1.00		2025-08-17 Initial version
+ * @version 1.01		2026-09-21 Updated GUI to match a facebook theme
  *  
  */
 
@@ -214,15 +215,19 @@ public class ViewAdminHome {
 		// Create the Pane for the list of widgets and the Scene for the window
 		theRootPane = new Pane();
 		theAdminHomeScene = new Scene(theRootPane, width, height);
+		theAdminHomeScene.getStylesheets().add(
+				getClass().getResource("/applicationMain/application.css").toExternalForm());
 	
 		// Populate the window with the title and other common widgets and set their static state
 		
 		// GUI Area 1
 		label_PageTitle.setText("Admin Home Page");
 		setupLabelUI(label_PageTitle, "Arial", 28, width, Pos.CENTER, 0, 5);
+		label_PageTitle.setStyle("-fx-font-weight: bold;");
 
 		label_UserDetails.setText("User: " + theUser.getUserName());
 		setupLabelUI(label_UserDetails, "Arial", 20, width, Pos.BASELINE_LEFT, 20, 55);
+		label_UserDetails.setStyle("-fx-font-weight: bold;");
 		
 		setupButtonUI(button_UpdateThisUser, "Dialog", 18, 170, Pos.CENTER, 610, 45);
 		button_UpdateThisUser.setOnAction((_) -> 
@@ -232,16 +237,20 @@ public class ViewAdminHome {
 		setupLabelUI(label_NumberOfInvitations, "Arial", 20, 200, Pos.BASELINE_LEFT, 20, 105);
 		label_NumberOfInvitations.setText("Number of outstanding invitations: " + 
 				theDatabase.getNumberOfInvitations());
+		label_NumberOfInvitations.setStyle("-fx-font-weight: bold;");
 	
 		setupLabelUI(label_NumberOfUsers, "Arial", 20, 200, Pos.BASELINE_LEFT, 20, 135);
 		label_NumberOfUsers.setText("Number of users: " + 
 				theDatabase.getNumberOfUsers());
+		label_NumberOfUsers.setStyle("-fx-font-weight: bold;");
 	
 		// GUI Area 3
 		setupLabelUI(label_Invitations, "Arial", 20, width, Pos.BASELINE_LEFT, 20, 175);
+		label_Invitations.setStyle("-fx-font-weight: bold;");
 	
 		setupLabelUI(label_InvitationEmailAddress, "Arial", 16, width, Pos.BASELINE_LEFT,
 		20, 210);
+		label_InvitationEmailAddress.setStyle("-fx-font-weight: bold;");
 	
 		setupTextUI(text_InvitationEmailAddress, "Arial", 16, 360, Pos.BASELINE_LEFT,
 		130, 205, true);
@@ -262,10 +271,14 @@ public class ViewAdminHome {
 	
 		// GUI Area 4
 		setupButtonUI(button_ManageInvitations, "Dialog", 16, 250, Pos.CENTER, 20, 270);
+		button_ManageInvitations.getStyleClass().remove("fb-button");
+		button_ManageInvitations.getStyleClass().add("grey-button");
 		button_ManageInvitations.setOnAction((_) -> 
 			{ControllerAdminHome.manageInvitations(); });
 	
 		setupButtonUI(button_SetOnetimePassword, "Dialog", 16, 250, Pos.CENTER, 20, 320);
+		button_SetOnetimePassword.getStyleClass().remove("fb-button");
+		button_SetOnetimePassword.getStyleClass().add("grey-button");
 		button_SetOnetimePassword.setOnAction((_) -> 
 			{ControllerAdminHome.setOneTimePassword(); });
 
@@ -274,14 +287,20 @@ public class ViewAdminHome {
 		combobox_SelectUser.getSelectionModel().select(0);
 
 		setupButtonUI(button_DeleteUser, "Dialog", 16, 250, Pos.CENTER, 20, 370);
+		button_DeleteUser.getStyleClass().remove("fb-button");
+		button_DeleteUser.getStyleClass().add("grey-button");
 		//button_DeleteUser.setOnAction((_) -> {ControllerAdminHome.deleteUser(); });
 		// handle the Delete User Button click
 		button_DeleteUser.setOnAction((_) -> {doDeleteUser(); });
 
 		setupButtonUI(button_ListUsers, "Dialog", 16, 250, Pos.CENTER, 20, 420);
+		button_ListUsers.getStyleClass().remove("fb-button");
+		button_ListUsers.getStyleClass().add("grey-button");
 		button_ListUsers.setOnAction((_) -> {ControllerAdminHome.listUsers(); });
 
 		setupButtonUI(button_AddRemoveRoles, "Dialog", 16, 250, Pos.CENTER, 20, 470);
+		button_AddRemoveRoles.getStyleClass().remove("fb-button");
+		button_AddRemoveRoles.getStyleClass().add("grey-button");
 		button_AddRemoveRoles.setOnAction((_) -> {ControllerAdminHome.addRemoveRoles(); });
 		
 		// GUI Area 5
@@ -357,7 +376,8 @@ public class ViewAdminHome {
 		b.setMinWidth(w);
 		b.setAlignment(p);
 		b.setLayoutX(x);
-		b.setLayoutY(y);		
+		b.setLayoutY(y);
+		b.getStyleClass().add("fb-button");
 	}
 
 	
@@ -399,6 +419,7 @@ public class ViewAdminHome {
 		c.setMinWidth(w);
 		c.setLayoutX(x);
 		c.setLayoutY(y);
+		c.getStyleClass().add("fb-button");
 	}
 	
 	private void doDeleteUser() {

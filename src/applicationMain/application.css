@@ -15,7 +15,8 @@
 
 .fb-button:hover {
     -fx-background-color: #166FE5;
-}
+    
+    }
 
 .fb-button:pressed {
     -fx-background-color: #125FC2;

@@ -26,6 +26,7 @@ import entityClasses.User;
  * @author Lynn Robert Carter
  * 
  * @version 1.00		2025-08-19 Initial version
+ * @version 1.01		2026-09-19 Updated GUI to match a facebook theme
  *  
  */
 
