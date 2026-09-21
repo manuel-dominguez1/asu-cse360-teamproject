@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import database.Database;
 import entityClasses.User;
-import userNameRecognizer.UserNameRecognizer;
+import guiTools.UserNameRecognizer;
 
 /*******
  * <p> Title: ControllerNewAccount Class. </p>

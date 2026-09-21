@@ -1,5 +1,5 @@
 package automationTestbed;
-import passwordRecognizer.passwordRecognizer;
+import guiTools.passwordRecognizer;
 
 /*******
  * <p> Title: PasswordEvaluationTestingAutomation </p>

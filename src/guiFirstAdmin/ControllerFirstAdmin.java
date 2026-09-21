@@ -1,10 +1,11 @@
 package guiFirstAdmin;
 
 import java.sql.SQLException;
-import userNameRecognizer.UserNameRecognizer;
-import passwordRecognizer.passwordRecognizer;
+
 import database.Database;
 import entityClasses.User;
+import guiTools.UserNameRecognizer;
+import guiTools.passwordRecognizer;
 import javafx.stage.Stage;
 
 /*******

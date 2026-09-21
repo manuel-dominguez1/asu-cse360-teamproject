@@ -1,4 +1,4 @@
-package userNameRecognizer;
+package guiTools;
 
 public class UserNameRecognizer {
 	/**

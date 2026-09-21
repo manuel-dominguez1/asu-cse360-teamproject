@@ -1,4 +1,4 @@
-package passwordRecognizer;
+package guiTools;
 
 
 import java.util.Set;

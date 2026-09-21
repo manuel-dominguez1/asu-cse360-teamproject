@@ -1,8 +1,8 @@
 package guiUserLogin;
 
 import database.Database;
-import passwordRecognizer.passwordRecognizer;
 import entityClasses.User;
+import guiTools.passwordRecognizer;
 import javafx.stage.Stage;
 import javafx.scene.control.TextInputDialog;
 import java.util.Optional;

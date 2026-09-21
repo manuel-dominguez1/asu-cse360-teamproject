@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import entityClasses.User;
-import passwordRecognizer.passwordRecognizer;
+import guiTools.passwordRecognizer;
 import emailAddressRecognizer.EmailAddressRecognizer;
 
 /*******
