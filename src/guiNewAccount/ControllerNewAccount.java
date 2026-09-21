@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import database.Database;
 import entityClasses.User;
+import guiFirstAdmin.ModelFirstAdmin;
 import guiTools.UserNameRecognizer;
 
 /*******
@@ -82,7 +83,7 @@ public class ControllerNewAccount {
 		String password = ViewNewAccount.text_Password1.getText();
 		
 		//check the username against the UserName Recognizers rules before proceeding
-		String usernameError = UserNameRecognizer.checkForValidUserName(username);
+		String usernameError = ModelNewAccount.usernameIsValid(username);
 		if(!usernameError.isEmpty()) {
 			ViewNewAccount.alertUsernameError.setContentText(usernameError);
 			ViewNewAccount.alertUsernameError.showAndWait();

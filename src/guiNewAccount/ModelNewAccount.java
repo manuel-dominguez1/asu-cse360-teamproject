@@ -1,5 +1,8 @@
 package guiNewAccount;
 
+import guiTools.UserNameRecognizer;
+import guiTools.passwordRecognizer;
+
 /*******
  * <p> Title: ModelNewAccount Class. </p>
  * 
@@ -15,5 +18,11 @@ package guiNewAccount;
  *  
  */
 public class ModelNewAccount {
-
+	public static String usernameIsValid(String username) {
+		return UserNameRecognizer.checkForValidUserName(username);
+	}
+	
+	public static String passwordIsValid(String password) {
+		return passwordRecognizer.checkForValidPassword(password);
+	}
 }
