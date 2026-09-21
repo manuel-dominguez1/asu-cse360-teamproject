@@ -1,10 +1,4 @@
 package guiListUsers;
-import entityClasses.User;
-import database.Database;
-import guiAddRemoveRoles.ViewAddRemoveRoles;
-import javafx.collections.FXCollections;
-import javafx.geometry.Pos;
-import javafx.scene.control.ComboBox;
 
 /*******
  * <p>
@@ -15,6 +9,19 @@ import javafx.scene.control.ComboBox;
  * Description: The Java/FX-based List Users Page. This class provides the
  * controller actions basic on the user's use of the JavaFX GUI widgets defined
  * by the View class.
+ * 
+ * The class has been written assuming that the View or the Model are the only class methods that
+ * can invoke these methods.  This is why each has been declared at "protected".  Do not change any
+ * of these methods to public.</p>
+ * 
+ * <p> Copyright: Lynn Robert Carter © 2025 </p>
+ * 
+ * @author Lynn Robert Carter
+ * @author Kristena Kay
+ * 
+ * @version 1.00		2025-08-17 Initial version
+ * @version 1.01		2025-09-16 Update Javadoc documentation *  
+ * @version 2.00		2026-09-20 Modified Code to Create List Users Page
  * 
  */
 
@@ -35,29 +42,7 @@ public class ControllerListUsers {
 	 */
 	public ControllerListUsers() {
 	}
-
-	// Reference for the in-memory database so this package has access
-	protected static void repaintTheWindow() {
-		// Clear what had been displayed
-		ViewListUsers.theRootPane.getChildren().clear();
-		
-		// Determine which of the two views to show to the user
-		
-			// Only show the request to select a user to be updated and the ComboBox
-			ViewListUsers.theRootPane.getChildren().addAll(
-					ViewListUsers.label_PageTitle, 
-					 ViewListUsers.tableView,  ViewListUsers.button_Return,
-					ViewListUsers.button_Logout, ViewListUsers.button_Quit);
-		
-		
-		
-		// Add the list of widgets to the stage and show it
-		
-		// Set the title for the window
-		ViewListUsers.theStage.setTitle("List Users Page");
-		ViewListUsers.theStage.setScene(ViewListUsers.theListUsersScene);
-		ViewListUsers.theStage.show();
-	}
+	
 	/**********
 	 * <p>
 	 * Method: performReturn()

@@ -188,12 +188,6 @@ public class ControllerAdminHome {
 						
 						theDatabase.deleteUser(userToDelete);
 						
-						// go to login page if user to delete is self
-						if (userToDelete.equals(currentUsername)) {
-							ViewAdminHome.deleteWindow.close();
-							performLogout();
-						}
-						
 						// show success message
 						ViewAdminHome.alertDeleteUser.setHeaderText("User Deleted Successfully");
 						ViewAdminHome.alertDeleteUser.setContentText("The user " + userToDelete + " was deleted");
@@ -209,10 +203,10 @@ public class ControllerAdminHome {
 					}
 				} 
 				
-				// show alert if there is only 1 admin 
+				// show alert if user to delete is self
 				else {
-					ViewAdminHome.alertDeleteUser.setContentText(userToDelete + " is the only current admin user. "
-							+ "This account cannot be deleted because there must be at least one admin user at all times.");
+					ViewAdminHome.alertDeleteUser.setContentText(userToDelete + " is your admin account. This account must"
+							+ " deleted by a different admin account to ensure there is at least one admin user at all times.");
 					ViewAdminHome.alertDeleteUser.showAndWait();
 					ViewAdminHome.text_UserToDelete.clear();
 				}
