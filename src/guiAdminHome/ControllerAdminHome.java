@@ -163,59 +163,70 @@ public class ControllerAdminHome {
 	 * Title: deleteUser () Method. </p>
 	 * 
 	 * <p> Description: Protected method that deletes a user from the table, given
-	 * 					that user exists and is not the only admin user. </p>
+	 * 					that user exists and the user to delete is not self. </p>
 	 */
 	protected static void deleteUser() {
 		
 		// handle delete user button click
 		ViewAdminHome.button_DoDeleteUser.setOnAction((_) -> {
 			
-			// check if user exists
-			if (theDatabase.doesUserExist(userToDelete)) {
-				String currentUsername = theDatabase.getCurrentUsername();
-				
-				// confirm there is more than one admin user or that user to delete is not self
-				if (theDatabase.getNumberOfAdmins() > 1 || !(userToDelete.equals(currentUsername))) {
+			// confirm that the user is an admin
+			if (theDatabase.getCurrentAdminRole()) {
+			
+				// check if user exists
+				if (theDatabase.doesUserExist(userToDelete)) {
+					String currentUsername = theDatabase.getCurrentUsername();
 					
-					// show confirmation alert
-					ViewAdminHome.alertDeleteUserConfirmation.setTitle("Delete User Confirmation");
-					ViewAdminHome.alertDeleteUserConfirmation.setHeaderText("You are about to permanently delete user " + userToDelete);
-					ViewAdminHome.alertDeleteUserConfirmation.setContentText("Are you sure you want to delete this user?");
-					Optional<ButtonType> confirmationResult = ViewAdminHome.alertDeleteUserConfirmation.showAndWait();
+					// confirm there is more than one admin user or that user to delete is not self
+					if (theDatabase.getNumberOfAdmins() > 1 || !(userToDelete.equals(currentUsername))) {
+						
+						// show confirmation alert
+						ViewAdminHome.alertDeleteUserConfirmation.setTitle("Delete User Confirmation");
+						ViewAdminHome.alertDeleteUserConfirmation.setHeaderText("You are about to permanently delete user " + userToDelete);
+						ViewAdminHome.alertDeleteUserConfirmation.setContentText("Are you sure you want to delete this user?");
+						Optional<ButtonType> confirmationResult = ViewAdminHome.alertDeleteUserConfirmation.showAndWait();
+						
+						// if user confirms, delete the user
+						if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
+							
+							theDatabase.deleteUser(userToDelete);
+							
+							// show success message
+							ViewAdminHome.alertDeleteUser.setHeaderText("User Deleted Successfully");
+							ViewAdminHome.alertDeleteUser.setContentText("The user " + userToDelete + " was deleted");
+							ViewAdminHome.alertDeleteUser.showAndWait();
+							ViewAdminHome.text_UserToDelete.clear();
+							
+						}
+						
+						// if user cancels, reset text field
+						else {
+							ViewAdminHome.text_UserToDelete.clear();
+							return;
+						}
+					} 
 					
-					// if user confirms, delete the user
-					if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
-						
-						theDatabase.deleteUser(userToDelete);
-						
-						// show success message
-						ViewAdminHome.alertDeleteUser.setHeaderText("User Deleted Successfully");
-						ViewAdminHome.alertDeleteUser.setContentText("The user " + userToDelete + " was deleted");
+					// show alert if user to delete is self
+					else {
+						ViewAdminHome.alertDeleteUser.setContentText(userToDelete + " is your admin account. This account must"
+								+ " deleted by a different admin account to ensure there is at least one admin user at all times.");
 						ViewAdminHome.alertDeleteUser.showAndWait();
 						ViewAdminHome.text_UserToDelete.clear();
-						
 					}
 					
-					// if user cancels, reset text field
-					else {
-						ViewAdminHome.text_UserToDelete.clear();
-						return;
-					}
-				} 
+				}
 				
-				// show alert if user to delete is self
+				// show alert if user does not exist
 				else {
-					ViewAdminHome.alertDeleteUser.setContentText(userToDelete + " is your admin account. This account must"
-							+ " deleted by a different admin account to ensure there is at least one admin user at all times.");
+					ViewAdminHome.alertDeleteUser.setContentText("The entered user does not exist");
 					ViewAdminHome.alertDeleteUser.showAndWait();
 					ViewAdminHome.text_UserToDelete.clear();
 				}
-				
-			}
+			} 
 			
-			// show alert if user does not exist
+			// show alert if the user is not an admin
 			else {
-				ViewAdminHome.alertDeleteUser.setContentText("The entered user does not exist");
+				ViewAdminHome.alertDeleteUser.setContentText("You are not an admin. Only admins can delete accounts.");
 				ViewAdminHome.alertDeleteUser.showAndWait();
 				ViewAdminHome.text_UserToDelete.clear();
 			}
@@ -300,7 +311,7 @@ public class ControllerAdminHome {
 	 * <p> Method: setUserToDelete() </p>
 	 * 
 	 * <p> Description: This method is called when the user adds text to the delete user field in the
-	 * View.  A private local copy of what was last entered is kept here.</p>
+	 * View. A private local copy of what was last entered is kept here.</p>
 	 * 
 	 */
 	protected static void setUserToDelete() {
