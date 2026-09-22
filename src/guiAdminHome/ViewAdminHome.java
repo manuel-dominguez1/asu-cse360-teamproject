@@ -422,6 +422,10 @@ public class ViewAdminHome {
 		c.getStyleClass().add("fb-button");
 	}
 	
+	/**********
+	 * Private local method to set up and initialize the GUI for Delete User.
+	 * This method then calls deleteUser() in ControllerAdminHome. 
+	 */
 	private void doDeleteUser() {
 		
 		// set up GUI
