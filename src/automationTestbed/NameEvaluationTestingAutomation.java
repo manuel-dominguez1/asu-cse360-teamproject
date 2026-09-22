@@ -1,5 +1,5 @@
 package automationTestbed;
-import guiTools.passwordRecognizer;
+import guiTools.nameRecognizer;
 
 /*******
  * <p> Title: UsernameEvaluationTestingAutomation </p>
@@ -30,36 +30,17 @@ public class NameEvaluationTestingAutomation {
 		/************** Start of the test cases **************/
 		
 		// Expected to pass:
-		performTestCase(1, "Password_123", true);
+		performTestCase(1, "Tom", true);
+		performTestCase(2, "Xa", true);
+		performTestCase(3, "Superfluvolous", true);
 		
 		// Expected to fail:
-		//less than 8 characters
-		performTestCase(2, "Mouser3", false);
-		performTestCase(3, "n0-Time", false);
-		performTestCase(4, "hat_Tw2", false);
-		//Missing Upper case
-		performTestCase(5, "pass-word2", false);
-		performTestCase(6, "p@rty-time1", false);
-		//Missing Lower case
-		performTestCase(7, "RUNNING-MAN2", false);
-		performTestCase(8, "P@RTYTIME1", false);
-		//Missing numerical digit
-		performTestCase(9, "Pass-word", false);
-		performTestCase(10, "Party-times", false);
-
-		//Missing special character
-		performTestCase(11, "Password123", false);
-		performTestCase(12, "Partytime123", false);
-		
-		// This is an improperly written negative test, because the password
-		// is valid, but the second parameter asserts that it is not valid
-//		performTestCase(3, "Aa!15678", false);
-		
-		// These are improperly written positive test, because the password 
-		// is not valid, but the second parameter asserts that it is valid
-//		performTestCase(4, "A!", true);
-//		performTestCase(5, "", true);
-		// Add more test cases here
+		//empty input
+		performTestCase(4, "", false);
+		//non-alphabetical characters
+		performTestCase(5, "M001", false);
+		//over 33 characters in length
+		performTestCase(6, "ThisisaverylongNamethatIdidnotbothertocount", false);
 		
 		/************** End of the test cases **************/
 		
@@ -86,7 +67,7 @@ public class NameEvaluationTestingAutomation {
 		System.out.println("\nFinite state machine execution trace:");
 		
 		/************** Call the recognizer to process the input **************/
-		String resultText= passwordRecognizer.checkForValidPassword(inputText);
+		String resultText= nameRecognizer.checkForValidName(inputText);
 		
 		/************** Interpret the result and display that interpreted information **************/
 		System.out.println();
@@ -95,14 +76,14 @@ public class NameEvaluationTestingAutomation {
 		if (resultText != "") {
 			 // If the test case expected the test to pass then this is a failure
 			if (expectedPass) {
-				System.out.println("***Failure*** The password <" + inputText + "> is invalid." + 
+				System.out.println("***Failure*** The name <" + inputText + "> is invalid." + 
 						"\nBut it was supposed to be valid, so this is a failure!\n");
 				System.out.println("Error message: " + resultText);
 				numFailed++;
 			}
 			// If the test case expected the test to fail then this is a success
 			else {			
-				System.out.println("***Success*** The password <" + inputText + "> is invalid." + 
+				System.out.println("***Success*** The name <" + inputText + "> is invalid." + 
 						"\nBut it was supposed to be invalid, so this is a pass!\n");
 				System.out.println("Error message: " + resultText);
 				numPassed++;
@@ -113,13 +94,13 @@ public class NameEvaluationTestingAutomation {
 		else {	
 			// If the test case expected the test to pass then this is a success
 			if (expectedPass) {	
-				System.out.println("***Success*** The password <" + inputText + 
+				System.out.println("***Success*** The name <" + inputText + 
 						"> is valid, so this is a pass!");
 				numPassed++;
 			}
 			// If the test case expected the test to fail then this is a failure
 			else {
-				System.out.println("***Failure*** The password <" + inputText + 
+				System.out.println("***Failure*** The name <" + inputText + 
 						"> was judged as valid" + 
 						"\nBut it was supposed to be invalid, so this is a failure!");
 				numFailed++;
@@ -130,35 +111,26 @@ public class NameEvaluationTestingAutomation {
 	
 	private static void displayEvaluation() {
 		
-		if (passwordRecognizer.hasUpper)
-			System.out.println("At least one upper case letter - Satisfied");
+		if (nameRecognizer.isEmpty)
+			System.out.println("At least one letter - Satisfied");
 		else
-			System.out.println("At least one upper case letter - Not Satisfied");
+			System.out.println("At least one letter - Not Satisfied");
 
-		if (passwordRecognizer.hasLower)
-			System.out.println("At least one lower case letter - Satisfied");
+		if (!nameRecognizer.unknownChar)
+			System.out.println("only approved special characters - Satisfied");
 		else
-			System.out.println("At least one lower case letter - Not Satisfied");
+			System.out.println("only approved special characters - Not Satisfied");
+	
+		if (nameRecognizer.endsInSymbol)
+			System.out.println("does not end with a symbol - Satisfied");
+		else
+			System.out.println("does not end with a symbol - Not Satisfied");
 	
 
-		if (passwordRecognizer.hasDigit)
-			System.out.println("At least one digit - Satisfied");
+		if (!nameRecognizer.tooLong)
+			System.out.println("less than 33 characters - Satisfied");
 		else
-			System.out.println("At least one digit - Not Satisfied");
+			System.out.println("less than 33 characters - Not Satisfied");
 
-		if (passwordRecognizer.hasSpecialChar)
-			System.out.println("At least one special character - Satisfied");
-		else
-			System.out.println("At least one special character - Not Satisfied");
-
-		if (!passwordRecognizer.tooShort)
-			System.out.println("At least 9 characters - Satisfied");
-		else
-			System.out.println("At least 9 characters - Not Satisfied");
-
-		if (!passwordRecognizer.tooLong)
-			System.out.println("At most 33 characters - Satisfied");
-		else
-			System.out.println("At most 33 characters - Not Satisfied");
 	}
 }

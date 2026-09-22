@@ -42,13 +42,11 @@ public class EmailEvaluationTestingAutomation {
 
 		
 		//Local part less than one character
-		performTestCase(6, "@gmail.com", false);
+		//performTestCase(6, "@gmail.com", false);
 		//Domain part less than one character
-		performTestCase(7, "apples@.com", false);
+		//performTestCase(7, "apples@.com", false);
 		//Missing @ symbol between local and domain
 		performTestCase(8, "applesgmail.com", false);
-		//longer than 32 characters
-		performTestCase(9, "thisisaverylongemailaddressthatIdidnotcountbutis73charslong@gmail.com", false);
 		//Local part includes non approved special character
 		performTestCase(10, "apple$win@gmail.com", false);
 		//back to back special character

@@ -27,6 +27,11 @@ public class nameRecognizer {
 	private static boolean running;								// The flag that specifies if the FSM is running
 	private static int nameSize = 0;							// A numeric value may not exceed 32 characters
 	
+	public static boolean isEmpty = false; 						//boolean for JUnit tests
+	public static boolean endsInSymbol = false; 						//boolean for JUnit tests
+	public static boolean unknownChar = false; 						//boolean for JUnit tests
+	public static boolean tooLong = false; 						//boolean for JUnit tests
+	
 	// Private method to display debugging data
 		private static void displayDebuggingInfo() {
 			// Display the current state of the FSM as part of an execution trace
@@ -65,6 +70,7 @@ public class nameRecognizer {
 		// Check to ensure that there is input to process
 		if(input.length() <= 0) {
 			nameRecognizerErrorMessage = "\n*** ERROR *** Name cannot be empty";
+			isEmpty = true;
 			return nameRecognizerErrorMessage;
 		}
 		
@@ -209,8 +215,9 @@ public class nameRecognizer {
 		switch (state) {
 		case 0:
 			nameRecognizerErrorMessage += "A name must start with a letter A-Z or a-z.\n";
+			unknownChar = true;
 			return nameRecognizerErrorMessage;
-
+			
 		case 1:
 			// State 1 is a final state.  Check to see if the UserName length is valid.  If so we
 			// we must ensure the whole string has been consumed.
@@ -219,12 +226,14 @@ public class nameRecognizer {
 				// name is too long
 				nameRecognizerErrorMessage += 
 						"A name must have no more than 32 characters.\n";
+				tooLong = true;
 				return nameRecognizerErrorMessage;
 			}
 			else if (currentCharNdx < input.length()) {
 				// There are characters remaining in the input, so the input is not valid
 				nameRecognizerErrorMessage += 
 					"A name may only contain non consecutive hyphens and apostrophes, or the characters A-Z, a-z.\n";
+				unknownChar = true;
 				return nameRecognizerErrorMessage;
 			}
 			else {
@@ -232,24 +241,28 @@ public class nameRecognizer {
 				nameRecognizerIndexofError = -1;
 				nameRecognizerErrorMessage = "";
 				return nameRecognizerErrorMessage;
-			}	
+			}
+			
 		case 2:
 			if (nameSize > 32) {
 				// name is too long
 				nameRecognizerErrorMessage += 
 						"A name must have no more than 32 characters.\n";
+				tooLong = true;
 				return nameRecognizerErrorMessage;
 			}
 			else if ((currentChar == '-') ||
 				currentChar == '\'') {
 				nameRecognizerErrorMessage +=
 						"A name must not contain consecutive hyphens or apostrophes";
+				unknownChar = true;
 				return nameRecognizerErrorMessage;
 			}
 			else if (!(currentChar >= 'A' && currentChar <= 'Z') ||	
 					!(currentChar >= 'a' && currentChar <= 'z')) {
 				nameRecognizerErrorMessage +=
 						"The last character of a name must be a letter";
+				endsInSymbol = true;
 				return nameRecognizerErrorMessage;
 			}
 		default:
