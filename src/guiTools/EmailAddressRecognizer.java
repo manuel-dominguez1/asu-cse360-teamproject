@@ -85,7 +85,7 @@ public class EmailAddressRecognizer {
 		if (currentCharNdx < inputLine.length())
 			currentChar = inputLine.charAt(currentCharNdx);
 		else {
-			//System.out.println("End of input was found!");
+			System.out.println("End of input was found!");
 			currentChar = ' ';
 			running = false;
 		}
@@ -127,7 +127,7 @@ public class EmailAddressRecognizer {
 			return emailAddressErrorMessage + displayInput(input, 255);
 		}
 		running = true;						// Start the loop
-		//System.out.println("\nCurrent Final Input  Next  DomainName\nState   State Char  State  Size");
+		System.out.println("\nCurrent Final Input  Next  DomainName\nState   State Char  State  Size");
 
 		// The Finite State Machines continues until the end of the input is reached or at some 
 		// state the current character does not match any valid transition to a next state
@@ -266,7 +266,7 @@ public class EmailAddressRecognizer {
 			}
 			
 			if (running) {
-				//displayDebuggingInfo();
+				displayDebuggingInfo();
 				// When the processing of a state has finished, the FSM proceeds to the next character
 				// in the input and if there is one, it fetches that character and updates the 
 				// currentChar.  If there is no next character the currentChar is set to a blank.
@@ -280,9 +280,9 @@ public class EmailAddressRecognizer {
 			// Should the FSM get here, the loop starts again
 
 		}
-		//displayDebuggingInfo();
+		displayDebuggingInfo();
 		
-		//System.out.println("The loop has ended.");
+		System.out.println("The loop has ended.");
 
 		emailAddressIndexofError = currentCharNdx;		// Copy the index of the current character;
 		
