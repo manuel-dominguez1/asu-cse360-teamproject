@@ -289,7 +289,7 @@ public class ViewAdminHome {
 		setupButtonUI(button_DeleteUser, "Dialog", 16, 250, Pos.CENTER, 20, 370);
 		button_DeleteUser.getStyleClass().remove("fb-button");
 		button_DeleteUser.getStyleClass().add("grey-button");
-		//button_DeleteUser.setOnAction((_) -> {ControllerAdminHome.deleteUser(); });
+		
 		// handle the Delete User Button click
 		button_DeleteUser.setOnAction((_) -> {doDeleteUser(); });
 
