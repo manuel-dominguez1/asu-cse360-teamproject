@@ -177,8 +177,8 @@ public class ControllerAdminHome {
 				if (theDatabase.doesUserExist(userToDelete)) {
 					String currentUsername = theDatabase.getCurrentUsername();
 					
-					// confirm there is more than one admin user or that user to delete is not self
-					if (theDatabase.getNumberOfAdmins() > 1 || !(userToDelete.equals(currentUsername))) {
+					// confirm that user to delete is not self
+					if (!(userToDelete.equals(currentUsername))) {
 						
 						// show confirmation alert
 						ViewAdminHome.alertDeleteUserConfirmation.setTitle("Delete User Confirmation");

@@ -123,7 +123,7 @@ public class ViewAdminHome {
 	protected static Button button_AddRemoveRoles = new Button("Add/Remove Roles");
 	protected static Alert alertNotImplemented = new Alert(AlertType.INFORMATION);
 	
-	// stuff for delete user
+	// GUI Area for Delete User
 	protected static Alert alertDeleteUserConfirmation = new Alert(AlertType.CONFIRMATION);
 	protected static Alert alertDeleteUser = new Alert(AlertType.INFORMATION);
 	protected static TextField text_UserToDelete = new TextField();
