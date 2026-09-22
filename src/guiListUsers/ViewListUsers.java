@@ -195,7 +195,7 @@ public class ViewListUsers {
 	    		lnameColumn, pnameColumn, emailColumn, adminColumn, role1Column, 
 	    		role2Column);
 		userInfoTable.setItems(userInfoList);
-		userInfoTable.setPrefWidth(width - 40);
+		userInfoTable.setMaxWidth(width - 40);
 		userInfoTable.setPrefHeight(440);
 		userInfoTable.setLayoutY(65);
 		userInfoTable.setLayoutX(20);
