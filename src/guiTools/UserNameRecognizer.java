@@ -38,8 +38,15 @@ public class UserNameRecognizer {
 														// running
 	private static int userNameSize = 0;			// A numeric value may not exceed 16 characters
 
+	public static boolean tooShort = false; 	//exposing the parameters for Junit testing
+	public static boolean tooLong = false;
+	public static boolean nonAlphabetStart = false;
+	public static boolean unknownChar = false;
+	public static boolean symbolErr = false;
+
 	// Private method to display debugging data
 	private static void displayDebuggingInfo() {
+
 		// Display the current state of the FSM as part of an execution trace
 		if (currentCharNdx >= inputLine.length())
 			// display the line with the current state numbers aligned
@@ -71,7 +78,8 @@ public class UserNameRecognizer {
 	 * @return			An output string that is empty if every things is okay or it is a String
 	 * 						with a helpful description of the error
 	 */
-	public static String checkForValidUserName(String input) {
+
+public static String checkForValidUserName(String input) {
 		// Check to ensure that there is input to process
 		if(input.length() <= 0) {
 			userNameRecognizerIndexofError = 0;	// Error at first character;
@@ -90,7 +98,7 @@ public class UserNameRecognizer {
 		userNameRecognizerInput = input;	// Save a copy of the input
 		running = true;						// Start the loop
 		nextState = -1;						// There is no next state
-		System.out.println("\nCurrent Final Input  Next\nState   State Char  State  Size");
+		//System.out.println("\nCurrent Final Input  Next\nState   State Char  State  Size");
 		
 		// This is the place where semantic actions for a transition to the initial state occur
 		
@@ -187,7 +195,7 @@ public class UserNameRecognizer {
 			}
 			
 			if (running) {
-				displayDebuggingInfo();
+				//displayDebuggingInfo();
 				// When the processing of a state has finished, the FSM proceeds to the next
 				// character in the input and if there is one, it fetches that character and
 				// updates the currentChar.  If there is no next character the currentChar is
@@ -206,9 +214,9 @@ public class UserNameRecognizer {
 			// Should the FSM get here, the loop starts again
 	
 		}
-		displayDebuggingInfo();
+		//displayDebuggingInfo();
 		
-		System.out.println("The loop has ended.");
+		//System.out.println("The loop has ended.");
 		
 		// When the FSM halts, we must determine if the situation is an error or not.  That depends
 		// of the current state of the FSM and whether or not the whole string has been consumed.
@@ -223,6 +231,7 @@ public class UserNameRecognizer {
 		case 0:
 			// State 0 is not a final state, so we can return a very specific error message
 			userNameRecognizerErrorMessage += "A UserName must start with a letter A-Z or a-z.\n";
+			nonAlphabetStart = true;
 			return userNameRecognizerErrorMessage;
 
 		case 1:
@@ -232,18 +241,21 @@ public class UserNameRecognizer {
 			if (userNameSize < 4) {
 				// UserName is too small
 				userNameRecognizerErrorMessage += "A UserName must have at least 4 characters.\n";
+				tooShort = true;
 				return userNameRecognizerErrorMessage;
 			}
 			else if (userNameSize > 32) {
 				// UserName is too long
 				userNameRecognizerErrorMessage += 
 					"A UserName must have no more than 32 characters.\n";
+				tooLong = true;
 				return userNameRecognizerErrorMessage;
 			}
 			else if (currentCharNdx < input.length()) {
 				// There are characters remaining in the input, so the input is not valid
 				userNameRecognizerErrorMessage += 
 					"A UserName character may only contain underscores, dashes, periods, ampersands, or the characters A-Z, a-z, or 0-9.\n";
+				unknownChar = true;
 				return userNameRecognizerErrorMessage;
 			}
 			else {
@@ -257,6 +269,7 @@ public class UserNameRecognizer {
 			// State 2 is not a final state, so we can return a very specific error message
 			userNameRecognizerErrorMessage +=
 				"A UserName character after an underscore, dash, period, or ampersand must be A-Z, a-z, or 0-9.\n";
+			symbolErr = true;
 			return userNameRecognizerErrorMessage;
 			
 		default:

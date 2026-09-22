@@ -43,6 +43,13 @@ public class EmailAddressRecognizer {
 														// running
 	private static int domainPartCounter = 0;			// A domain name may not exceed 63 characters
 
+	
+	public static boolean tooShort = false; 				// exposing booleans for Junit tests
+	public static boolean tooLong = false; 				// exposing booleans for Junit tests
+	public static boolean beginsNonAlphanumeric = false; 				// exposing booleans for Junit tests
+	public static boolean missingAtSymbol = false; 				// exposing booleans for Junit tests
+	public static boolean invalidDomain = false; 				// exposing booleans for Junit tests
+	public static boolean endsWithSymbol = false; 				// exposing booleans for Junit tests
 	/**********
 	 * This private method display the input line and then on a line under it displays an up arrow
 	 * at the point where an error should one be detected.  This method is designed to be used to 
@@ -78,7 +85,7 @@ public class EmailAddressRecognizer {
 		if (currentCharNdx < inputLine.length())
 			currentChar = inputLine.charAt(currentCharNdx);
 		else {
-			System.out.println("End of input was found!");
+			//System.out.println("End of input was found!");
 			currentChar = ' ';
 			running = false;
 		}
@@ -108,17 +115,19 @@ public class EmailAddressRecognizer {
 		// Let's ensure there is input
 		if (input.length() <= 0) {
 			emailAddressErrorMessage = "Email cannot be empty.\n";
+			tooShort = true;
 			return emailAddressErrorMessage + displayInput(input, 0);
 		}
 		currentChar = input.charAt(0);		// The current character from the above indexed position
 
 		// Let's ensure the address is not too long
 		if (input.length() > 255) {
+			tooLong = true;
 			emailAddressErrorMessage = "Email address too long, must not exceed 255 characters.\n";
 			return emailAddressErrorMessage + displayInput(input, 255);
 		}
 		running = true;						// Start the loop
-		System.out.println("\nCurrent Final Input  Next  DomainName\nState   State Char  State  Size");
+		//System.out.println("\nCurrent Final Input  Next  DomainName\nState   State Char  State  Size");
 
 		// The Finite State Machines continues until the end of the input is reached or at some 
 		// state the current character does not match any valid transition to a next state
@@ -257,7 +266,7 @@ public class EmailAddressRecognizer {
 			}
 			
 			if (running) {
-				displayDebuggingInfo();
+				//displayDebuggingInfo();
 				// When the processing of a state has finished, the FSM proceeds to the next character
 				// in the input and if there is one, it fetches that character and updates the 
 				// currentChar.  If there is no next character the currentChar is set to a blank.
@@ -271,9 +280,9 @@ public class EmailAddressRecognizer {
 			// Should the FSM get here, the loop starts again
 
 		}
-		displayDebuggingInfo();
+		//displayDebuggingInfo();
 		
-		System.out.println("The loop has ended.");
+		//System.out.println("The loop has ended.");
 
 		emailAddressIndexofError = currentCharNdx;		// Copy the index of the current character;
 		
@@ -286,7 +295,8 @@ public class EmailAddressRecognizer {
 		case 0:
 			// State 0 is not a final state, so we can return a very specific error message
 			emailAddressIndexofError = currentCharNdx;		// Copy the index of the current character;
-			emailAddressErrorMessage = "Non-alphanumberic character detected.\n";
+			emailAddressErrorMessage = "Non-alphanumeric character detected.\n";
+			beginsNonAlphanumeric = true;
 			return emailAddressErrorMessage;
 
 		case 1:
@@ -294,6 +304,7 @@ public class EmailAddressRecognizer {
 			
 			emailAddressIndexofError = currentCharNdx;		// Copy the index of the current character;
 			emailAddressErrorMessage = "No commercial at symbol detected. Please try again.\n";
+			missingAtSymbol = true;
 			return emailAddressErrorMessage;
 
 		case 2:
@@ -301,6 +312,7 @@ public class EmailAddressRecognizer {
 						
 			emailAddressIndexofError = currentCharNdx;		// Copy the index of the current character;
 			emailAddressErrorMessage = "Invalid domain detected. Please try again.\n";
+			invalidDomain = true;
 			return emailAddressErrorMessage;
 
 		case 3:
@@ -327,6 +339,7 @@ public class EmailAddressRecognizer {
 
 			emailAddressIndexofError = currentCharNdx;		// Copy the index of the current character;
 			emailAddressErrorMessage = "Email address cannot end in a hyphen. Please try again.\n";
+			endsWithSymbol = true;
 			return emailAddressErrorMessage;
 
 		default:
