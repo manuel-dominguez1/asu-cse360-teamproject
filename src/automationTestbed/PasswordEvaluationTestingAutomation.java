@@ -130,23 +130,23 @@ public class PasswordEvaluationTestingAutomation {
 	
 	private static void displayEvaluation() {
 		
-		if (passwordRecognizer.hasUpper)
+		if (!passwordRecognizer.hasUpper)
 			System.out.println("At least one upper case letter - Satisfied");
 		else
 			System.out.println("At least one upper case letter - Not Satisfied");
 
-		if (passwordRecognizer.hasLower)
+		if (!passwordRecognizer.hasLower)
 			System.out.println("At least one lower case letter - Satisfied");
 		else
 			System.out.println("At least one lower case letter - Not Satisfied");
 	
 
-		if (passwordRecognizer.hasDigit)
+		if (!passwordRecognizer.hasDigit)
 			System.out.println("At least one digit - Satisfied");
 		else
 			System.out.println("At least one digit - Not Satisfied");
 
-		if (passwordRecognizer.hasSpecialChar)
+		if (!passwordRecognizer.hasSpecialChar)
 			System.out.println("At least one special character - Satisfied");
 		else
 			System.out.println("At least one special character - Not Satisfied");
