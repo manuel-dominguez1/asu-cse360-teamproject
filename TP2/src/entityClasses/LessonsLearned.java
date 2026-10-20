@@ -1,5 +1,8 @@
 package entityClasses;
 
+import guiTools.TitleRecognizer;
+import guiTools.DescriptionRecognizer;
+
 /*******
  * <p> Title: Lesson Class </p>
  * 
@@ -67,6 +70,46 @@ public class LessonsLearned {
         this.title = title;
         this.description = dsc;
         this.author = author;
+    }
+
+	/*****
+     * <p> Method: boolean isValidTitle(String title) </p>
+     * 
+     * <p> Description: This method verifies that the desired title is valid
+     * before the lesson is saved to the database. </p>
+     * 
+     * @param title specifies the title of the lesson
+     * 
+     * @return true if valid, otherwise false
+     * 
+     */
+    public boolean isValidTitle(String title) {
+    	String invalidTitleMessage = TitleRecognizer.checkForValidTitle(title);
+		if (!invalidTitleMessage.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
+    }
+
+    /*****
+     * <p> Method: boolean isValidDescription(String dsc) </p>
+     * 
+     * <p> Description: This method verifies that the desired description is valid
+     * before the lesson is saved to the database. </p>
+     * 
+     * @param title specifies the title of the lesson
+     * 
+     * @return true if valid, otherwise false
+     * 
+     */
+    public boolean isValidDescription(String dsc) {
+    	String invalidDescriptionMessage = DescriptionRecognizer.checkForValidDescription(dsc);
+		if (!invalidDescriptionMessage.isEmpty()) {
+			return true;
+		} else {
+			return false;
+		}
     }
 
     /*****
