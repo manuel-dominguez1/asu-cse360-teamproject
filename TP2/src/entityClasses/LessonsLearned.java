@@ -98,7 +98,7 @@ public class LessonsLearned {
      * <p> Description: This method verifies that the desired description is valid
      * before the lesson is saved to the database. </p>
      * 
-     * @param title specifies the title of the lesson
+     * @param dsc specifies the description of the lesson
      * 
      * @return true if valid, otherwise false
      * 
