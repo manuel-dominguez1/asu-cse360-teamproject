@@ -3,17 +3,18 @@ package entityClasses;
 import guiTools.TitleRecognizer;
 import guiTools.DescriptionRecognizer;
 
+
 /*******
  * <p> Title: Lesson Class </p>
  * 
  * <p> Description: The Lesson class represents one persistent lesson object learned. </p>
+ *
  */ 
 
 public class LessonsLearned {
 	
-	/*
-	 * These are the private attributes for this entity object
-	 */
+	// These are the private attributes for this entity object
+	
     private int id;
     private String title;
     private String description;
@@ -44,7 +45,6 @@ public class LessonsLearned {
      * @param author specifies which user created the lesson, identified by username
      * 
      */
-    // Constructor to initialize a new Lesson object with id, title, description and author.
     public LessonsLearned(int id, String title, String dsc, String author) {
         this.id = id;
         this.title = title;
@@ -65,7 +65,6 @@ public class LessonsLearned {
      * @param author specifies which user created the lesson, identified by username
      * 
      */
-    // Constructor to initialize a new Lesson object with title, description and author.
     public LessonsLearned(String title, String dsc, String author) {
         this.title = title;
         this.description = dsc;
@@ -120,7 +119,6 @@ public class LessonsLearned {
      * @return an int of the Id
      * 
      */
-    // Gets the current value of the Id.
     public int getId() { return id; }
     
     /*****
@@ -131,7 +129,6 @@ public class LessonsLearned {
      * @return a String of the Title
      * 
      */
-    // Gets the current value of the Title.
     public String getTitle() { return title; }
 
     
@@ -143,7 +140,6 @@ public class LessonsLearned {
      * @return a String of the Description
 	 *
      */
-    // Gets the current value of the Description.
     public String getDescription() { return description; }
 
     
@@ -155,7 +151,6 @@ public class LessonsLearned {
      * @return a String of the Author
 	 *
      */
-    // Gets the current value of the Author.
     public String getAuthor() { return author; }
 
     /*****
@@ -166,7 +161,6 @@ public class LessonsLearned {
      * @param s is a string that specifies the lesson's title
 	 *
      */
-    // Sets the title of the lesson.
     public void setTitle(String s) { title = s; }
     
     /*****
@@ -177,8 +171,83 @@ public class LessonsLearned {
      * @param s is a string that specifies the lesson's description
 	 *
      */
-    // Sets the description of the lesson.
     public void setDescription(String s) { description = s; }
+
+	
+	/*****
+     * <p> Method: boolean createLesson(String title, String description, User currentUser) </p>
+     * 
+     * <p> Description: This method creates a new LessonsLearned object. </p>
+     * 
+     * @param title is a string that specifies the lesson's title
+     * 
+     * @param description is a string that specifies the lesson's description
+     * 
+     * @param currentUser is the User entity that is currently logged in and creating the lesson
+     * 
+     * @return true if creation is successful, otherwise false
+	 *
+     */
+    public boolean createLesson(String title, String description, User currentUser) {
+    	// Set the author as the current User's username
+    	String author = currentUser.getUserName();
+    	
+    	// If the title or description is invalid
+    	if(!isValidTitle(title) || !isValidDescription(description)) {
+    		return false;
+    	}
+    	
+    	// Create lesson object and save it to the List
+    	LessonsLearned newLesson = new LessonsLearned(title.trim(), description.trim(), author);
+		LessonsLearnedList.add(newLesson);
+		
+		return true;
+    }
     
+    /*****
+     * <p> Method: boolean deleteLesson(int id) </p>
+     * 
+     * <p> Description: This method deletes an existing LessonsLearned object. </p>
+     * 
+     * @param id is the id of the lesson to delete
+     * 
+     * @return true is deletion is successful, otherwise false
+	 *
+     */
+    public boolean deleteLesson(int id) {
+    	// Delete the lesson in the List
+    	return LessonsLearnedList.delete(id);
+    }
+    
+    /*****
+     * <p> Method: boolean updateLesson(String title, String description, User currentUser) </p>
+     * 
+     * <p> Description: This method updates an existing LessonsLearned object. </p>
+     * 
+     * @param title is a string that specifies the lesson's title
+     * 
+     * @param description is a string that specifies the lesson's description
+     * 
+     * @param currentUser is the User entity that is currently logged in and creating the lesson
+	 *
+     */
+    public boolean updateLesson(int id, String newTitle, String newDescription, User currentUser) { 
+    	LessonsLearned lesson = LessonsLearnedList.get(id);
+    	// If the lesson doesn't exist
+    	if (lesson == null) {
+    		return false;
+    	}
+    	
+    	// If the title or description modification is invalid
+    	if(!isValidTitle(newTitle) || !isValidDescription(newDescription)) {
+    		return false;
+    	}	
+    	// Set the new attributes
+    	lesson.setTitle(newTitle.trim());
+    	lesson.setDescription(newDescription.trim());
+    	
+    	// Update lesson in the List
+    	return LessonsLearnedList.update(lesson);
+	}
     
 }
