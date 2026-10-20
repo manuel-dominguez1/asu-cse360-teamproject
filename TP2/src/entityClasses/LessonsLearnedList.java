@@ -26,7 +26,7 @@
 	     * @param lesson represents a LessonsLearned object to be added to the list
 	     * 
 	     */
-	  public void add(LessonsLearned lesson) {
+	  public static void add(LessonsLearned lesson) {
 		  if (lesson == null) {
 			  throw new IllegalArgumentException("Lesson required");
 		  }
@@ -43,7 +43,7 @@
 	     * @return a Learned Lessons object with a matching id
 	     * 
 	     */
-	  public LessonsLearned get(int id) {
+	  public static LessonsLearned get(int id) {
 		  for (LessonsLearned lesson : lessons) {
 			  if (lesson.getId() == id) {
 				  return lesson;
@@ -63,7 +63,7 @@
 	     * @return true if update is successful, otherwise false
 	     * 
 	     */
-	  public boolean update(LessonsLearned lesson) {
+	  public static boolean update(LessonsLearned lesson) {
 		  if (lesson == null) {
 			  return false;
 		  }
@@ -87,7 +87,7 @@
 	     * @return true if deletion is successful, otherwise false
 	     * 
 	     */
-	  public boolean delete(int id) {
+	  public static boolean delete(int id) {
 		  return lessons.removeIf(l -> l.getId() == id);
 	  }
 	  
