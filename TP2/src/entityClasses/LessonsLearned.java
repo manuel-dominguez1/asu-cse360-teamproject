@@ -183,15 +183,13 @@ public class LessonsLearned {
      * 
      * @param description is a string that specifies the lesson's description
      * 
-     * @param currentUser is the User entity that is currently logged in and creating the lesson
+     * @param author is a string representing the user creating the lesson, matches the user's username
      * 
      * @return true if creation is successful, otherwise false
 	 *
      */
-    public boolean createLesson(String title, String description, User currentUser) {
-    	// Set the author as the current User's username
-    	String author = currentUser.getUserName();
-    	
+    public boolean createLesson(String title, String description, String author) {
+   
     	// If the title or description is invalid
     	if(!isValidTitle(title) || !isValidDescription(description)) {
     		return false;
