@@ -55,7 +55,7 @@
 	  }
 	  
 	  /*****
-	     * <p> Method: List<LessonsLearned> all() </p>
+	     * <p> Method: {@literal List<LessonsLearned>} all() </p>
 	     * 
 	     * <p> Description: Returns all lessons currently loaded into the list. </p>
 	     * 
@@ -112,7 +112,17 @@
 		  
 		  return null;
 	  }
-	  
+
+	  /*****
+	     * <p> Method: LessonsLearnedList search(String query) </p>
+	     * 
+	     * <p> Description: Produces a list of LessonLearned containing a keyword. </p>
+	     * 
+	     * @param query represents the words or phrase being searched for
+	     * 
+	     * @return a list of Learned Lessons objects matching the query
+	     * 
+	     */
 	  public LessonsLearnedList search(String query) {
 		  // Construct a new list for results
 		  LessonsLearnedList result = new LessonsLearnedList();
