@@ -216,6 +216,21 @@ public class LessonsLearned {
     	// Delete the lesson in the List
     	return LessonsLearnedList.delete(id);
     }
+
+	/*****
+     * <p> Method: boolean deleteLesson(String title) </p>
+     * 
+     * <p> Description: This method deletes an existing LessonsLearned object. </p>
+     * 
+     * @param title is the title of the lesson to delete
+     * 
+     * @return true is deletion is successful, otherwise false
+	 *
+     */
+    public static boolean deleteLesson(String title) {
+    	// Delete the lesson in the List
+    	return LessonsLearnedList.delete(title);
+    }
     
     /*****
      * <p> Method: boolean updateLesson(String title, String description, User currentUser) </p>
