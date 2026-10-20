@@ -90,6 +90,20 @@
 	  public static boolean delete(int id) {
 		  return lessons.removeIf(l -> l.getId() == id);
 	  }
+
+	   /*****
+	     * <p> Method: boolean delete(String title) </p>
+	     * 
+	     * <p> Description: Deletes an existing lesson from the result list. </p>
+	     * 
+	     * @param title represents the title of the desired lesson
+	     * 
+	     * @return true if deletion is successful, otherwise false
+	     * 
+	     */
+	  public static boolean delete(String title) {
+		  return lessons.removeIf(l -> l.getTitle() == title);
+	  }
 	  
 	  /*****
 	     * <p> Method: LessonsLearnedList search(String query) </p>
