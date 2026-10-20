@@ -82,7 +82,7 @@ public class LessonsLearned {
      * @return true if valid, otherwise false
      * 
      */
-    public boolean isValidTitle(String title) {
+    public static boolean isValidTitle(String title) {
     	String invalidTitleMessage = TitleRecognizer.checkForValidTitle(title);
 		if (!invalidTitleMessage.isEmpty()) {
 			return true;
@@ -102,7 +102,7 @@ public class LessonsLearned {
      * @return true if valid, otherwise false
      * 
      */
-    public boolean isValidDescription(String dsc) {
+    public static boolean isValidDescription(String dsc) {
     	String invalidDescriptionMessage = DescriptionRecognizer.checkForValidDescription(dsc);
 		if (!invalidDescriptionMessage.isEmpty()) {
 			return true;
@@ -188,7 +188,7 @@ public class LessonsLearned {
      * @return true if creation is successful, otherwise false
 	 *
      */
-    public boolean createLesson(String title, String description, String author) {
+    public static boolean createLesson(String title, String description, String author) {
    
     	// If the title or description is invalid
     	if(!isValidTitle(title) || !isValidDescription(description)) {
@@ -212,7 +212,7 @@ public class LessonsLearned {
      * @return true is deletion is successful, otherwise false
 	 *
      */
-    public boolean deleteLesson(int id) {
+    public static boolean deleteLesson(int id) {
     	// Delete the lesson in the List
     	return LessonsLearnedList.delete(id);
     }
@@ -229,7 +229,7 @@ public class LessonsLearned {
      * @param currentUser is the User entity that is currently logged in and creating the lesson
 	 *
      */
-    public boolean updateLesson(int id, String newTitle, String newDescription, User currentUser) { 
+    public static boolean updateLesson(int id, String newTitle, String newDescription, User currentUser) { 
     	LessonsLearned lesson = LessonsLearnedList.get(id);
     	// If the lesson doesn't exist
     	if (lesson == null) {
