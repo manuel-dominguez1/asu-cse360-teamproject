@@ -371,9 +371,11 @@ public class Database {
 		}
 		
 		/*******
-		 *  <p> Method: List<LessonsLearned> searchLessons(String keyword) </p>
+		 *  <p> Method: {@literal List<LessonsLearned>} searchLessons(String keyword) </p>
 		 *   
 		 *  <P> Description: Generate a list of lessons, one for each lesson matching the desired keyword.</p>
+		 *
+		 *  @param keyword is the desired search criteria
 		 *  
 		 *  @return a list of Lessons that contain the keyword
 		 *  
