@@ -4,12 +4,6 @@ package entityClasses;
  * <p> Title: Lesson Class </p>
  * 
  * <p> Description: The Lesson class represents one persistent lesson object learned. </p>
- * 
- * <p> Copyright: Sierra Trimmer © 2026 </p>
- * 
- * @author Sierra Trimmer
- * 
- * 
  */ 
 
 public class LessonsLearned {
