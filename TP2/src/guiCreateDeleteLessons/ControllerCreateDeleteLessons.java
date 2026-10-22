@@ -1,7 +1,9 @@
 package guiCreateDeleteLessons;
 
 import database.Database;
-import entityClasses.Lesson;
+import entityClasses.LessonsLearned;
+import entityClasses.LessonsLearnedList;
+
 import java.util.Optional;
 import javafx.scene.control.ButtonType;
 import guiTools.TitleRecognizer;
@@ -51,7 +53,8 @@ public class ControllerCreateDeleteLessons {
 	
 	// Reference for the in-memory database so this package has access
 	private static Database theDatabase = applicationMain.FoundationsMain.database;
-	private static Lesson lessonBeingUpdated = null;
+	private static LessonsLearned lessonBeingDeleted = null;
+	private static LessonsLearned lessonBeingUpdated = null;
 	
 	/**********
 	 * <p> Method: repaintTheWindow() </p>
@@ -96,9 +99,12 @@ public class ControllerCreateDeleteLessons {
 					ViewCreateDeleteLessons.line_Separator1,
 					ViewCreateDeleteLessons.label_SelectOperation, ViewCreateDeleteLessons.combobox_SelectOperation,
 					ViewCreateDeleteLessons.label_LessonToDelete, ViewCreateDeleteLessons.text_LessonToDelete,
-					ViewCreateDeleteLessons.lessonInfoTable,
+					ViewCreateDeleteLessons.button_LookupLessonToDelete,
+					ViewCreateDeleteLessons.label_DeleteLessonTitle, ViewCreateDeleteLessons.text_DeleteLessonTitle,
+					ViewCreateDeleteLessons.label_DeleteLessonDescription, ViewCreateDeleteLessons.textarea_DeleteLessonDescription,
+					//ViewCreateDeleteLessons.lessonInfoTable,
 					ViewCreateDeleteLessons.button_SubmitDelete,
-					ViewCreateDeleteLessons.label_DeleteLookupError,
+					ViewCreateDeleteLessons.label_DeleteLookupError,ViewCreateDeleteLessons.label_DeletionError,
 					ViewCreateDeleteLessons.line_Separator4, ViewCreateDeleteLessons.button_Return,
 					ViewCreateDeleteLessons.button_Logout, ViewCreateDeleteLessons.button_Quit);
 		}
@@ -110,7 +116,7 @@ public class ControllerCreateDeleteLessons {
 					ViewCreateDeleteLessons.line_Separator1,
 					ViewCreateDeleteLessons.label_SelectOperation, ViewCreateDeleteLessons.combobox_SelectOperation,
 					ViewCreateDeleteLessons.label_LessonToUpdate, ViewCreateDeleteLessons.text_LessonToUpdate,
-					ViewCreateDeleteLessons.button_LookupLesson,
+					ViewCreateDeleteLessons.button_LookupLessonToUpdate,
 					ViewCreateDeleteLessons.label_UpdateLessonTitle, ViewCreateDeleteLessons.text_UpdateLessonTitle,
 					ViewCreateDeleteLessons.label_UpdateLessonDescription, ViewCreateDeleteLessons.textarea_UpdateLessonDescription,
 					ViewCreateDeleteLessons.button_SubmitUpdate,
@@ -149,7 +155,7 @@ public class ControllerCreateDeleteLessons {
 		// If the selection is to create a lesson
 		if (ViewCreateDeleteLessons.theSelectedOperation.compareTo("Create new lesson") == 0) {
 			
-			// Create the lesson information from the GUI
+			// Retrieve the lesson information from the GUI
 			String lessonTitle = ViewCreateDeleteLessons.text_CreateLessonTitle.getText();
 			String lessonDescription = ViewCreateDeleteLessons.textarea_CreateLessonDescription.getText();
 			String lessonAuthor = ViewCreateDeleteLessons.theUser.getUserName();
@@ -172,11 +178,11 @@ public class ControllerCreateDeleteLessons {
 			ViewCreateDeleteLessons.label_CreateDescriptionError.setText("");
 			ViewCreateDeleteLessons.label_CreateTitleError.setText("");
 		
-			// Create the Lesson Object
-			Lesson newLesson = new Lesson(lessonTitle.trim(), lessonDescription.trim(), lessonAuthor);
+			// Create the Lesson in the database and list
+			boolean success = LessonsLearned.createLesson(lessonTitle, lessonDescription, lessonAuthor, theDatabase);
 			
 			// Show success or error dialog based on database response	
-			if (theDatabase.register(newLesson)) {
+			if (success) {
 				ViewCreateDeleteLessons.alertCreationConfirmation.setHeaderText("Lesson Created");
 				ViewCreateDeleteLessons.alertCreationConfirmation.setContentText("Your lesson has been successfully saved to the database.");
 				ViewCreateDeleteLessons.alertCreationConfirmation.showAndWait();
@@ -190,7 +196,60 @@ public class ControllerCreateDeleteLessons {
 			
 			ViewCreateDeleteLessons.text_CreateLessonTitle.clear();
 			ViewCreateDeleteLessons.textarea_CreateLessonDescription.clear();
+			
 		}
+	}
+	
+	/**********
+	 * <p> 
+	 * 
+	 * Title: performFindLessonToDelete () Method. </p>
+	 * 
+	 * <p> Description: Method to find an existing lesson in the database and display
+	 * the lesson's current title and description so that
+	 * the user can confirm it is the lesson they would like to delete. </p>
+	 *  
+	 */
+	protected static void performFindLessonToDelete () {
+		String rawInput = ViewCreateDeleteLessons.text_LessonToDelete.getText();
+		
+		// Validate that input was entered
+		if (rawInput == null || rawInput.trim().isEmpty()) {
+			ViewCreateDeleteLessons.label_DeleteLookupError.setText("Please enter the Title or ID of the lesson you would like to delete.");
+			return;
+		}
+		
+		// Clear previous error messages
+		ViewCreateDeleteLessons.label_DeleteLookupError.setText("");
+		ViewCreateDeleteLessons.label_DeletionError.setText("");
+
+		String cleanInput = rawInput.trim();
+		lessonBeingDeleted = null;
+		
+		// Determine if a lesson title or id was entered
+		if (cleanInput.matches("\\d+")) {
+			int lessonId = Integer.parseInt(cleanInput);
+			if(theDatabase.doesLessonExist(lessonId)) {
+				lessonBeingDeleted = theDatabase.getLessonDetails(lessonId);
+			}
+		}
+		else {
+			if(theDatabase.doesLessonExist(cleanInput)) {
+				lessonBeingDeleted = theDatabase.getLessonDetails(cleanInput);
+			}
+		}
+		
+		// Lesson does not exist
+		if (lessonBeingDeleted == null) {
+			ViewCreateDeleteLessons.label_DeletionError.setText("No lesson found matching: \"" + cleanInput + "\"");
+			ViewCreateDeleteLessons.text_DeleteLessonTitle.clear();
+			ViewCreateDeleteLessons.textarea_DeleteLessonDescription.clear();
+			return;
+		}
+		
+		// Populate fields with lesson data
+		ViewCreateDeleteLessons.text_DeleteLessonTitle.setText(lessonBeingDeleted.getTitle());
+		ViewCreateDeleteLessons.textarea_DeleteLessonDescription.setText(lessonBeingDeleted.getDescription());
 	}
 	
 	/**********
@@ -216,25 +275,15 @@ public class ControllerCreateDeleteLessons {
 						
 		// If the selection is to delete a lesson
 		if (ViewCreateDeleteLessons.theSelectedOperation.compareTo("Delete existing lesson")== 0) {
-				
-			String rawInput = ViewCreateDeleteLessons.text_LessonToDelete.getText();
-			// Validate that input was entered
-			if (rawInput == null || rawInput.trim().isEmpty()) {
-				ViewCreateDeleteLessons.label_DeleteLookupError.setText("Please enter the Title or ID of the lesson you would like to delete.");
+			
+			// Check if lesson was found
+			if(lessonBeingDeleted == null) {
+				ViewCreateDeleteLessons.label_DeletionError.setText("Please find a lesson before attempting to delete.");
 				return;
 			}
-			
-			ViewCreateDeleteLessons.label_DeleteLookupError.setText("");
-			
-			String cleanInput = rawInput.trim();
-			
-			// Determine if a lesson title or id was entered
-			if (cleanInput.matches("\\d+")) {
-				lessonId = Integer.parseInt(cleanInput);
-			}
-			else {
-				lessonTitle = cleanInput;
-			}
+						
+			// Get the id of the lesson being updated
+			int targetId = lessonBeingDeleted.getId();
 			
 			boolean isDeleted = false;
 			
@@ -244,11 +293,11 @@ public class ControllerCreateDeleteLessons {
 
 			if (result.isPresent() && result.get() == ButtonType.OK) {		
 				// Delete the Lesson Object
-				if (lessonId != -1) {
-					isDeleted = theDatabase.deleteLesson(lessonId);
+				if (targetId != -1) {
+					isDeleted = LessonsLearned.deleteLesson(targetId, theDatabase);
 				}
 				else {
-					isDeleted = theDatabase.deleteLesson(lessonTitle);
+					isDeleted = LessonsLearned.deleteLesson(lessonTitle, theDatabase);
 				}
 			}
 			else {
@@ -274,14 +323,14 @@ public class ControllerCreateDeleteLessons {
 	/**********
 	 * <p> 
 	 * 
-	 * Title: performFindLesson () Method. </p>
+	 * Title: performFindLessonToUpdate () Method. </p>
 	 * 
 	 * <p> Description: Method to find an existing lesson in the database and display
 	 * the lesson's current title and description so that
 	 * the user can modify them. </p>
 	 *  
 	 */
-	protected static void performFindLesson () {
+	protected static void performFindLessonToUpdate () {
 		String rawInput = ViewCreateDeleteLessons.text_LessonToUpdate.getText();
 		
 		// Validate that input was entered
@@ -359,7 +408,8 @@ public class ControllerCreateDeleteLessons {
 			// Read the edited fields
 			String newTitle = ViewCreateDeleteLessons.text_UpdateLessonTitle.getText();
 			String newDescrip = ViewCreateDeleteLessons.textarea_UpdateLessonDescription.getText();
-			
+
+	
 			newTitle = newTitle.trim();
 			newDescrip = newDescrip.trim();
 				
@@ -407,12 +457,12 @@ public class ControllerCreateDeleteLessons {
 			
 			// Update title
 			if (titleUpdated) {
-				titleSuccess = theDatabase.updateTitle(targetId, newTitle);
+				titleSuccess = LessonsLearned.updateTitle(targetId, newTitle, theDatabase);
 			}
 			
 			// Update description
 			if (descriptionUpdated) {
-				descriptionSuccess = theDatabase.updateDescription(targetId, newDescrip);
+				descriptionSuccess = LessonsLearned.updateDescription(targetId, newDescrip, theDatabase);
 
 			}
 			

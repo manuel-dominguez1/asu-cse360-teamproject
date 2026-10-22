@@ -23,7 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import database.Database;
-import entityClasses.Lesson;
+import entityClasses.LessonsLearned;
 import entityClasses.User;
 
 
@@ -88,22 +88,31 @@ public class ViewCreateDeleteLessons {
 	// Area 2c: When the delete operation has been selected these widgets are shown and can be used
 	protected static Label label_LessonToDelete = new Label("Enter the Title or ID of the lesson you would like to delete:");
 	protected static TextField text_LessonToDelete = new TextField();
+	protected static Button button_LookupLessonToDelete = new Button("Find");
+	protected static Label label_DeleteLessonTitle = new Label("Lesson Title:");
+	protected static TextField text_DeleteLessonTitle = new TextField();
+	protected static Label label_DeleteLessonDescription = new Label("Lesson Description:");
+	protected static TextArea textarea_DeleteLessonDescription = new TextArea();
 	protected static Button button_SubmitDelete = new Button("Submit");
 	protected static Alert alertDeletionConfirmation = new Alert(AlertType.CONFIRMATION);
 	protected static Alert alertDeletionDone = new Alert(AlertType.INFORMATION);
 	protected static Alert alertDeletionError = new Alert(AlertType.INFORMATION);
 	protected static Label label_DeleteLookupError = new Label("");
-	protected static ObservableList<Lesson> lessonInfoList = FXCollections.observableArrayList();
-	protected static TableView<Lesson> lessonInfoTable = new TableView<>();
-	protected static TableColumn<Lesson, Integer> idColumn = new TableColumn<>("Id");
-	protected static TableColumn<Lesson, String> titleColumn = new TableColumn<>("Title");
-	protected static TableColumn<Lesson, String> descriptionColumn = new TableColumn<>("Description");
-	protected static TableColumn<Lesson, String> authorColumn = new TableColumn<>("Author");
+	protected static Label label_DeletionError = new Label("");
+	
+	/*
+	protected static ObservableList<LessonsLearned> lessonInfoList = FXCollections.observableArrayList();
+	protected static TableView<LessonsLearned> lessonInfoTable = new TableView<>();
+	protected static TableColumn<LessonsLearned, Integer> idColumn = new TableColumn<>("Id");
+	protected static TableColumn<LessonsLearned, String> titleColumn = new TableColumn<>("Title");
+	protected static TableColumn<LessonsLearned, String> descriptionColumn = new TableColumn<>("Description");
+	protected static TableColumn<LessonsLearned, String> authorColumn = new TableColumn<>("Author");
+	*/
 	
 	// Area 2d: When the update operation has been selected these widgets are shown and can be used
 	protected static Label label_LessonToUpdate = new Label("Enter the Title or ID of the lesson you would like to update:");
 	protected static TextField text_LessonToUpdate = new TextField();
-	protected static Button button_LookupLesson = new Button("Find");
+	protected static Button button_LookupLessonToUpdate = new Button("Find");
 	protected static Label label_UpdateLessonTitle = new Label("Confirm the Title of your lesson:");
 	protected static TextField text_UpdateLessonTitle = new TextField();
 	protected static Label label_UpdateLessonDescription = new Label("Confirm the Description of your lesson:");
@@ -191,8 +200,9 @@ public class ViewCreateDeleteLessons {
 		// singleton instance of this class
 		if (theView == null) theView = new ViewCreateDeleteLessons();
 		
-		// Populate Table
+		/* Populate Table
 		lessonInfoList.setAll(theDatabase.getFullLessonList()); // Fetch all user data
+		*/
 		
 		// Default to no user selected
 		combobox_SelectOperation.getSelectionModel().select(0);
@@ -277,11 +287,24 @@ public class ViewCreateDeleteLessons {
 		button_SubmitCreate.setOnAction((_) -> {ControllerCreateDeleteLessons.performCreateLesson(); });
 		
 		// GUI Area 2c: Delete a Lesson
-		setupLabelUI(label_LessonToDelete, "Arial", 16, 400, Pos.BASELINE_LEFT, 20, 180);
+		setupLabelUI(label_LessonToDelete, "Arial", 16, 400, Pos.BASELINE_LEFT, 20, 165);
 		setupTextUI(text_LessonToDelete, "Arial", 16, 410, Pos.BASELINE_LEFT,
-				20, 210, true);
+				20, 195, true);
+		setupButtonUI(button_LookupLessonToDelete, "Dialog", 18, 210, Pos.CENTER, 450, 195);			
+		button_LookupLessonToDelete.getStyleClass().remove("fb-button");
+		button_LookupLessonToDelete.getStyleClass().add("grey-button");
+		button_LookupLessonToDelete.setOnAction((_) -> {ControllerCreateDeleteLessons.performFindLessonToDelete(); });
+		setupLabelUI(label_DeletionError, "Arial", 16, 300, Pos.BASELINE_LEFT, 20, 100);
+		label_DeletionError.setTextFill(Color.RED);
 		setupLabelUI(label_DeleteLookupError, "Arial", 16, 300, Pos.BASELINE_LEFT, 20, 100);
 		label_DeleteLookupError.setTextFill(Color.RED);
+		setupLabelUI(label_DeleteLessonTitle, "Arial", 16, 300, Pos.BASELINE_LEFT, 20, 235);
+		setupTextUI(text_DeleteLessonTitle, "Arial", 16, 410, Pos.BASELINE_LEFT,
+				20, 265, false);
+		setupLabelUI(label_DeleteLessonDescription, "Arial", 16, 300, Pos.BASELINE_LEFT, 20, 305);
+		setupTextAreaUI(textarea_DeleteLessonDescription, "Arial", 16, 750, 125, 20, 335, false);
+		
+		/*
 		idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 		titleColumn.setCellValueFactory(new PropertyValueFactory<>("Title"));
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("Description"));
@@ -293,19 +316,22 @@ public class ViewCreateDeleteLessons {
 		lessonInfoTable.setPrefHeight(200);
 		lessonInfoTable.setLayoutY(265);
 		lessonInfoTable.setLayoutX(20);
-		setupButtonUI(button_SubmitDelete, "Dialog", 18, 210, Pos.CENTER, 300, 475);
+		*/
+		
+		setupButtonUI(button_SubmitDelete, "Dialog", 18, 210, Pos.CENTER, 300, 475);			
 		button_SubmitDelete.getStyleClass().remove("fb-button");
 		button_SubmitDelete.getStyleClass().add("grey-button");
 		button_SubmitDelete.setOnAction((_) -> {ControllerCreateDeleteLessons.performDeleteLesson(); });
+		
 		
 		// GUI Area 2d: Update a Lesson
 		setupLabelUI(label_LessonToUpdate, "Arial", 16, 400, Pos.BASELINE_LEFT, 20, 165);
 		setupTextUI(text_LessonToUpdate, "Arial", 16, 410, Pos.BASELINE_LEFT,
 				20, 195, true);
-		setupButtonUI(button_LookupLesson, "Dialog", 18, 210, Pos.CENTER, 450, 195);			
-		button_LookupLesson.getStyleClass().remove("fb-button");
-		button_LookupLesson.getStyleClass().add("grey-button");
-		button_LookupLesson.setOnAction((_) -> {ControllerCreateDeleteLessons.performFindLesson(); });
+		setupButtonUI(button_LookupLessonToUpdate, "Dialog", 18, 210, Pos.CENTER, 450, 195);			
+		button_LookupLessonToUpdate.getStyleClass().remove("fb-button");
+		button_LookupLessonToUpdate.getStyleClass().add("grey-button");
+		button_LookupLessonToUpdate.setOnAction((_) -> {ControllerCreateDeleteLessons.performFindLessonToUpdate(); });
 		setupLabelUI(label_UpdateError, "Arial", 16, 300, Pos.BASELINE_LEFT, 20, 100);
 		label_UpdateError.setTextFill(Color.RED);
 		setupLabelUI(label_UpdateLookupError, "Arial", 16, 300, Pos.BASELINE_LEFT, 20, 100);

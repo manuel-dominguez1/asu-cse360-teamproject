@@ -1,4 +1,5 @@
 package guiListLessons;
+import entityClasses.LessonsLearnedList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -8,7 +9,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import entityClasses.User;
-import entityClasses.Lesson;
+import entityClasses.LessonsLearned;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -66,14 +67,15 @@ public class ViewListLessons {
 	protected static Line line_Separator1 = new Line(20, 95, width-20, 95);
 	
 	// A list of all the current lessons and their information.
-	protected static ObservableList<Lesson> lessonInfoList = FXCollections.observableArrayList();
+	private static LessonsLearnedList lessonList = new LessonsLearnedList();
+	protected static ObservableList<LessonsLearned> lessonInfoList = FXCollections.observableArrayList();
 	
 	// GUI Area 2: A table to display all the lessons and their information.
-	protected static TableView<Lesson> lessonInfoTable = new TableView<>();
-	protected static TableColumn<Lesson, Integer> idColumn = new TableColumn<>("Id");
-	protected static TableColumn<Lesson, String> titleColumn = new TableColumn<>("Title");
-	protected static TableColumn<Lesson, String> descriptionColumn = new TableColumn<>("Description");
-	protected static TableColumn<Lesson, String> authorColumn = new TableColumn<>("Author");
+	protected static TableView<LessonsLearned> lessonInfoTable = new TableView<>();
+	protected static TableColumn<LessonsLearned, Integer> idColumn = new TableColumn<>("Id");
+	protected static TableColumn<LessonsLearned, String> titleColumn = new TableColumn<>("Title");
+	protected static TableColumn<LessonsLearned, String> descriptionColumn = new TableColumn<>("Description");
+	protected static TableColumn<LessonsLearned, String> authorColumn = new TableColumn<>("Author");
 	
 	// This is a separator and it is used to partition the GUI for various tasks
 	protected static Line line_Separator4 = new Line(20, 525, width-20,525);
@@ -144,7 +146,8 @@ public class ViewListLessons {
 		theUser = user;
 		
 		// Populate the dynamic aspects of the GUI with the data from all lessons
-		lessonInfoList.setAll(theDatabase.getFullLessonList()); // Fetch all user data
+		lessonList.refresh(theDatabase);
+		lessonInfoList.setAll(lessonList.all()); // Fetch all user data
 		
 		// If not yet established, populate the static aspects of the GUI by creating
 		// the singleton instance of this class

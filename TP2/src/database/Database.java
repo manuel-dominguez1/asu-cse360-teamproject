@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import entityClasses.User;
-import entityClasses.Lesson;
+import entityClasses.LessonsLearned;
 import guiTools.EmailAddressRecognizer;
 import guiTools.passwordRecognizer;
 import guiTools.TitleRecognizer;
@@ -139,8 +139,9 @@ public class Database {
 				+ "id INT AUTO_INCREMENT PRIMARY KEY, "
 				+ "title VARCHAR(255) UNIQUE, "
 				+ "description VARCHAR(255), "
-				+ "author VARCHAR(500))";
+				+ "author VARCHAR(500))";	
 		statement.execute(lessonTable);
+		
 	}
 
 
@@ -240,9 +241,9 @@ public class Database {
 	}
 	
 	/*******
-	 * <p> Method: register(Lesson lesson) </p>
+	 * <p> Method: register(LessonsLearned lesson) </p>
 	 * 
-	 * <p> Description: Creates a new row in the database using the lesson parameter.
+	 * <p> Description: Creates a new row in the database using the LessonsLearned parameter.
 	 * The database automatically generates the lesson ID.</p>
 	 * 
 	 * @param lesson specifies a lesson object to be added to the database.
@@ -250,7 +251,7 @@ public class Database {
 	 * @return true if the lesson was successfully added to the database, otherwise false
 	 * 
 	 */
-		public boolean register(Lesson lesson) {
+		public boolean register(LessonsLearned lesson) {
 			String insertLesson = "INSERT INTO lessonsLearned (title, description, author) "
 					+ "VALUES (?, ?, ?)";
 			try (PreparedStatement pstmt = connection.prepareStatement(insertLesson)) {
@@ -354,13 +355,13 @@ public class Database {
 	 *  @return a list of Lessons found in the database.
 	 *  
 	 */
-		public List<Lesson> getFullLessonList () {
-			List<Lesson> lessonList = new ArrayList<Lesson>();
+		public List<LessonsLearned> getFullLessonList () {
+			List<LessonsLearned> lessonList = new ArrayList<LessonsLearned>();
 			String query = "SELECT * FROM lessonsLearned";
 			try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 				ResultSet rs = pstmt.executeQuery();
 				while (rs.next()) {
-					lessonList.add(new Lesson(rs.getInt("id"),rs.getString("title"),
+					lessonList.add(new LessonsLearned(rs.getInt("id"), rs.getString("title"),
 							rs.getString("description"), rs.getString("author")));
 				}
 			} catch (SQLException e) {
@@ -368,6 +369,36 @@ public class Database {
 			}
 			return lessonList;
 		}
+		
+		/*******
+		 *  <p> Method: {@literal List<LessonsLearned>} searchLessons(String keyword) </p>
+		 *   
+		 *  <P> Description: Generate a list of lessons, one for each lesson matching the desired keyword.</p>
+		 *
+		 *  @param keyword is the desired search criteria
+		 *  
+		 *  @return a list of Lessons that contain the keyword
+		 *  
+		 */
+			public List<LessonsLearned> searchLessons (String keyword) {
+				List<LessonsLearned> results = new ArrayList<>();
+				String query = "SELECT * FROM lessonsLearned WHERE LOWER(title) LIKE ? OR LOWER(description) LIKE ?";
+				try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+					String searchTerm = "%" + keyword.trim() + "%";
+					pstmt.setString(1, searchTerm);
+					pstmt.setString(2, searchTerm);
+					
+					try (ResultSet rs = pstmt.executeQuery()) {
+						while (rs.next()) {
+							results.add(new LessonsLearned(rs.getInt("id"), rs.getString("title"),
+								rs.getString("description"), rs.getString("author")));
+						}
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return results;
+			}
 	
 /*******
  * <p> Method: boolean loginAdmin(User user) </p>
@@ -1168,7 +1199,7 @@ public class Database {
 	public int getId(String title) {
 		String query = "SELECT id FROM lessonsLearned WHERE title = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-			pstmt.setString(2, title);
+			pstmt.setString(1, title);
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        if (rs.next()) {
@@ -1430,7 +1461,7 @@ public class Database {
 	 *  
 	 */
 	// get the attributes for a specified lesson
-	public Lesson getLessonDetails(String title) {
+	public LessonsLearned getLessonDetails(String title) {
 		String query = "SELECT * FROM lessonsLearned WHERE title = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 			pstmt.setString(1, title);
@@ -1440,7 +1471,7 @@ public class Database {
 			    	currentTitle = rs.getString(2);
 			    	currentDescription = rs.getString(3);
 			    	currentAuthor = rs.getString(4);
-			    	return new Lesson(currentId, currentTitle,
+			    	return new LessonsLearned(currentId, currentTitle,
 	    	    			currentDescription, currentAuthor);
 				}
 			}
@@ -1462,7 +1493,7 @@ public class Database {
 	 *  
 	 */
 	// get the attributes for a specified lesson
-	public Lesson getLessonDetails(int id) {
+	public LessonsLearned getLessonDetails(int id) {
 		String query = "SELECT id, title, description, author FROM lessonsLearned WHERE id = ?";
 		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 			pstmt.setInt(1, id);
@@ -1472,7 +1503,7 @@ public class Database {
 	    	    	currentTitle = rs.getString(2);
 	    	    	currentDescription = rs.getString(3);
 	    	    	currentAuthor = rs.getString(4);
-	    	    	return new Lesson(currentId, currentTitle,
+	    	    	return new LessonsLearned(currentId,currentTitle,
 	    	    			currentDescription, currentAuthor);
 	        	}
 	        }		
