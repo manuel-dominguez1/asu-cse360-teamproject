@@ -26,7 +26,7 @@ import guiTools.DescriptionRecognizer;
  * 
  * <p> Copyright: Lynn Robert Carter © 2025 </p>
  * 
- * @ author Lynn Robert Carter, Sierra Trimer
+ * @author Lynn Robert Carter, Sierra Trimer
  * 
  * @version 1.00		2026-09-20 Initial version 
  */
