@@ -6,9 +6,16 @@ import database.Database;
 
 
 /*******
- * <p> Title: Lesson Class </p>
+ * <p> Title: LessonsLearned Class </p>
  * 
- * <p> Description: The Lesson class represents one persistent lesson object learned. </p>
+ * <p> Description: The LessonsLearned class represents a single lesson learned,
+ * stored persistently in the database. It provides validation for lesson titles
+ * and descriptions, along with static methods to create, delete, and update
+ * lessons in the database. </p>
+ * 
+ * @author Sierra Trimmer
+ * 
+ * @version 1.0
  * 
  */ 
 
@@ -23,7 +30,7 @@ public class LessonsLearned {
     
     
     /*****
-     * <p> Method: Lesson () </p>
+     * <p> Method: LessonsLearned() </p>
      * 
      * <p> Description: This default constructor is not used in this system. </p>
      */
@@ -33,7 +40,7 @@ public class LessonsLearned {
 
     
     /*****
-     * <p> Method: Lesson(int id, String title, String dsc, String author) </p>
+     * <p> Method: LessonsLearned(int id, String title, String dsc, String author) </p>
      * 
      * <p> Description: This constructor is used to establish lesson objects. </p>
      * 
@@ -54,10 +61,11 @@ public class LessonsLearned {
     }
     
     /*****
-     * <p> Method: Lesson(String title, String dsc, String author) </p>
+     * <p> Method: LessonsLearned(String title, String dsc, String author) </p>
      * 
      * <p> Description: This constructor is used to establish lesson objects
-     * missing an id field. </p>
+     * that do not yet have an id, such as new lessons before they are saved
+     * to the database. </p>
      * 
      * @param title specifies the title of the lesson
      * 
@@ -149,7 +157,7 @@ public class LessonsLearned {
      * 
      * <p> Description: This getter returns the Author. </p>
      * 
-     * @return a String of the Author
+     * @return a String of the Author's username
 	 *
      */
     public String getAuthor() { return author; }
@@ -176,9 +184,11 @@ public class LessonsLearned {
     
     
     /*****
-     * <p> Method: boolean createLesson(String title, String description, User currentUser, Database db) </p>
+     * <p> Method: boolean createLesson(String title, String description, String author, Database db) </p>
      * 
-     * <p> Description: This method creates a new LessonsLearned object. </p>
+     * <p> Description: This method validates the title and description, then
+     * creates a new LessonsLearned object and saves it to the database. Leading
+     * and trailing whitespace is trimmed from the title and description. </p>
      * 
      * @param title is a string that specifies the lesson's title
      * 
@@ -186,7 +196,7 @@ public class LessonsLearned {
      * 
      * @param author is a string representing the user creating the lesson, matches the user's username
      * 
-     * @param db is the database where memory is stored
+     * @param db is the database where lessons are stored
      * 
      * @return true if creation is successful, otherwise false
 	 *
@@ -208,13 +218,14 @@ public class LessonsLearned {
     /*****
      * <p> Method: boolean deleteLesson(int id, Database db) </p>
      * 
-     * <p> Description: This method deletes an existing LessonsLearned object. </p>
+     * <p> Description: This method deletes an existing LessonsLearned object
+     * from the database, identified by its id. </p>
      * 
      * @param id is the id of the lesson to delete
      * 
-     * @param db is the database where memory is stored
+     * @param db is the database where lessons are stored
      * 
-     * @return true is deletion is successful, otherwise false
+     * @return true if deletion is successful, otherwise false
 	 *
      */
     public static boolean deleteLesson(int id, Database db) {
@@ -226,13 +237,14 @@ public class LessonsLearned {
     /*****
      * <p> Method: boolean deleteLesson(String title, Database db) </p>
      * 
-     * <p> Description: This method deletes an existing LessonsLearned object. </p>
+     * <p> Description: This method deletes an existing LessonsLearned object
+     * from the database, identified by its title. </p>
      * 
      * @param title is the title of the lesson to delete
      * 
-     * @param db is the database where memory is stored
+     * @param db is the database where lessons are stored
      * 
-     * @return true is deletion is successful, otherwise false
+     * @return true if deletion is successful, otherwise false
 	 *
      */
     public static boolean deleteLesson(String title, Database db) {
@@ -243,13 +255,15 @@ public class LessonsLearned {
     /*****
      * <p> Method: boolean updateTitle(int id, String title, Database db) </p>
      * 
-     * <p> Description: This method updates the title of an existing LessonsLearned object. </p>
+     * <p> Description: This method updates the title of an existing LessonsLearned 
+     * object. The update fails if the lesson does not exist or the new title is 
+     * invalid. </p>
      * 
      * @param id is the id of the desired lesson
      * 
      * @param title is a string for the new desired title
      * 
-     * @param db is the database where memory is stored
+     * @param db is the database where lessons are stored
      * 
      * @return true if update is successful, otherwise false
 	 *
@@ -272,15 +286,17 @@ public class LessonsLearned {
     }
     
     /*****
-     * <p> Method: boolean updateDescription(int id,String description, Database db) </p>
+     * <p> Method: boolean updateDescription(int id, String description, Database db) </p>
      * 
-     * <p> Description: This method updates the description of an existing LessonsLearned object. </p>
+     * <p> Description: This method updates the description of an existing 
+     * LessonsLearned object. The update fails if the lesson does not exist or 
+     * the new description is invalid. </p>
      * 
      * @param id is the id of the desired lesson
      * 
      * @param description is a string for the new desired description
      * 
-     * @param db is the database where memory is stored
+     * @param db is the database where lessons are stored
      * 
      * @return true if update is successful, otherwise false
 	 *
