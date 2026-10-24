@@ -12,6 +12,8 @@ package guiListLessons;
  * <p> Copyright: Sierra Trimmer © 2026 </p>
  * 
  * @author Sierra Trimmer
+ * 
+ * @version 1.00	2026-09-20
  */
 
 public class ModelListLessons {

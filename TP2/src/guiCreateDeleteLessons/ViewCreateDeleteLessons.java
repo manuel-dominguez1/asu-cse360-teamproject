@@ -30,14 +30,13 @@ import entityClasses.User;
 /*******
  * <p> Title: GUICreateDeleteLessons Class. </p>
  * 
- * <p> Description: The Java/FX-based page for creating and deleting lessons.</p>
+ * <p> Description: The Java/FX-based page for creating, deleting, and updating lessons.</p>
  * 
  * <p> Copyright: Lynn Robert Carter © 2025 </p>
  * 
- * @author Lynn Robert Carter
+ * @author Lynn Robert Carter, Sierra Trimmer
  * 
- * @version 1.00		2025-08-20 Initial version
- *  
+ * @version 1.00		2026-09-20 Initial version
  */
 
 public class ViewCreateDeleteLessons {
@@ -170,7 +169,7 @@ public class ViewCreateDeleteLessons {
 	*/
 
 	/**********
-	 * <p> Method: displayCreateDeleteLessons(Stage ps, Lesson lesson) </p>
+	 * <p> Method: displayCreateDeleteLessons(Stage ps, User user) </p>
 	 * 
 	 * <p> Description: This method is the single entry point from outside this package to cause
 	 * the CreateDeleteLessons page to be displayed.
@@ -187,7 +186,7 @@ public class ViewCreateDeleteLessons {
 	 * 
 	 * @param ps specifies the JavaFX Stage to be used for this GUI and it's methods
 	 * 
-	 * @param user specifies the User whose roles will be updated
+	 * @param user specifies the current User
 	 *
 	 */
 	public static void displayCreateDeleteLessons(Stage ps, User user) {
@@ -217,7 +216,7 @@ public class ViewCreateDeleteLessons {
 
 	
 	/**********
-	 * <p> Method: GUICreateDeleteLessonsPage() </p>
+	 * <p> Method: ViewCreateDeleteLessonsPage() </p>
 	 * 
 	 * <p> Description: This method initializes all the elements of the graphical user interface.
 	 * This method determines the location, size, font, color, and change and event handlers for

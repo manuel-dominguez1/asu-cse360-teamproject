@@ -9,10 +9,9 @@ package guiCreateDeleteLessons;
  * 
  * <p> Copyright: Lynn Robert Carter © 2025 </p>
  * 
- * @author Lynn Robert Carter
+ * @author Lynn Robert Carter, Sierra Trimmer
  * 
- * @version 1.00		2025-08-15 Initial version
- *  
+ * @version 1.00		2026-09-20 Initial version
  */
 
 public class ModelCreateDeleteLessons {

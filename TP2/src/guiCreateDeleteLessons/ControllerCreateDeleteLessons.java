@@ -10,10 +10,11 @@ import guiTools.TitleRecognizer;
 import guiTools.DescriptionRecognizer;
 
 /*******
- * <p> Title: ControllerAddRemoveRoles Class. </p>
+ * <p> Title: ControllerCreateDeleteLessons Class. </p>
  * 
- * <p> Description: The Java/FX-based Add Remove Roles Page.  This class provides the controller
- * actions basic on the user's use of the JavaFX GUI widgets defined by the View class.
+ * <p> Description: The Java/FX-based Page for creating, deleting, and updating lessons. 
+ * This class provides the controller actions basic on the user's use of the JavaFX GUI 
+ * widgets defined by the View class.
  * 
  * This page has one of the more complex Controller Classes due to the fact that the changing the
  * values of widgets changes the layout of the page.  It is up to the Controller to determine what
@@ -25,10 +26,9 @@ import guiTools.DescriptionRecognizer;
  * 
  * <p> Copyright: Lynn Robert Carter © 2025 </p>
  * 
- * @author Lynn Robert Carter
+ * @ author Lynn Robert Carter, Sierra Trimer
  * 
- * @version 1.00		2025-08-17 Initial version
- * @version 1.01		2025-09-16 Update Javadoc documentation *  
+ * @version 1.00		2026-09-20 Initial version 
  */
 
 public class ControllerCreateDeleteLessons {
@@ -44,7 +44,7 @@ public class ControllerCreateDeleteLessons {
 	 */
 
 	/*****
-     * <p> Method: ControllerAddRemoveRoles() </p>
+     * <p> Method: ControllerCreateDeleteLessons() </p>
      * 
      * <p> Description: This default constructor is not used in this system. </p>
      */
@@ -140,7 +140,12 @@ public class ControllerCreateDeleteLessons {
 	 * 
 	 * Title: performCreateLesson () Method. </p>
 	 * 
-	 * <p> Description: Method for creating a new lesson in the database. </p>
+	 * <p> Description: Method for creating a new lesson in the database. 
+	 * The input for the new lesson is validated with DescriptionRecognizer
+	 * and TItleRecognizer classes. If the given input is valid, a new lesson
+	 * is created and added to the database and the lessons list. A success 
+	 * message is then displayed. Otherwise, a meaningful error message is 
+	 * displayed. </p>
 	 */
 	protected static void performCreateLesson () {
 		// Determine which item in the ComboBox list was selected
@@ -257,7 +262,10 @@ public class ControllerCreateDeleteLessons {
 	 * 
 	 * Title: performDeleteLesson () Method. </p>
 	 * 
-	 * <p> Description: Method for deleting a lesson from the database using a lesson's id or title. </p>
+	 * <p> Description: Method for deleting a lesson from the database using a lesson's 
+	 * id or title.  If the specified lesson to delete is found, a confirmation window is
+	 * displayed. If confirmed, the lesson is then deleted from the database. If the lesson
+	 * is not found a meaningful error message is displayed. </p>
 	 */
 	protected static void performDeleteLesson () {
 		
@@ -327,7 +335,8 @@ public class ControllerCreateDeleteLessons {
 	 * 
 	 * <p> Description: Method to find an existing lesson in the database and display
 	 * the lesson's current title and description so that
-	 * the user can modify them. </p>
+	 * the user can modify them. If the specified lesson to upadete does not exist, a 
+	 * meaningful error message is displayed. </p>
 	 *  
 	 */
 	protected static void performFindLessonToUpdate () {
@@ -380,7 +389,11 @@ public class ControllerCreateDeleteLessons {
 	 * Title: performUpdateLesson () Method. </p>
 	 * 
 	 * <p> Description: Method to update the title or description of the
-	 * lesson found by the performFindLesson() method. </p>
+	 * lesson found by the performFindLesson() method. The new title and/or description
+	 * is validated using the TitleRecognizer and/or DescriptionRecognizer class. A
+	 * confirmation window is then displayed before the lesson is updated. If the lesson
+	 * is updated, a success message is displayed. If the lesson is not updated a meaningful
+	 * error message is displayed. </p>
 	 */
 	protected static void performUpdateLesson () {
 		
@@ -503,7 +516,6 @@ public class ControllerCreateDeleteLessons {
 	 * 
 	 * <p> Description: This method returns the user (who must be an Admin as only admins are the
 	 * only users who have access to this page) to the Admin Home page. </p>
-	 * 
 	 */
 	protected static void performReturn() {
 		guiAdminHome.ViewAdminHome.displayAdminHome(ViewCreateDeleteLessons.theStage,

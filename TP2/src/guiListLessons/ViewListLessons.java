@@ -40,7 +40,7 @@ import javafx.collections.FXCollections;
  * 
  * @version 1.00		2025-08-17 Initial version
  * @version 2.00		2026-09-20 Modified Code to Create List Users Page
- * @version 3.00		2026-09-30 Modified to create List Lessons Page
+ * @version 3.00		2026-09-22 Modified to create List Lessons Page
  * 
  */
 
@@ -136,7 +136,7 @@ public class ViewListLessons {
 	 * @param ps   specifies the JavaFX Stage to be used for this GUI and it's
 	 *             methods
 	 * 
-	 * @param user specifies the User whose roles will be updated
+	 * @param user specifies the current User
 	 *
 	 */
 	public static void displayListLessons(Stage ps, User user) {
@@ -164,7 +164,7 @@ public class ViewListLessons {
 
 	/**********
 	 * <p>
-	 * Method: GUIListLessonsPage()
+	 * Method: ViewListLessonsPage()
 	 * </p>
 	 * 
 	 * <p>

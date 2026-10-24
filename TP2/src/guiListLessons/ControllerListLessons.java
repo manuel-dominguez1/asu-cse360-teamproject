@@ -1,5 +1,6 @@
 package guiListLessons;
 
+import guiListLessons.ViewListLessons;
 
 /*******
  * <p>
@@ -19,7 +20,7 @@ package guiListLessons;
  * 
  * @author Sierra Trimmer
  * 
- * @version 1.00		2026-09-30 Initial version
+ * @version 1.00		2026-09-20 Initial version
  * 
  */
 
