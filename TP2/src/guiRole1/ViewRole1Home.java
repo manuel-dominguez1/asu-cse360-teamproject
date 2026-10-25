@@ -2,14 +2,22 @@ package guiRole1;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.util.List;
+
 import database.Database;
 import entityClasses.User;
+import guiAdminHome.ControllerAdminHome;
 
 
 /*******
@@ -52,11 +60,12 @@ public class ViewRole1Home {
 	// This is a separator and it is used to partition the GUI for various tasks
 	protected static Line line_Separator1 = new Line(20, 95, width-20, 95);
 
-	// GUI ARea 2: This is a stub, so there are no widgets here.  For an actual role page, this are
+	// GUI Area 2: This is a stub, so there are no widgets here.  For an actual role page, this are
 	// would contain the widgets needed for the user to play the assigned role.
-	
-	
-	
+	protected static Button button_CreateDeleteLessons = new Button("Create/Delete Lessons");
+	protected static Button button_ListLessons = new Button("List All Lessons");
+	protected static Alert alertNotImplemented = new Alert(AlertType.INFORMATION);
+		
 	// This is a separator and it is used to partition the GUI for various tasks
 	protected static Line line_Separator4 = new Line(20, 525, width-20,525);
 	
@@ -148,6 +157,8 @@ public class ViewRole1Home {
 		// Create the Pane for the list of widgets and the Scene for the window
 		theRootPane = new Pane();
 		theViewRole1HomeScene = new Scene(theRootPane, width, height);	// Create the scene
+		theViewRole1HomeScene.getStylesheets().add(
+				getClass().getResource("/applicationMain/application.css").toExternalForm());
 		
 		// Set the title for the window
 		
@@ -164,8 +175,16 @@ public class ViewRole1Home {
 		button_UpdateThisUser.setOnAction((_) -> {ControllerRole1Home.performUpdate(); });
 		
 		// GUI Area 2
+		setupButtonUI(button_CreateDeleteLessons, "Dialog", 16, 250, Pos.CENTER, 20, 420);
+		button_CreateDeleteLessons.getStyleClass().remove("fb-button");
+		button_CreateDeleteLessons.getStyleClass().add("grey-button");
+		button_CreateDeleteLessons.setOnAction((_) -> 
+			{ControllerRole1Home.createDeleteLessons(); });
 		
-			// This is a stub, so this area is empty
+		setupButtonUI(button_ListLessons, "Dialog", 16, 250, Pos.CENTER, 300, 420);
+		button_ListLessons.getStyleClass().remove("fb-button");
+		button_ListLessons.getStyleClass().add("grey-button");
+		button_ListLessons.setOnAction((_) -> {ControllerRole1Home.listLessons(); });
 		
 		
 		// GUI Area 3
@@ -180,6 +199,7 @@ public class ViewRole1Home {
 		// Place all of the widget items into the Root Pane's list of children
          theRootPane.getChildren().addAll(
 			label_PageTitle, label_UserDetails, button_UpdateThisUser, line_Separator1,
+			button_CreateDeleteLessons, button_ListLessons,
 	        line_Separator4, button_Logout, button_Quit);
 }
 	
