@@ -514,8 +514,8 @@ public class ControllerCreateDeleteLessons {
 	/**********
 	 * <p> Method: performReturn() </p>
 	 * 
-	 * <p> Description: This method returns the user (who must be an Admin as only admins are the
-	 * only users who have access to this page) to the Admin Home page. </p>
+	 * <p> Description: This method returns the user to their appropriate home page 
+	 * based on their active role. </p>
 	 */
 	protected static void performReturn() {
 		if (theDatabase.getCurrentAdminRole()) {
