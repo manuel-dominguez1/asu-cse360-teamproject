@@ -132,7 +132,7 @@ public class ControllerAddRemoveRoles {
 		ViewAddRemoveRoles.addList.add("<Select a role>");
 		if (!theDatabase.getCurrentAdminRole())
 			ViewAddRemoveRoles.addList.add("Admin");
-		if (!theDatabase.getCurrentNewRole1())
+		if (!theDatabase.getCurrentContributorRole())
 			ViewAddRemoveRoles.addList.add("Role1");
 		if (!theDatabase.getCurrentNewRole2())
 			ViewAddRemoveRoles.addList.add("Role2");
@@ -143,7 +143,7 @@ public class ControllerAddRemoveRoles {
 		ViewAddRemoveRoles.removeList.add("<Select a role>");
 		if (theDatabase.getCurrentAdminRole())
 			ViewAddRemoveRoles.removeList.add("Admin");
-		if (theDatabase.getCurrentNewRole1())
+		if (theDatabase.getCurrentContributorRole())
 			ViewAddRemoveRoles.removeList.add("Role1");
 		if (theDatabase.getCurrentNewRole2())
 			ViewAddRemoveRoles.removeList.add("Role2");
@@ -160,7 +160,7 @@ public class ControllerAddRemoveRoles {
 		}
 		
 		// Roles 1 - It could be at the head of the list or later in the list
-		if (theDatabase.getCurrentNewRole1()) {
+		if (theDatabase.getCurrentContributorRole()) {
 			if (notTheFirst)
 				theCurrentRoles += ", Role1"; 
 			else {
