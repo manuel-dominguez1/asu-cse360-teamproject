@@ -138,7 +138,7 @@ public class Database {
 	    String lessonTable = "CREATE TABLE IF NOT EXISTS lessonsLearned ("
 				+ "id INT AUTO_INCREMENT PRIMARY KEY, "
 				+ "title VARCHAR(255) UNIQUE, "
-				+ "description VARCHAR(255), "
+				+ "description VARCHAR(1600), "
 				+ "author VARCHAR(500))";	
 		statement.execute(lessonTable);
 		
@@ -346,6 +346,34 @@ public class Database {
 			//System.out.println(lessonList);
 			return lessonList;
 		}
+		
+		/*******
+		 *  <p> Method: List getLessonList(String author) </p>
+		 *  
+		 *  <P> Description: Generate an List of Strings, one for each lesson in the database created by author,
+		 *  ordered by ID. </p>
+		 *  
+		 *  @param author the author we will get our lessons from.
+		 *  
+		 *  @return a list of lesson titles found in the database by author, ordered by their id.
+		 */
+			public List<String> getLessonList (String author) throws SQLException {
+				List<String> lessonList = new ArrayList<String>();
+				
+				String query = "SELECT * FROM lessonsLearned WHERE author = ? ORDER BY id";
+				
+				try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+					
+					
+					try (ResultSet rs = pstmt.executeQuery()) {
+					while (rs.next()) {
+						lessonList.add(rs.getString("title"));
+						}
+					}
+				}
+			
+				return lessonList;
+			}
 		
 	/*******
 	 *  <p> Method: List getFullLessonList() </p>
@@ -1450,6 +1478,7 @@ public class Database {
 	    }
 	}
 	
+
 	/*******
 	 * <p> Method: Lesson getLessonDetails(String title) </p>
 	 * 
