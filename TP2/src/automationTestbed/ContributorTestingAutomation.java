@@ -11,8 +11,8 @@ import entityClasses.LessonsLearnedList;
  * <p> Title: ContributorTestingAutomation </p>
  *
  * <p> Description: Tests creating, reading, updating, deleting, and listing
- * lessons learned. Checks input validation and displays pass/fail results.
- * Removes test records after running, except for one lesson kept to test
+ * lessons learned as per our user stories
+ * Removes test records after running, except for one kept to test
  * persistence between runs. </p>
  * 
  * @author Manuel Dominguez
@@ -20,6 +20,7 @@ import entityClasses.LessonsLearnedList;
  */
 
 public class ContributorTestingAutomation {
+	
     // Number of tests whose actual behavior matches expectations.
     private static int numPassed = 0;
     // Number of failed assertions or test exceptions.
@@ -38,7 +39,7 @@ public class ContributorTestingAutomation {
     /*******
      * <p> Method: ContributorTestingAutomation() </p>
      *
-     * <p> Description: This utility testbed is run through main rather than instantiated. </p>
+     * <p> constructor not necessary for this testbed. </p>
      *
      */
     private ContributorTestingAutomation() { }
@@ -49,7 +50,7 @@ public class ContributorTestingAutomation {
      * <p> Description: Connects to the database, runs the tests, cleans up test records, and
      * closes the connection. </p>
      *
-     * @param args command-line arguments; not used
+     * @param args command line arguments not used
      *
      */
     public static void main(String[] args) {
@@ -60,8 +61,7 @@ public class ContributorTestingAutomation {
             runNormalTests();
             testPersistence();
         } catch (Exception e) {
-            evaluate("SETUP", "Execution completes without an unexpected exception",
-                    "No exception", e.toString(), false);
+            evaluate("SETUP", "Execution completes without an unexpected exception", "No exception", e.toString(), false);
             e.printStackTrace();
         } finally {
             cleanup();
@@ -92,9 +92,9 @@ public class ContributorTestingAutomation {
      * input, then checks the database results. </p>
 
      *
-     * <p> Requirement: Add a lesson with core information. Pass requires valid data to be
+     * <p> Requirement: Add a lesson with core information(title, description). Pass requires valid data to be
      * saved correctly and missing or duplicate input to be rejected without changing existing
-     * data. The maximum-length case checks that accepted input can be stored. </p>
+     * data. The max length case checks that accepted input can be stored. </p>
      */
     private static void testCreateLessons() {
         System.out.println("\n=== Create Lessons ===");
@@ -108,33 +108,25 @@ public class ContributorTestingAutomation {
                     && title.equals(saved.getTitle())
                     && description.equals(saved.getDescription())
                     && author.equals(saved.getAuthor());
-            evaluate("Add a lesson with core information", "Valid lesson is saved correctly",
-                    "Matching title, description, author, and positive ID", describe(saved), correct);
+            evaluate("Add a lesson with core information", "Valid lesson is saved correctly", "Matching title, description, author, and positive ID", describe(saved), correct);
 
             // Test case 2: Reject creation when the required description is empty.
             String invalidTitle = "Missing Description Test Lesson";
             boolean invalidCreated = LessonsLearned.createLesson(invalidTitle, "", author, theDatabase);
             LessonsLearned invalidSaved = track(invalidTitle);
-            evaluate("Add a lesson with core information", "Missing description is rejected",
-                    "false and no record", "Returned " + invalidCreated + "; " + describe(invalidSaved),
-                    !invalidCreated && invalidSaved == null);
+            evaluate("Add a lesson with core information", "Missing description is rejected", "false and no record", "Returned " + invalidCreated + "; " + describe(invalidSaved), !invalidCreated && invalidSaved == null);
 
             // Test case 3: Reject creation when the required title is empty.
             // Empty-title records should never exist. Track one if this test uncovers a defect.
             invalidCreated = LessonsLearned.createLesson("", description, author, theDatabase);
             invalidSaved = track("");
-            evaluate("Add a lesson with core information", "Missing title is rejected",
-                    "false and no record", "Returned " + invalidCreated + "; " + describe(invalidSaved),
-                    !invalidCreated && invalidSaved == null);
+            evaluate("Add a lesson with core information", "Missing title is rejected", "false and no record", "Returned " + invalidCreated + "; " + describe(invalidSaved), !invalidCreated && invalidSaved == null);
 
             // Test case 4: Reject a duplicate title and preserve the original lesson.
             if (created && saved != null) {
-                boolean duplicateCreated = LessonsLearned.createLesson(title,
-                        "Replacement description", author, theDatabase);
+                boolean duplicateCreated = LessonsLearned.createLesson(title, "Replacement description", author, theDatabase);
                 LessonsLearned after = theDatabase.getLessonDetails(saved.getId());
-                evaluate("Add a lesson with core information", "Duplicate title preserves original lesson",
-                        "false and original unchanged", "Returned " + duplicateCreated + "; " + describe(after),
-                        !duplicateCreated && sameValues(saved, after));
+                evaluate("Add a lesson with core information", "Duplicate title preserves original lesson", "false and original unchanged", "Returned " + duplicateCreated + "; " + describe(after), !duplicateCreated && sameValues(saved, after));
             }
 
             // Test case 5: Save and read back the maximum 1600-character description.
@@ -143,18 +135,13 @@ public class ContributorTestingAutomation {
             String longDescription = "A".repeat(1600);
             boolean longCreated = LessonsLearned.createLesson(longTitle, longDescription, author, theDatabase);
             LessonsLearned longSaved = track(longTitle);
-            evaluate("Add a lesson with core information", "Maximum valid description saves completely",
-                    "Created with all 1600 characters", describe(longSaved),
-                    longCreated && longSaved != null && longDescription.equals(longSaved.getDescription()));
+            evaluate("Add a lesson with core information", "Maximum valid description saves completely", "Created with all 1600 characters", describe(longSaved), longCreated && longSaved != null && longDescription.equals(longSaved.getDescription()));
 
             // Test case 6: Reject a 1601-character description without saving a lesson.
             String tooLongTitle = "Over Limit Description Test Lesson";
-            boolean tooLongCreated = LessonsLearned.createLesson(
-                    tooLongTitle, "A".repeat(1601), author, theDatabase);
+            boolean tooLongCreated = LessonsLearned.createLesson(tooLongTitle, "A".repeat(1601), author, theDatabase);
             LessonsLearned tooLongSaved = track(tooLongTitle);
-            evaluate("Add a lesson with core information", "Description above 1600 characters is rejected",
-                    "false and no record", "Returned " + tooLongCreated + "; " + describe(tooLongSaved),
-                    !tooLongCreated && tooLongSaved == null);
+            evaluate("Add a lesson with core information", "Description above 1600 characters is rejected", "false and no record", "Returned " + tooLongCreated + "; " + describe(tooLongSaved), !tooLongCreated && tooLongSaved == null);
         } catch (Exception e) {
             evaluate("Create lesson tests", "Execution completes", "No exception", e.toString(), false);
         }
@@ -182,27 +169,21 @@ public class ContributorTestingAutomation {
             }
             // Test case 7: Retrieve the prepared lesson and compare every stored field.
             LessonsLearned readBack = theDatabase.getLessonDetails(saved.getId());
-            evaluate("Examine a lesson", "Saved lesson details can be retrieved",
-                    describe(saved), describe(readBack), sameValues(saved, readBack));
+            evaluate("Examine a lesson", "Saved lesson details can be retrieved", describe(saved), describe(readBack), sameValues(saved, readBack));
 
             // Test case 8: Return no details for a nonexistent lesson ID.
             LessonsLearned missing = theDatabase.getLessonDetails(-1);
-            evaluate("Examine a lesson", "Nonexistent lesson returns no details",
-                    "null", describe(missing), missing == null);
+            evaluate("Examine a lesson", "Nonexistent lesson returns no details", "null", describe(missing), missing == null);
 
             // Test case 9: Find the correct lesson in the loaded list and matching subset.
             LessonsLearnedList list = new LessonsLearnedList();
             list.refresh(theDatabase);
             LessonsLearnedList subset = list.search(title);
-            evaluate("List and select lessons", "Loaded list and matching subset contain saved lesson",
-                    "Correct lesson in list and one matching result", "Matching results: " + subset.size(),
-                    sameValues(saved, list.get(saved.getId()))
-                    && subset.size() == 1 && sameValues(saved, subset.get(saved.getId())));
+            evaluate("List and select lessons", "Loaded list and matching subset contain saved lesson", "Correct lesson in list and one matching result", "Matching results: " + subset.size(), sameValues(saved, list.get(saved.getId())) && subset.size() == 1 && sameValues(saved, subset.get(saved.getId())));
 
             // Test case 10: Return an empty subset when no lesson matches.
             subset = list.search("TP2NoMatchingKeywordZZ");
-            evaluate("List and select lessons", "Unmatched search gives an empty subset",
-                    "Zero results", "Results: " + subset.size(), subset.size() == 0 && subset.isEmpty());
+            evaluate("List and select lessons", "Unmatched search gives an empty subset", "Zero results", "Results: " + subset.size(), subset.size() == 0 && subset.isEmpty());
         } catch (Exception e) {
             evaluate("Read lesson tests", "Execution completes", "No exception", e.toString(), false);
         }
@@ -211,7 +192,7 @@ public class ContributorTestingAutomation {
     /*******
      * <p> Method: void testUpdateLessons() </p>
      *
-     * <p> Description: Updates the title and description, then checks that empty-field updates
+     * <p> Description: Updates the title and description, then checks that empty field updates
      * leave the saved lesson unchanged. </p>
 
      *
@@ -232,38 +213,24 @@ public class ContributorTestingAutomation {
             String newTitle = "Updated Test Lesson";
             boolean updated = LessonsLearned.updateTitle(id, newTitle, theDatabase);
             LessonsLearned saved = theDatabase.getLessonDetails(id);
-            evaluate("Manage editable lesson information", "Valid title update is saved",
-                    "New title; original description and author", describe(saved),
-                    updated && saved != null && saved.getId() == id
-                    && newTitle.equals(saved.getTitle())
-                    && original.getDescription().equals(saved.getDescription())
-                    && author.equals(saved.getAuthor()));
+            evaluate("Manage editable lesson information", "Valid title update is saved", "New title; original description and author", describe(saved), updated && saved != null && saved.getId() == id && newTitle.equals(saved.getTitle()) && original.getDescription().equals(saved.getDescription()) && author.equals(saved.getAuthor()));
 
             // Test case 12: Save a valid description change while preserving the other fields.
             String newDescription = "Updated description";
             updated = LessonsLearned.updateDescription(id, newDescription, theDatabase);
             saved = theDatabase.getLessonDetails(id);
-            evaluate("Manage editable lesson information", "Valid description update is saved",
-                    "New description; title and author preserved", describe(saved),
-                    updated && saved != null && saved.getId() == id
-                    && newTitle.equals(saved.getTitle())
-                    && newDescription.equals(saved.getDescription())
-                    && author.equals(saved.getAuthor()));
+            evaluate("Manage editable lesson information", "Valid description update is saved", "New description; title and author preserved", describe(saved), updated && saved != null && saved.getId() == id && newTitle.equals(saved.getTitle()) && newDescription.equals(saved.getDescription()) && author.equals(saved.getAuthor()));
 
             // Test case 13: Reject an empty title update and preserve the saved lesson.
             LessonsLearned beforeInvalidUpdate = theDatabase.getLessonDetails(id);
             updated = LessonsLearned.updateTitle(id, "", theDatabase);
             saved = theDatabase.getLessonDetails(id);
-            evaluate("Manage editable lesson information", "Empty title update preserves saved lesson",
-                    "false and unchanged", "Returned " + updated + "; " + describe(saved),
-                    !updated && sameValues(beforeInvalidUpdate, saved));
+            evaluate("Manage editable lesson information", "Empty title update preserves saved lesson", "false and unchanged", "Returned " + updated + "; " + describe(saved), !updated && sameValues(beforeInvalidUpdate, saved));
 
             // Test case 14: Reject an empty description update and preserve the saved lesson.
             updated = LessonsLearned.updateDescription(id, "", theDatabase);
             saved = theDatabase.getLessonDetails(id);
-            evaluate("Manage editable lesson information", "Empty description update preserves saved lesson",
-                    "false and unchanged", "Returned " + updated + "; " + describe(saved),
-                    !updated && sameValues(beforeInvalidUpdate, saved));
+            evaluate("Manage editable lesson information", "Empty description update preserves saved lesson", "false and unchanged", "Returned " + updated + "; " + describe(saved), !updated && sameValues(beforeInvalidUpdate, saved));
         } catch (Exception e) {
             evaluate("Update lesson tests", "Execution completes", "No exception", e.toString(), false);
         }
@@ -294,15 +261,11 @@ public class ContributorTestingAutomation {
             LessonsLearned remaining = theDatabase.getLessonDetails(id);
             LessonsLearnedList list = new LessonsLearnedList();
             list.refresh(theDatabase);
-            evaluate("Delete a lesson", "Deletion removes lesson from storage and list",
-                    "true and absent from storage and list", "Returned " + deleted + "; " + describe(remaining),
-                    deleted && remaining == null && list.get(id) == null);
+            evaluate("Delete a lesson", "Deletion removes lesson from storage and list", "true and absent from storage and list", "Returned " + deleted + "; " + describe(remaining), deleted && remaining == null && list.get(id) == null);
 
             // Test case 16: Reject deletion of the already deleted lesson.
             deleted = LessonsLearned.deleteLesson(id, theDatabase);
-            evaluate("Delete a lesson", "Already deleted lesson cannot be deleted again",
-                    "false and still absent", "Returned " + deleted,
-                    !deleted && theDatabase.getLessonDetails(id) == null);
+            evaluate("Delete a lesson", "Already deleted lesson cannot be deleted again", "false and still absent", "Returned " + deleted, !deleted && theDatabase.getLessonDetails(id) == null);
         } catch (Exception e) {
             evaluate("Delete lesson tests", "Execution completes", "No exception", e.toString(), false);
         }
@@ -314,12 +277,9 @@ public class ContributorTestingAutomation {
      * <p> Description: Checks the new database overload that lists lesson titles
      * for an author, ordered by lesson ID. </p>
      *
-     * <p> Requirement: Support listing a Contributor's own lessons. The first case
-     * checks that both owned lessons appear in ID order and another author's lesson
-     * is excluded. Titles are deliberately opposite alphabetical order. The second
-     * case expects an empty list for an author with no lessons. These tests check
-     * the database method only; the GUI must call it using the logged-in author
-     * before the application demonstrates Contributor privacy. </p>
+     * <p> Requirement: Support listing a Contributor's own lessons. The first case checks that both owned lessons appear in ID order and another author's lesson
+     * is excluded. Titles are deliberately opposite alphabetical order. The second case expects an empty list for an author with no lessons. These tests check
+     * the database method only; the GUI must call it using the logged in author before the application demonstrates Contributor privacy. </p>
      */
     private static void testAuthorLessonList() {
         System.out.println("\n=== Lessons By Author ===");
@@ -331,41 +291,28 @@ public class ContributorTestingAutomation {
         String otherAuthor = "TP2OtherListContributor";
         String emptyAuthor = "TP2ContributorWithNoLessons";
         try {
-            boolean firstCreated = LessonsLearned.createLesson(
-                    firstTitle, "First lesson by ID", listAuthor, theDatabase);
+            boolean firstCreated = LessonsLearned.createLesson(firstTitle, "First lesson by ID", listAuthor, theDatabase);
             LessonsLearned first = track(firstTitle);
-            boolean secondCreated = LessonsLearned.createLesson(
-                    secondTitle, "Second lesson by ID", listAuthor, theDatabase);
+            boolean secondCreated = LessonsLearned.createLesson(secondTitle, "Second lesson by ID", listAuthor, theDatabase);
             LessonsLearned second = track(secondTitle);
-            boolean otherCreated = LessonsLearned.createLesson(
-                    otherTitle, "Lesson belonging to another contributor", otherAuthor, theDatabase);
+            boolean otherCreated = LessonsLearned.createLesson(otherTitle, "Lesson belonging to another contributor", otherAuthor, theDatabase);
             LessonsLearned other = track(otherTitle);
 
-            if (!firstCreated || first == null || !secondCreated || second == null
-                    || !otherCreated || other == null) {
-                evaluate("Test Setup", "Prepare author list lessons",
-                        "Three new lessons", "One or more lessons could not be prepared", false);
+            if (!firstCreated || first == null || !secondCreated || second == null || !otherCreated || other == null) {
+                evaluate("Test Setup", "Prepare author list lessons", "Three new lessons", "One or more lessons could not be prepared", false);
                 return;
             }
 
             // Test case 17: List only the selected author's lessons in ID order.
             List<String> titles = theDatabase.getLessonList(listAuthor);
-            boolean correctList = titles != null && titles.size() == 2
-                    && first.getId() < second.getId()
-                    && firstTitle.equals(titles.get(0))
-                    && secondTitle.equals(titles.get(1))
-                    && !titles.contains(otherTitle);
-            evaluate("List only the author's lessons", "Owned lessons appear in ID order without another author's lesson",
-                    "[" + firstTitle + ", " + secondTitle + "]",
-                    String.valueOf(titles), correctList);
+            boolean correctList = titles != null && titles.size() == 2 && first.getId() < second.getId() && firstTitle.equals(titles.get(0)) && secondTitle.equals(titles.get(1)) && !titles.contains(otherTitle);
+            evaluate("List only the author's lessons", "Owned lessons appear in ID order without another author's lesson", "[" + firstTitle + ", " + secondTitle + "]", String.valueOf(titles), correctList);
 
             // Test case 18: Return an empty list for an author with no lessons.
             List<String> emptyTitles = theDatabase.getLessonList(emptyAuthor);
-            evaluate("List only the author's lessons", "Author with no lessons receives an empty list",
-                    "[]", String.valueOf(emptyTitles), emptyTitles != null && emptyTitles.isEmpty());
+            evaluate("List only the author's lessons", "Author with no lessons receives an empty list", "[]", String.valueOf(emptyTitles), emptyTitles != null && emptyTitles.isEmpty());
         } catch (Exception e) {
-            evaluate("List only the author's lessons", "Author list execution completes",
-                    "No exception", e.toString(), false);
+            evaluate("List only the author's lessons", "Author list execution completes", "No exception", e.toString(), false);
         }
     }
 
@@ -385,8 +332,7 @@ public class ContributorTestingAutomation {
         boolean created = LessonsLearned.createLesson(title, description, author, theDatabase);
         LessonsLearned saved = track(title);
         if (!created || saved == null) {
-            evaluate("Test Setup", "Prepare record: " + title,
-                    "Created and readable", describe(saved), false);
+            evaluate("Test Setup", "Prepare record: " + title, "Created and readable", describe(saved), false);
             return null;
         }
         return saved;
@@ -423,10 +369,7 @@ public class ContributorTestingAutomation {
      *
      */
     private static boolean sameValues(LessonsLearned expected, LessonsLearned actual) {
-        return expected != null && actual != null && expected.getId() == actual.getId()
-                && Objects.equals(expected.getTitle(), actual.getTitle())
-                && Objects.equals(expected.getDescription(), actual.getDescription())
-                && Objects.equals(expected.getAuthor(), actual.getAuthor());
+        return expected != null && actual != null && expected.getId() == actual.getId() && Objects.equals(expected.getTitle(), actual.getTitle()) && Objects.equals(expected.getDescription(), actual.getDescription()) && Objects.equals(expected.getAuthor(), actual.getAuthor());
     }
 
     /*******
@@ -443,9 +386,7 @@ public class ContributorTestingAutomation {
         if (lesson == null) {
             return "null";
         } else {
-            return "ID=" + lesson.getId() + ", title=" + lesson.getTitle()
-                    + ", description=" + lesson.getDescription()
-                    + ", author=" + lesson.getAuthor();
+            return "ID=" + lesson.getId() + ", title=" + lesson.getTitle()+ ", description=" + lesson.getDescription() + ", author=" + lesson.getAuthor();
         }
     }
 
@@ -516,27 +457,16 @@ public class ContributorTestingAutomation {
         // Test case 19 on later runs: Verify the lesson retained from a previous execution.
         LessonsLearned saved = theDatabase.getLessonDetails(persistenceTitle);
         if (saved != null) {
-            boolean matches = saved.getId() > 0
-                    && persistenceTitle.equals(saved.getTitle())
-                    && "Saved between executions".equals(saved.getDescription())
-                    && author.equals(saved.getAuthor());
-            evaluate("Persistence", "Lesson persists between executions",
-                    "Previously saved title, description, author, and positive ID",
-                    describe(saved), matches);
+            boolean matches = saved.getId() > 0 && persistenceTitle.equals(saved.getTitle()) && "Saved between executions".equals(saved.getDescription()) && author.equals(saved.getAuthor());
+            evaluate("Persistence", "Lesson persists between executions", "Previously saved title, description, author, and positive ID", describe(saved), matches);
         } else {
-            boolean created = LessonsLearned.createLesson(persistenceTitle,
-                    "Saved between executions", author, theDatabase);
+            boolean created = LessonsLearned.createLesson(persistenceTitle, "Saved between executions", author, theDatabase);
             LessonsLearned createdLesson = theDatabase.getLessonDetails(persistenceTitle);
-            if (created && createdLesson != null
-                    && createdLesson.getId() > 0
-                    && persistenceTitle.equals(createdLesson.getTitle())
-                    && "Saved between executions".equals(createdLesson.getDescription())
-                    && author.equals(createdLesson.getAuthor())) {
+            if (created && createdLesson != null && createdLesson.getId() > 0 && persistenceTitle.equals(createdLesson.getTitle()) && "Saved between executions".equals(createdLesson.getDescription()) && author.equals(createdLesson.getAuthor())) {
                 System.out.println("\nPersistence lesson saved. Run again to verify it remains.");
                 System.out.println("Persistence verification is pending; it is not counted as passed.");
             } else {
-                evaluate("Persistence", "Create persistence lesson",
-                        "Dedicated record saved correctly", describe(createdLesson), false);
+                evaluate("Persistence", "Create persistence lesson", "Dedicated record saved correctly", describe(createdLesson), false);
             }
         }
     }
