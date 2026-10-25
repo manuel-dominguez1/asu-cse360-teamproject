@@ -42,6 +42,33 @@ public class ControllerRole1Home {
 	}
 
 	/**********
+	 * <p> 
+	 * 
+	 * Title: listLessons () Method. </p>
+	 * 
+	 * <p> Description: List all lessons to admin user. </p>
+	 */
+	protected static void listLessons() {
+		guiListLessons.ViewListLessons.displayListLessons(ViewRole1Home.theStage, 
+				ViewRole1Home.theUser);
+	}
+	
+	/**********
+	 * <p> 
+	 * 
+	 * Title: createDeleteLessons () Method. </p>
+	 * 
+	 * <p> Description: Protected method that allows an admin to create and delete lessons.
+	 * This is done by invoking the CreateDeleatLessons Page. There
+	 * is no need to specify the home page for the return as this can only be initiated by and
+	 * Admin.</p>
+	 */
+	protected static void createDeleteLessons() {
+		guiCreateDeleteLessons.ViewCreateDeleteLessons.displayCreateDeleteLessons(ViewRole1Home.theStage, 
+				ViewRole1Home.theUser);
+	}
+
+	/**********
 	 * <p> Method: performUpdate() </p>
 	 * 
 	 * <p> Description: This method directs the user to the User Update Page so the user can change
