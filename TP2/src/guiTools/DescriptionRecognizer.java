@@ -198,8 +198,8 @@ public static String checkForValidDescription(String input) {
 					running = false;
 				
 				// The execution of this state is finished
-				// If the size is larger than 500, the loop must stop
-				if (descSize > 500)
+				// If the size is larger than 1600, the loop must stop
+				if (descSize > 1600)
 					running = false;
 				break;			
 			}
@@ -247,10 +247,10 @@ public static String checkForValidDescription(String input) {
 			// State 1 is a final state.  Check to see if the UserName length is valid.  If so we
 			// we must ensure the whole string has been consumed.
 
-			if (descSize > 500) {
+			if (descSize > 1600) {
 				// title is too long
 				descRecognizerErrorMessage += 
-					"A description must have no more than 500 characters.";
+					"A description must have no more than 1600 characters.";
 				tooLong = true;
 				return descRecognizerErrorMessage;
 			}
