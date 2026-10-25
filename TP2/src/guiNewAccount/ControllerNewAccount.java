@@ -91,6 +91,14 @@ public class ControllerNewAccount {
 			ViewNewAccount.alertUsernameError.showAndWait();
 			return;
 		}
+
+		//check the password against the Password Recognizers rules before proceeding
+		String passwordError = ModelNewAccount.passwordIsValid(password);
+		if(!passwordError.isEmpty()) {
+			ViewNewAccount.alertPasswordError.setContentText(passwordError);
+			ViewNewAccount.alertPasswordError.showAndWait();
+			return;
+		}
 		
 		// Display key information to the log
 		System.out.println("** Account for Username: " + username + "; theInvitationCode: "+
