@@ -363,7 +363,8 @@ public class Database {
 				String query = "SELECT * FROM lessonsLearned WHERE author = ? ORDER BY id";
 				
 				try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-					
+				    pstmt.setString(1, author);
+
 					
 					try (ResultSet rs = pstmt.executeQuery()) {
 					while (rs.next()) {
