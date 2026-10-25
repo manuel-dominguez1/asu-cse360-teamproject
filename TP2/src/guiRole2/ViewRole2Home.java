@@ -138,7 +138,7 @@ public class ViewRole2Home {
 	 * This method determines the location, size, font, color, and change and event handlers for
 	 * each GUI object. </p>
 	 * 
-	 * This is a singleton and is only performed once.  Subsequent uses fill in the changeable
+	 * <p>This is a singleton and is only performed once.  Subsequent uses fill in the changeable
 	 * fields using the displayRole2Home method.</p>
 	 * 
 	 */
