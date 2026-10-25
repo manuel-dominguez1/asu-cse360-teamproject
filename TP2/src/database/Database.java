@@ -60,7 +60,7 @@ public class Database {
 	private String currentPreferredFirstName;
 	private String currentEmailAddress;
 	private boolean currentAdminRole;
-	private boolean currentNewRole1;
+	private boolean currentContributorRole;
 	private boolean currentNewRole2;
 	private int currentId;
 	private String currentTitle;
@@ -1717,7 +1717,7 @@ public class Database {
 	 * @return true if this user plays a Contributor role, else false
 	 *  
 	 */
-	public boolean getCurrentNewRole1() { return currentNewRole1;};
+	public boolean getCurrentContributorRole() { return currentContributorRole;};
 
 	
 	/*******
