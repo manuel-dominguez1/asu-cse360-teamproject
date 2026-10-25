@@ -2,7 +2,6 @@ package guiListLessons;
 
 import database.Database;
 import guiListLessons.ViewListLessons;
-import database.Database;
 
 /*******
  * <p>
