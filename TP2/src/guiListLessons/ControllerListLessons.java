@@ -44,20 +44,26 @@ public class ControllerListLessons {
 	public ControllerListLessons() {
 	}
 	
+	// Reference for the in-memory database so this package has access
+	private static Database theDatabase = applicationMain.FoundationsMain.database;
+	
 	/**********
-	 * <p>
-	 * Method: performReturn()
-	 * </p>
+	 * <p> Method: performReturn() </p>
 	 * 
-	 * <p>
-	 * Description: This method returns the user (who must be an Admin as only
-	 * admins are the only users who have access to this page) to the Admin Home
-	 * page.
-	 * </p>
-	 * 
+	 * <p> Description: This method returns the user to their appropriate home page 
+	 * based on their active role. </p>
 	 */
 	protected static void performReturn() {
-		guiAdminHome.ViewAdminHome.displayAdminHome(ViewListLessons.theStage, ViewListLessons.theUser);
+		if (theDatabase.getCurrentAdminRole()) {
+			guiAdminHome.ViewAdminHome.displayAdminHome(ViewListLessons.theStage,
+				ViewListLessons.theUser);
+		} else if (theDatabase.getCurrentContributorRole()) {
+			guiRole1.ViewRole1Home.displayRole1Home(ViewListLessons.theStage,
+					ViewListLessons.theUser);
+		} else {
+			guiRole2.ViewRole2Home.displayRole2Home(ViewListLessons.theStage,
+					ViewListLessons.theUser);
+		}
 	}
 
 	/**********
