@@ -229,8 +229,8 @@ public class Database {
 			currentAdminRole = user.getAdminRole();
 			pstmt.setBoolean(9, currentAdminRole);
 			
-			currentNewRole1 = user.getNewRole1();
-			pstmt.setBoolean(10, currentNewRole1);
+			currentContributorRole = user.getNewRole1();
+			pstmt.setBoolean(10, currentContributorRole);
 			
 			currentNewRole2 = user.getNewRole2();
 			pstmt.setBoolean(11, currentNewRole2);
@@ -1471,7 +1471,7 @@ public class Database {
 	    	currentPreferredFirstName = rs.getString(8);
 	    	currentEmailAddress = rs.getString(9);
 	    	currentAdminRole = rs.getBoolean(10);
-	    	currentNewRole1 = rs.getBoolean(11);
+	    	currentContributorRole = rs.getBoolean(11);
 	    	currentNewRole2 = rs.getBoolean(12);
 			return true;
 	    } catch (SQLException e) {
@@ -1593,9 +1593,9 @@ public class Database {
 				pstmt.setString(2, username);
 				pstmt.executeUpdate();
 				if (value.compareTo("true") == 0)
-					currentNewRole1 = true;
+					currentContributorRole = true;
 				else
-					currentNewRole1 = false;
+					currentContributorRole = false;
 				return true;
 			} catch (SQLException e) {
 				return false;
