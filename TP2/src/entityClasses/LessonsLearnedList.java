@@ -53,6 +53,18 @@
 		  lessons.clear();
 		  lessons.addAll(databaseLessons);
 	  }
+
+	  /*****
+	     * <p> Method: {@literal List<LessonsLearned>} all() </p>
+	     * 
+	     * <p> Description: Returns all lessons currently loaded into the database. </p>
+	     *
+	     * @return an unmodifiable list of lessons
+	     * 
+	     */
+	  public List<LessonsLearned> all() {
+		  return Collections.unmodifiableList(new ArrayList<>(lessons));
+	  }
 	  
 	  /*****
 	     * <p> Method: {@literal List<LessonsLearned>} all(String username) </p>
