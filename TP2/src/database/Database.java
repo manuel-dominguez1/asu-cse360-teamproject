@@ -1710,11 +1710,11 @@ public class Database {
 
 	
 	/*******
-	 * <p> Method: boolean getCurrentNewRole1() </p>
+	 * <p> Method: boolean getCurrentContributorRole() </p>
 	 * 
-	 * <p> Description: Get the current user's Student role attribute.</p>
+	 * <p> Description: Get the current user's Contributor role attribute.</p>
 	 * 
-	 * @return true if this user plays a Student role, else false
+	 * @return true if this user plays a Contributor role, else false
 	 *  
 	 */
 	public boolean getCurrentNewRole1() { return currentNewRole1;};
