@@ -147,7 +147,13 @@ public class ViewListLessons {
 		
 		// Populate the dynamic aspects of the GUI with the data from all lessons
 		lessonList.refresh(theDatabase);
-		lessonInfoList.setAll(lessonList.all()); // Fetch all user data
+		// If the user is admin, list all lessons
+		if(user.getAdminRole()) {
+			lessonInfoList.setAll(lessonList.all()); // Fetch all user data
+		// else list only lessons belonging to the current user
+		} else {
+			lessonInfoList.setAll(lessonList.all(user.getUserName())); // Fetch all user data
+		}
 		
 		// If not yet established, populate the static aspects of the GUI by creating
 		// the singleton instance of this class

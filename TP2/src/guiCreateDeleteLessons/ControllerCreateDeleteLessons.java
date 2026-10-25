@@ -335,7 +335,7 @@ public class ControllerCreateDeleteLessons {
 	 * 
 	 * <p> Description: Method to find an existing lesson in the database and display
 	 * the lesson's current title and description so that
-	 * the user can modify them. If the specified lesson to upadete does not exist, a 
+	 * the user can modify them. If the specified lesson to update does not exist, a 
 	 * meaningful error message is displayed. </p>
 	 *  
 	 */
@@ -514,12 +514,20 @@ public class ControllerCreateDeleteLessons {
 	/**********
 	 * <p> Method: performReturn() </p>
 	 * 
-	 * <p> Description: This method returns the user (who must be an Admin as only admins are the
-	 * only users who have access to this page) to the Admin Home page. </p>
+	 * <p> Description: This method returns the user to their appropriate home page 
+	 * based on their active role. </p>
 	 */
 	protected static void performReturn() {
-		guiAdminHome.ViewAdminHome.displayAdminHome(ViewCreateDeleteLessons.theStage,
+		if (theDatabase.getCurrentAdminRole()) {
+			guiAdminHome.ViewAdminHome.displayAdminHome(ViewCreateDeleteLessons.theStage,
 				ViewCreateDeleteLessons.theUser);
+		} else if (theDatabase.getCurrentContributorRole()) {
+			guiRole1.ViewRole1Home.displayRole1Home(ViewCreateDeleteLessons.theStage,
+					ViewCreateDeleteLessons.theUser);
+		} else {
+			guiRole2.ViewRole2Home.displayRole2Home(ViewCreateDeleteLessons.theStage,
+					ViewCreateDeleteLessons.theUser);
+		}
 	}
 	
 	

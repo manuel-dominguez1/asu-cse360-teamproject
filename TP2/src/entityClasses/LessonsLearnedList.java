@@ -53,17 +53,45 @@
 		  lessons.clear();
 		  lessons.addAll(databaseLessons);
 	  }
-	  
+
 	  /*****
 	     * <p> Method: {@literal List<LessonsLearned>} all() </p>
 	     * 
-	     * <p> Description: Returns all lessons currently loaded into the list. </p>
-	     * 
+	     * <p> Description: Returns all lessons currently loaded into the database. </p>
+	     *
 	     * @return an unmodifiable list of lessons
 	     * 
 	     */
 	  public List<LessonsLearned> all() {
-		  return Collections.unmodifiableList(new ArrayList<> (lessons));
+		  return Collections.unmodifiableList(new ArrayList<>(lessons));
+	  }
+	  
+	  /*****
+	     * <p> Method: {@literal List<LessonsLearned>} all(String username) </p>
+	     * 
+	     * <p> Description: Returns all lessons currently loaded into the list
+	     * viewable by the current user. </p>
+	     * 
+	     * @param username is a string representing the username of the user 
+	     * currently logged-in
+	     * 
+	     * @return an unmodifiable list of lessons
+	     * 
+	     */
+	  public List<LessonsLearned> all(String username) {
+		  // Create a new list
+		  List<LessonsLearned> userLessons = new ArrayList<>();
+		  
+		  // For each lesson in the database
+		  for (LessonsLearned lesson : lessons) {
+			  // If the author of the lesson matches the specified username
+			  if (lesson.getAuthor().equals(username)) {
+				  // Add the lesson to the list
+				  userLessons.add(lesson);
+			  }
+		  }
+		  
+		  return Collections.unmodifiableList(userLessons);
 	  }
 	  
 	  /*****
