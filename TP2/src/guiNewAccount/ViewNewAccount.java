@@ -68,6 +68,8 @@ public class ViewNewAccount {
 	
 	// This alert explains exactly why an entered username failed the UserName Recognizer
 	protected static Alert alertUsernameError = new Alert(AlertType.INFORMATION);
+	// This alert explains exactly why an entered password failed the Password Recognizer
+	protected static Alert alertPasswordError = new Alert(AlertType.INFORMATION);
 
     protected static Button button_Quit = new Button("Quit");
 
@@ -224,6 +226,11 @@ public class ViewNewAccount {
 		//filled in by the controller when an error occurs, since the reason varies
 		alertUsernameError.setTitle("Invalid Username");
 		alertUsernameError.setHeaderText("The username you entered is not valid");
+
+		//If the password is not valid, this alert explains why. The text is
+		//filled in by the controller when an error occurs, since the reason varies
+		alertPasswordError.setTitle("Invalid Password");
+		alertPasswordError.setHeaderText("The password you entered is not valid");
 
         // Set up the account creation and login
         setupButtonUI(button_UserSetup, "Dialog", 18, 200, Pos.CENTER, 300, 380);
