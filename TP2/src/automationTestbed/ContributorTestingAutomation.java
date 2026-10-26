@@ -20,67 +20,56 @@ import entityClasses.LessonsLearnedList;
 public class ContributorTestingAutomation {
 	
     /*******
-     * <p> Attribute: numPassed </p>
      *
-     * <p> Description: Number of tests that match expectations</p>
+     * <p> Number of tests that match expectations</p>
      *
      */
     private static int numPassed = 0;
     /*******
-     * <p> Attribute: numFailed </p>
      *
-     * <p> Description: Number of failed test exceptions</p>
+     * <p> Number of failed test exceptions</p>
      *
      */
     private static int numFailed = 0;
     /*******
-     * <p> Attribute: testNumber </p>
      *
-     * <p> Description: Test number for organization</p>
+     * <p> test number for organization</p>
      *
      */
     private static int testNumber = 0;
     /*******
-     * <p> Attribute: theDatabase </p>
      *
-     * <p> Description: connection to our dataabase, so database tests can be automated</p>
+     * <p> Connection to our database, so database tests can be automated</p>
      *
      */
     private static final Database theDatabase = new Database();
     /*******
-     * <p> Attribute: createdIds </p>
      *
-     * <p> Description: IDs of tests, for cleanup of the database</p>
+     * <p> IDs of tests, for cleanup of the database</p>
      *
      */
     private static final List<Integer> createdIds = new ArrayList<>();
     /*******
-     * <p> Attribute: author </p>
      *
-     * <p> Description: author of normal testing lessons</p>
+     * <p> author of normal testing lessons</p>
      *
      */
     private static final String author = "TP2TestContributor";
     /*******
-     * <p> Attribute: persistenceTitle </p>
      *
-     * <p> Description: set title of our Persistence test</p>
+     * <p> set title of our Persistence test</p>
      *
      */
     private static final String persistenceTitle = "TP2 Persistence Test";
 
     /*******
-     * <p> Method: ContributorTestingAutomation() </p>
-     *
      * <p> constructor not necessary for this testbed. </p>
      *
      */
     private ContributorTestingAutomation() { }
 
-    /*******
-     * <p> Method: main(String[] args) </p>
-     *
-     * <p> Description: in order: Connects to the database, runs the tests, cleans up test records, and
+    /*******  
+     * <p> in order: Connects to the database, runs the tests, cleans up test records, and
      * closes the connection. </p>
      *
      * @param args command line arguments not used
@@ -106,9 +95,7 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: runNormalTests() </p>
-     *
-     * <p> Description: Runs the create, read, update, delete, and Author privacy test groups. </p>
+     * <p>Runs the create, read, update, delete, and Author privacy test groups. </p>
      */
     private static void runNormalTests() {
         testCreateLessons();
@@ -119,14 +106,18 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: testCreateLessons() </p>
      *
-     * <p> Description: Creates lessons. tests involve valid, missing, duplicate, and max length
+     * <p> Creates lessons. tests involve valid, missing, duplicate, and max length
      * input, then checks against the database results </p>
 
      *
-     * <p> Requirement: Add a lesson with core information(title, description) to the database. Pass requires valid data to be
-     * saved correctly and missing or duplicate input to be rejected without changing existing data. The max length case checks that only accepted length input can be stored. </p>
+     * <p> Purpose: These tests check the user story that a Contributor can add a lesson with core information.
+     * Test 1 checks that the title and description are actually saved to the database with the
+     * author and a unique ID. Tests 2 and 3 check that required core information cannot be left
+     * empty. Test 4 tests unique title rules we implemented, and makes sure a rejected duplicate does not
+     * replace the original lesson. Tests 5 and 6 checks the description's 1600 character limit, the full allowed amount must save, and an extra character must be rejected.
+     * And a negative case passes when the input is rejected and nothing is saved or changed.
+     * </p>
      */
     private static void testCreateLessons() {
         System.out.println("\n=== Create Lessons ===");
@@ -179,16 +170,19 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: testReadLessons() </p>
      *
-     * <p> Description: tests the reading of lesson details and checks both matching and empty lesson list
+     * <p> tests the reading of lesson details and checks both matching and empty lesson list
      * subsets. </p>
 
      *
-     * <p> Requirement: List lessons and examine a selected lesson. Pass requires matching
-     * saved values, no details for a missing record, the correct matching subset, and an empty
-     * unmatched subset. </p>
+     * <p> Purpose: These tests check the lesson data needed for the story that a Contributor can list lessons
+     * and choose one to examine. Test 7 checks that selecting an existing lesson by ID returns the
+     * expected saved information from the database. Test 8 checks that a missing ID does not return any lesson. Test
+     * 9 checks that the loaded list and a matching subset contain the intended lesson, and test 10
+     * checks that an unmatched search gives an empty subset. Passing means the returned information or absence matches the expected
+     * result. </p>
      */
+    
     private static void testReadLessons() {
         System.out.println("\n=== Read and List Lessons ===");
         // setup for the lesson used by the read and list tests. if it didnt save into database, none of these tests will pass and so return early.
@@ -222,15 +216,16 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: testUpdateLessons() </p>
      *
-     * <p> Description: testing updates to the title and description, then checks that empty field updates
+     * <p> testing updates to the title and description, then checks that empty field updates
      * leave the saved lesson unchanged. </p>
 
      *
-     * <p> Requirement: Manage editable lesson information. Pass requires valid edits to be
-     * saved while preserving the other fields, while invalid edits to leave all saved fields
-     * unchanged </p>
+     * <p> Purpose: These tests check the story that a Contributor can manage a lesson after adding it.
+     * Test 11 checks that changing the title only keeps the same lesson ID, description, and author. Test
+     * 12 checks that changing the description only keeps the other information. Tests 13 and 14 check that
+     * trying to clear either required field does not damage the existing lesson. Reading the lesson
+     * back confirms that valid edits were stored and invalid edits left all fields unchanged. </p>
      */
     private static void testUpdateLessons() {
         System.out.println("\n=== Update Lessons ===");
@@ -269,12 +264,14 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: testDeleteLessons() </p>
      *
-     * <p> Description: Deletes a lesson, checks that it is gone, and tries deleting it again</p>
+     * <p> Deletes a lesson, checks that it is gone, and tries deleting it again</p>
 
      *
-     * <p> Requirement: Delete a lesson. Pass requires the lesson to disappear from storage and the refreshed list, and a second deletion to return false</p>
+     * <p> Purpose: These tests check deletion as part of managing a lesson. Test 15 checks that the
+     * deleted lesson cannot still be retrieved from the database or found in the refreshed list. Test
+     * 16 checks that trying to delete it again is rejected instead of reporting another successful
+     * deletion. Passing requires the correct return value and the lesson to remain absent. </p>
      */
     private static void testDeleteLessons() {
         System.out.println("\n=== Delete Lessons ===");
@@ -301,12 +298,15 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: testAuthorLessonList() </p>
      *
-     * <p> Description: Checks the database can lists lesson titles for an author, ordered by lesson ID. </p>
+     * <p> Checks the database can lists lesson titles for an author, ordered by lesson ID. </p>
      *
-     * <p> Requirement: Support listing a Contributor's own lessons. The first case checks that both owned lessons appear in ID order and another author's lesson
-     * is excluded. Titles are deliberately opposite alphabetical order. The second case expects an empty list for an author with no lessons. </p>
+     * <p> Purpose: These tests support the stories that a Contributor can list their own lessons and
+     * cannot see submissions from other Contributors. Test 17 creates lessons for two authors, then
+     * checks that the requested author's list contains both of their lessons and none from the other
+     * author. The titles are in opposite alphabetical order so the test also checks our database's ID
+     * ordering. Test 18 checks that an author with no lessons receives an empty list instead of
+     * someone else's lessons or an error. Passing requires the exact expected list.</p>
      */
     private static void testAuthorLessonList() {
         System.out.println("\n=== Lessons By Author ===");
@@ -344,16 +344,18 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: testPersistence() </p>
      *
-     * <p> Description: Checks for the persistence lesson saved by a previous execution. If not exists,
+     * <p> Checks for the persistence lesson saved by a previous execution. If not exists,
      * attempts to create it and asks the user to run the tests again for the persistence check. </p>
      *
 
      *
-     * <p> Requirement: Persistent lesson storage between database connections. Pass requires a record from
-     * a previous execution to retain its title, description, author, and a positive ID.
-     * Creating the first record only prepares the check and is not counted as a pass. </p>
+     * <p> Purpose: This test checks the database's persistent storage so a lesson added by a
+     * Contributor remains available after the program closes. The first run creates a dedicated lesson
+     * and leaves it saved within the database. Test 19 on a later run checks if the lesson by title exists, then checks its title, description, author, and positive
+     * ID for any edit or missing values since the last run. Passing means those saved values are still available from a separate execution. Creating the
+     * record on the first run only prepares this check and is not counted as proof of persistence.
+     * </p>
      */
     private static void testPersistence() {
         // Test case 19 on 2nd+ runs: Verify the lesson retained from a previous execution.
@@ -374,9 +376,8 @@ public class ContributorTestingAutomation {
     }
     
     /*******
-     * <p> Method: createTracked(String title, String description) </p>
      *
-     * <p> Description: Creates a test lesson and records its generated ID for cleanup, used in the lessons used on multiple tests</p>
+     * <p> Creates a test lesson and records its generated ID for cleanup, used in the lessons used on multiple tests</p>
      *
      * @param title unique test title of lesson
      *
@@ -396,9 +397,8 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: track(String title) </p>
      *
-     * <p> Description: Finds a test lesson by title and records its ID for cleanup. </p>
+     * <p> Finds a test lesson by title and records its ID for cleanup. </p>
      *
      * @param title test title to retrieve
      *
@@ -414,9 +414,8 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: sameValues(LessonsLearned expected, LessonsLearned actual) </p>
      *
-     * <p> Description: simple comparison of the ID, title, description, and author of two lessons. </p>
+     * <p> simple comparison of the ID, title, description, and author of two lessons. </p>
      *
      * @param expected what we expect lesson to readback
      *
@@ -430,9 +429,8 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: describe(LessonsLearned lesson) </p>
      *
-     * <p> Description: Returns the lesson information for display in the console for testing. </p>
+     * <p> Returns the lesson information for display in the console for testing. </p>
      *
      * @param lesson retrieved lesson or null
      *
@@ -448,9 +446,8 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: evaluate(String requirement, String name, String expected, String actual, boolean passed) </p>
-     *
-     * <p> Description: Evaluates and displays one test result and updates the pass or fail count. </p>
+    *
+     * <p> Evaluates and displays one test result and updates the pass or fail count. </p>
      *
      * @param requirement requirement references covered for readability
      *
@@ -477,9 +474,8 @@ public class ContributorTestingAutomation {
     }
 
     /*******
-     * <p> Method: cleanup() </p>
      *
-     * <p> Description: Deletes the tracked test records. The persistence record remains saved. </p>
+     * <p> Deletes the tracked test records. The persistence record remains saved. </p>
      *
      */
     private static void cleanup() {
