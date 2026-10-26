@@ -357,7 +357,7 @@ public class Database {
 		 *  
 		 *  @return a list of lesson titles found in the database by author, ordered by their id.
 		 */
-			public List<String> getLessonList (String author) throws SQLException {
+			public List<String> getLessonList (String author) {
 				List<String> lessonList = new ArrayList<String>();
 				
 				String query = "SELECT * FROM lessonsLearned WHERE author = ? ORDER BY id";
@@ -371,6 +371,8 @@ public class Database {
 						lessonList.add(rs.getString("title"));
 						}
 					}
+				} catch (SQLException e) {
+					return lessonList;
 				}
 			
 				return lessonList;
