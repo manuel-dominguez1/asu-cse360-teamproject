@@ -9,19 +9,48 @@
   /*******
    * <p> Title: LessonsLearnedList Class </p>
    * 
-   * <p> Description: The LessonsLearnedList class represents an in-memory  list of lessons learned
-   * retrieved from the persistent H2 database. Supports refreshing, retrieving, and searching lessons. </p>
+   * <p> Description: The LessonsLearnedList class represents a list of LessonsLearned objects
+   * retrieved from the persistent H2 database. LessonsLearned handles Create, Update, and Delete
+   * for a single lesson; this class handles Read for collections of lessons. One instance holds
+   * all lessons in the system; others hold subsets, such as one Contributor's lessons or the
+   * results of a keyword search. </p>
+   * 
+   * <p> Supports these Contributor User Stories: </p>
+   * <ul>
+   * <li> View all lessons learned: refresh() and all() </li>
+   * <li> View the lessons a Contributor has written: all(String username) </li>
+   * <li> Locate a lesson to read, update, or delete: get(int id) and get(String title) </li>
+   * <li> Search lessons by one or more keywords: search(String query) </li>
+   * </ul>
+   * 
+   * <p> For the TP3 epics, search() returns a LessonsLearnedList rather than a plain List, so
+   * future filters (e.g., by category or tag) can produce subsets the same way. </p>
+   * 
+   * @author Sierra Trimmer
+   * 
+   * @version 1.0
    * 
    */ 
 
   public class LessonsLearnedList {
-	  // In-memory list of lessons retrieved from the database
+	  /**
+	   * <p> Attribute: lessons </p>
+	   * 
+	   * <p> Description: The in-memory list of LessonsLearned objects held by this list. </p>
+	   * 
+	   * <p> Source and rationale: The assignment requires a list class supporting CRUD for lists
+	   * of lessons learned, including a persistent list of all lessons and subsets of it. The
+	   * H2 database is the persistent store, this attribute holds a copy so the GUI can display,
+	   * filter, and search lessons without querying the database for every action. </p>
+	   */
 	  private final List<LessonsLearned> lessons = new ArrayList<>();
 	  
 	  /*****
 	     * <p> Method: LessonsLearnedList() </p>
 	     * 
-	     * <p> Description: Default Constructor. </p>
+	     * <p> Description: This default constructor establishes an empty list. The list is 
+	     * populated from the database by calling refresh(), or by search() when a subset list
+	     * is produced. </p>
 	     * 
 	     */
 	  public LessonsLearnedList() {
@@ -29,11 +58,17 @@
 	  }
 	  
 	  /*****
-	     * <p> Method: refresh(Database db) </p>
+	     * <p> Method: void refresh(Database db) </p>
 	     * 
-	     * <p> Description: Reloads the list of lessons from the persistent database. </p>
+	     * <p> Description: Reloads the list with every lesson currently stored in the persistent
+	     * database. This must be called after a lesson is created, updated, or deleted so the
+	     * list shown to the Contributor matches what is stored. </p>
 	     * 
-	     * @param db is the existing databse connection
+	     * @param db is the existing database connection
+	     * 
+	     * @throws IllegalArgumentException if db is null
+	     * 
+	     * @throws IllegalStateException if the database is unable to return the lessons
 	     * 
 	     */
 	  public void refresh(Database db) {
@@ -44,7 +79,7 @@
 		  // Create a list of all lessons in the database
 		  List<LessonsLearned> databaseLessons = db.getFullLessonList();
 		  
-		  // If the list is empty
+		  // A null result means the database query failed
 		  if (databaseLessons == null) {
 			  throw new IllegalStateException("Unable to load lessons");
 		  }
@@ -57,7 +92,8 @@
 	  /*****
 	     * <p> Method: {@literal List<LessonsLearned>} all() </p>
 	     * 
-	     * <p> Description: Returns all lessons currently loaded into the database. </p>
+	     * <p> Description: Returns all lessons currently loaded into this list. This supports the
+	     * Contributor User Story for viewing all lessons learned in the system. </p>
 	     *
 	     * @return an unmodifiable list of lessons
 	     * 
@@ -82,7 +118,7 @@
 		  // Create a new list
 		  List<LessonsLearned> userLessons = new ArrayList<>();
 		  
-		  // For each lesson in the database
+		  // Contributor User Story: a Contributor views the lessons they authored
 		  for (LessonsLearned lesson : lessons) {
 			  // If the author of the lesson matches the specified username
 			  if (lesson.getAuthor().equals(username)) {
@@ -101,7 +137,7 @@
 	     * 
 	     * @param id represents the id of the desired lesson
 	     * 
-	     * @return a Learned Lessons object with a matching id
+	     * @return the LessonsLearned object with a matching id, or null if none is found
 	     * 
 	     */
 	  public LessonsLearned get(int id) {
@@ -122,11 +158,11 @@
 	     * 
 	     * @param title represents the title of the desired lesson
 	     * 
-	     * @return a Learned Lessons object with a matching title
+	     * @return the LessonsLearned object with a matching title, or null if none is found
 	     * 
 	     */
 	  public LessonsLearned get(String title) {
-		  // If title is empty
+		  // Guard against a null title so the comparison below cannot throw an exception
 		  if (title == null) {
 			  return null;
 		  }
@@ -144,11 +180,13 @@
 	  /*****
 	     * <p> Method: LessonsLearnedList search(String query) </p>
 	     * 
-	     * <p> Description: Produces a list of LessonLearned containing a keyword. </p>
+	     * <p> Description: Produces a new LessonsLearnedList containing the lessons whose title or
+	     * description contains every keyword in the query. This supports the Contributor User
+	     * Story for searching lessons by keyword, and is how subsets of all lessons are created. </p>
 	     * 
 	     * @param query represents the words or phrase being searched for
 	     * 
-	     * @return a list of Learned Lessons objects matching the query
+	     * @return a new LessonsLearnedList of matching lessons, or all lessons if the query is blank
 	     * 
 	     */
 	  public LessonsLearnedList search(String query) {
@@ -168,7 +206,7 @@
 			  String text = (lesson.getTitle() + " " + lesson.getDescription()).toLowerCase(Locale.ROOT);
 			  boolean matches = true;
 			  
-			  // Every keyword must be present
+			// Contributor User Story: keyword search. Every keyword must be present (AND search)
 			  for (String term : terms) {
 				  if (!text.contains(term)) {
 					  matches = false;
@@ -201,7 +239,7 @@
 	  /*****
 	     * <p> Method: boolean isEmpty() </p>
 	     * 
-	     * <p> Description: Determines whether the list is empty. </p>
+	     * <p> Description: Determines whether this list contains any lessons. </p>
 	     * 
 	     * @return true if empty, otherwise false
 	     * 
