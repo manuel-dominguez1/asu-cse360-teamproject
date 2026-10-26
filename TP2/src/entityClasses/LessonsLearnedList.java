@@ -15,16 +15,6 @@
    * all lessons in the system; others hold subsets, such as one Contributor's lessons or the
    * results of a keyword search. </p>
    * 
-   * <p> Supports these Contributor User Stories: </p>
-   * <ul>
-   * <li> View all lessons learned: refresh() and all() </li>
-   * <li> View the lessons a Contributor has written: all(String username) </li>
-   * <li> Locate a lesson to read, update, or delete: get(int id) and get(String title) </li>
-   * <li> Search lessons by one or more keywords: search(String query) </li>
-   * </ul>
-   * 
-   * <p> For the TP3 epics, search() returns a LessonsLearnedList rather than a plain List, so
-   * future filters (e.g., by category or tag) can produce subsets the same way. </p>
    * 
    * @author Sierra Trimmer
    * 
@@ -92,8 +82,7 @@
 	  /*****
 	     * <p> Method: {@literal List<LessonsLearned>} all() </p>
 	     * 
-	     * <p> Description: Returns all lessons currently loaded into this list. This supports the
-	     * Contributor User Story for viewing all lessons learned in the system. </p>
+	     * <p> Description: Returns all lessons currently loaded into this list. </p>
 	     *
 	     * @return an unmodifiable list of lessons
 	     * 
@@ -118,7 +107,6 @@
 		  // Create a new list
 		  List<LessonsLearned> userLessons = new ArrayList<>();
 		  
-		  // Contributor User Story: a Contributor views the lessons they authored
 		  for (LessonsLearned lesson : lessons) {
 			  // If the author of the lesson matches the specified username
 			  if (lesson.getAuthor().equals(username)) {
@@ -181,8 +169,8 @@
 	     * <p> Method: LessonsLearnedList search(String query) </p>
 	     * 
 	     * <p> Description: Produces a new LessonsLearnedList containing the lessons whose title or
-	     * description contains every keyword in the query. This supports the Contributor User
-	     * Story for searching lessons by keyword, and is how subsets of all lessons are created. </p>
+	     * description contains every keyword in the query. This is how subsets of all
+	     * lessons are created. </p>
 	     * 
 	     * @param query represents the words or phrase being searched for
 	     * 
@@ -206,7 +194,7 @@
 			  String text = (lesson.getTitle() + " " + lesson.getDescription()).toLowerCase(Locale.ROOT);
 			  boolean matches = true;
 			  
-			// Contributor User Story: keyword search. Every keyword must be present (AND search)
+			  // Every keyword must be present (AND search)
 			  for (String term : terms) {
 				  if (!text.contains(term)) {
 					  matches = false;
