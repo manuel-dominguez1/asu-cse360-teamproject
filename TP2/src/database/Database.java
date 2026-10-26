@@ -352,8 +352,6 @@ public class Database {
 		 *  
 		 *  <P> Description: Generate an List of Strings, one for each lesson in the database created by author,
 		 *  ordered by ID. </p>
-		 *
-		 *  @throws SQL exception if attempt to find a lesson is unsuccessful
 		 *  
 		 *  @param author the author we will get our lessons from.
 		 *  
