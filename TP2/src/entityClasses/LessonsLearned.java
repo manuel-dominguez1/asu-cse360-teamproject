@@ -13,6 +13,19 @@ import database.Database;
  * and descriptions, along with static methods to create, delete, and update
  * lessons in the database. </p>
  * 
+ * <p> This class implements the Create, Update, and Delete operations required by
+ * Contributor Story 1 (add lessons with core information and manage them). The id and
+ * author attributes support Contributor Stories 2 and 4 (list and examine only the
+ * lessons I have added). Read operations on collections of lessons are provided by
+ * LessonsLearnedList. </p>
+ * 
+ * <p> Planned attributes: The Curator lock epic (TP3) will require a locked flag for the
+ * whole lesson and per-field locks, so Contributors cannot edit locked fields or delete a
+ * locked lesson (Contributor Stories 1-2). Contributor Story 3 and the Curator time and
+ * effort epics will require experience data (what was done, how it was done, time taken,
+ * and effort by team member), stored as a separate list per lesson since one lesson may
+ * have many attempts. </p>
+ * 
  * @author Sierra Trimmer
  * 
  * @version 1.0
@@ -21,11 +34,23 @@ import database.Database;
 
 public class LessonsLearned {
 	
-	// These are the private attributes for this entity object
-	
+	/** Unique id assigned by the database. Source: Contributor Story 2 (select a lesson to
+	 *  examine). Rationale: titles may repeat, so update and delete need a key that
+	 *  identifies exactly one lesson. */
     private int id;
+
+	/** Short title of the lesson. Source: Contributor Story 1 (core information) and
+	 *  Story 2 (list used to pick a lesson). Rationale: identifies the lesson in lists and
+	 *  searches. Validated by TitleRecognizer. */
     private String title;
+
+	/** Full text of the lesson learned. Source: Contributor Story 1 (core information).
+	 *  Rationale: holds the actual content of the lesson. Validated by DescriptionRecognizer. */
     private String description;
+
+	/** Username of the Contributor who created the lesson. Source: Contributor Story 2 (list
+	 *  of lessons I have added) and Story 4 (only see my own content). Rationale: lets the
+	 *  system filter lessons by author. */
     private String author;
     
     
@@ -203,15 +228,15 @@ public class LessonsLearned {
      */
     public static boolean createLesson(String title, String description, String author, Database db) {
    
-    	// If the title or description is invalid
+    	// Contributor Story 1: core information must be valid before a lesson is added
     	if(!isValidTitle(title) || !isValidDescription(description)) {
     		return false;
     	}
     	
-    	// Create lesson object and save it to the List
+    	// Create the lesson object from the trimmed core information
     	LessonsLearned lesson = new LessonsLearned(title.trim(), description.trim(), author);
 		
-		// Save the lesson to the database
+    	// Save to the database so the Contributor can see and manage it later (Story 1)
 		return db.register(lesson);
     }
     
@@ -229,7 +254,7 @@ public class LessonsLearned {
 	 *
      */
     public static boolean deleteLesson(int id, Database db) {
-    	// Delete the lesson from the database
+    	// Contributor Story 1: a Contributor can manage (delete) the lessons they added
     	return db.deleteLesson(id);
     	
     }
@@ -248,7 +273,7 @@ public class LessonsLearned {
 	 *
      */
     public static boolean deleteLesson(String title, Database db) {
-    	// Delete the lesson from the database
+    	// Contributor Story 1: a Contributor can manage (delete) the lessons they added
     	return db.deleteLesson(title);
     }
     
@@ -269,7 +294,7 @@ public class LessonsLearned {
 	 *
      */
     public static boolean updateTitle(int id, String title, Database db) { 
-    	// If the lesson doesn't exist
+    	// Contributor Story 2: a lesson must exist before it can be examined or changed
     	if (!db.doesLessonExist(id)) {
     		return false;
     	}
@@ -302,7 +327,7 @@ public class LessonsLearned {
 	 *
      */
     public static boolean updateDescription(int id, String description, Database db) { 
-    	// If the lesson doesn't exist
+    	// Contributor Story 2: a lesson must exist before it can be examined or changed
     	if (!db.doesLessonExist(id)) {
     		return false;
     	}

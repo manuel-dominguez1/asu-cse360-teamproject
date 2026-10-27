@@ -15,7 +15,11 @@
    * all lessons in the system; others hold subsets, such as one Contributor's lessons or the
    * results of a keyword search. </p>
    * 
-   * 
+   * <p> all(String username) supports Contributor Stories 2 and 4 (list only the lessons I
+   * have added). get(int id) and get(String title) support Contributor Story 2 (examine a
+   * lesson more closely). all() and search(String query) anticipate the Phase 3 Viewer
+   * stories (list all lessons and keyword search). </p>
+   *
    * @author Sierra Trimmer
    * 
    * @version 1.0
@@ -82,7 +86,8 @@
 	  /*****
 	     * <p> Method: {@literal List<LessonsLearned>} all() </p>
 	     * 
-	     * <p> Description: Returns all lessons currently loaded into this list. </p>
+	     * <p> Description: Returns all lessons currently loaded into this list. This anticipates
+	     * the Phase 3 Viewer story to see a list of all lessons learned. </p>
 	     *
 	     * @return an unmodifiable list of lessons
 	     * 
@@ -94,8 +99,8 @@
 	  /*****
 	     * <p> Method: {@literal List<LessonsLearned>} all(String username) </p>
 	     * 
-	     * <p> Description: Returns all lessons currently loaded into the list
-	     * viewable by the current user. </p>
+	     * <p> Description: Returns the lessons in this list written by the specified user.
+	     * This supports Contributor Stories 2 and 4 (see only the lessons I have added). </p>
 	     * 
 	     * @param username is a string representing the username of the user 
 	     * currently logged-in
@@ -108,7 +113,7 @@
 		  List<LessonsLearned> userLessons = new ArrayList<>();
 		  
 		  for (LessonsLearned lesson : lessons) {
-			  // If the author of the lesson matches the specified username
+			  // Contributor Stories 2 and 4: keep only the lessons this Contributor has added
 			  if (lesson.getAuthor().equals(username)) {
 				  // Add the lesson to the list
 				  userLessons.add(lesson);
@@ -121,7 +126,7 @@
 	  /*****
 	     * <p> Method: LessonsLearned get(int id) </p>
 	     * 
-	     * <p> Description: Finds a lesson in the list by id. </p>
+	     * <p> Description: Finds a lesson in the list by id. This supports Contributor Story 2 (examine a lesson more closely). </p>
 	     * 
 	     * @param id represents the id of the desired lesson
 	     * 
@@ -142,7 +147,7 @@
 	  /*****
 	     * <p> Method: LessonsLearned get(String title) </p>
 	     * 
-	     * <p> Description: Finds a lesson in the list by title. </p>
+	     * <p> Description: Finds a lesson in the list by title. This supports Contributor Story 2 (examine a lesson more closely). </p>
 	     * 
 	     * @param title represents the title of the desired lesson
 	     * 
@@ -194,7 +199,7 @@
 			  String text = (lesson.getTitle() + " " + lesson.getDescription()).toLowerCase(Locale.ROOT);
 			  boolean matches = true;
 			  
-			  // Every keyword must be present (AND search)
+			// Viewer story (Phase 3): keyword search. Every keyword must be present (AND search)
 			  for (String term : terms) {
 				  if (!text.contains(term)) {
 					  matches = false;
